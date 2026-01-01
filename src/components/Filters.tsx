@@ -1,7 +1,7 @@
 import { ChevronDown, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import {
 	Popover,
 	PopoverContent,
@@ -9,11 +9,11 @@ import {
 } from "@/components/ui/popover";
 import {
 	CATEGORIES,
+	type CompetitionFormat,
+	type CompetitionLevel,
+	type CompetitionStatus,
 	LEVELS,
-	CompetitionLevel,
-	CompetitionFormat,
-	ParticipationType,
-	CompetitionStatus,
+	type ParticipationType,
 } from "@/types/competition";
 
 export interface FilterState {
@@ -64,8 +64,8 @@ export function Filters({
 				<h3 className="text-sm font-semibold text-foreground">Filter</h3>
 				{hasActiveFilters && (
 					<button
-						onClick={onClearFilters}
 						className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+						onClick={onClearFilters}
 					>
 						Reset
 					</button>
@@ -76,7 +76,7 @@ export function Filters({
 				{/* Kategori Filter */}
 				<Popover>
 					<PopoverTrigger asChild>
-						<Button variant="outline" size="sm" className="h-8 gap-1.5">
+						<Button className="h-8 gap-1.5" size="sm" variant="outline">
 							Kategori
 							{filters.categories.length > 0 && (
 								<span className="ml-1 rounded-full bg-primary px-1.5 py-0.5 text-[10px] text-primary-foreground">
@@ -86,13 +86,13 @@ export function Filters({
 							<ChevronDown className="h-3.5 w-3.5" />
 						</Button>
 					</PopoverTrigger>
-					<PopoverContent className="w-48 p-3" align="start">
+					<PopoverContent align="start" className="w-48 p-3">
 						<div className="space-y-2 max-h-60 overflow-y-auto">
 							{CATEGORIES.map((cat) => (
-								<div key={cat} className="flex items-center space-x-2">
+								<div className="flex items-center space-x-2" key={cat}>
 									<Checkbox
-										id={`cat-${cat}`}
 										checked={filters.categories.includes(cat)}
+										id={`cat-${cat}`}
 										onCheckedChange={(checked) => {
 											if (checked) {
 												onFiltersChange({
@@ -103,15 +103,15 @@ export function Filters({
 												onFiltersChange({
 													...filters,
 													categories: filters.categories.filter(
-														(c) => c !== cat,
+														(c) => c !== cat
 													),
 												});
 											}
 										}}
 									/>
 									<Label
-										htmlFor={`cat-${cat}`}
 										className="text-sm text-muted-foreground cursor-pointer"
+										htmlFor={`cat-${cat}`}
 									>
 										{cat}
 									</Label>
@@ -124,7 +124,7 @@ export function Filters({
 				{/* Tingkat Filter */}
 				<Popover>
 					<PopoverTrigger asChild>
-						<Button variant="outline" size="sm" className="h-8 gap-1.5">
+						<Button className="h-8 gap-1.5" size="sm" variant="outline">
 							Tingkat
 							{filters.levels.length > 0 && (
 								<span className="ml-1 rounded-full bg-primary px-1.5 py-0.5 text-[10px] text-primary-foreground">
@@ -134,13 +134,13 @@ export function Filters({
 							<ChevronDown className="h-3.5 w-3.5" />
 						</Button>
 					</PopoverTrigger>
-					<PopoverContent className="w-48 p-3" align="start">
+					<PopoverContent align="start" className="w-48 p-3">
 						<div className="space-y-2">
 							{LEVELS.map((lvl) => (
-								<div key={lvl.value} className="flex items-center space-x-2">
+								<div className="flex items-center space-x-2" key={lvl.value}>
 									<Checkbox
-										id={`lvl-${lvl.value}`}
 										checked={filters.levels.includes(lvl.value)}
+										id={`lvl-${lvl.value}`}
 										onCheckedChange={(checked) => {
 											if (checked) {
 												onFiltersChange({
@@ -156,8 +156,8 @@ export function Filters({
 										}}
 									/>
 									<Label
-										htmlFor={`lvl-${lvl.value}`}
 										className="text-sm text-muted-foreground cursor-pointer"
+										htmlFor={`lvl-${lvl.value}`}
 									>
 										{lvl.label}
 									</Label>
@@ -170,7 +170,7 @@ export function Filters({
 				{/* Format Filter */}
 				<Popover>
 					<PopoverTrigger asChild>
-						<Button variant="outline" size="sm" className="h-8 gap-1.5">
+						<Button className="h-8 gap-1.5" size="sm" variant="outline">
 							Format
 							{filters.format !== "all" && (
 								<span className="ml-1 rounded-full bg-primary px-1.5 py-0.5 text-[10px] text-primary-foreground">
@@ -180,13 +180,13 @@ export function Filters({
 							<ChevronDown className="h-3.5 w-3.5" />
 						</Button>
 					</PopoverTrigger>
-					<PopoverContent className="w-40 p-3" align="start">
+					<PopoverContent align="start" className="w-40 p-3">
 						<div className="space-y-2">
 							{formatOptions.map((opt) => (
-								<div key={opt.value} className="flex items-center space-x-2">
+								<div className="flex items-center space-x-2" key={opt.value}>
 									<Checkbox
-										id={`format-${opt.value}`}
 										checked={filters.format === opt.value}
+										id={`format-${opt.value}`}
 										onCheckedChange={(checked) => {
 											if (checked) {
 												onFiltersChange({ ...filters, format: opt.value });
@@ -194,8 +194,8 @@ export function Filters({
 										}}
 									/>
 									<Label
-										htmlFor={`format-${opt.value}`}
 										className="text-sm text-muted-foreground cursor-pointer"
+										htmlFor={`format-${opt.value}`}
 									>
 										{opt.label}
 									</Label>
@@ -208,7 +208,7 @@ export function Filters({
 				{/* Partisipasi Filter */}
 				<Popover>
 					<PopoverTrigger asChild>
-						<Button variant="outline" size="sm" className="h-8 gap-1.5">
+						<Button className="h-8 gap-1.5" size="sm" variant="outline">
 							Partisipasi
 							{filters.participationType !== "all" && (
 								<span className="ml-1 rounded-full bg-primary px-1.5 py-0.5 text-[10px] text-primary-foreground">
@@ -218,13 +218,13 @@ export function Filters({
 							<ChevronDown className="h-3.5 w-3.5" />
 						</Button>
 					</PopoverTrigger>
-					<PopoverContent className="w-40 p-3" align="start">
+					<PopoverContent align="start" className="w-40 p-3">
 						<div className="space-y-2">
 							{participationOptions.map((opt) => (
-								<div key={opt.value} className="flex items-center space-x-2">
+								<div className="flex items-center space-x-2" key={opt.value}>
 									<Checkbox
-										id={`part-${opt.value}`}
 										checked={filters.participationType === opt.value}
+										id={`part-${opt.value}`}
 										onCheckedChange={(checked) => {
 											if (checked) {
 												onFiltersChange({
@@ -235,8 +235,8 @@ export function Filters({
 										}}
 									/>
 									<Label
-										htmlFor={`part-${opt.value}`}
 										className="text-sm text-muted-foreground cursor-pointer"
+										htmlFor={`part-${opt.value}`}
 									>
 										{opt.label}
 									</Label>

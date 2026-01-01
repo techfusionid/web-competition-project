@@ -1,8 +1,8 @@
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Star, Users } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export function NewsletterCTA() {
 	const [email, setEmail] = useState("");
@@ -28,7 +28,7 @@ export function NewsletterCTA() {
 		await new Promise((resolve) => setTimeout(resolve, 1000));
 
 		toast.success(
-			"Berhasil berlangganan! Kami akan kirim info lomba terbaru ke email kamu.",
+			"Berhasil berlangganan! Kami akan kirim info lomba terbaru ke email kamu."
 		);
 		setEmail("");
 		setIsLoading(false);
@@ -37,21 +37,21 @@ export function NewsletterCTA() {
 	return (
 		<div className="mt-8">
 			<form
-				onSubmit={handleSubmit}
 				className="mx-auto flex max-w-md items-center gap-0 overflow-hidden rounded-lg border border-border bg-card"
+				onSubmit={handleSubmit}
 			>
 				<Input
-					type="email"
-					placeholder="Masukkan email kamu"
-					value={email}
-					onChange={(e) => setEmail(e.target.value)}
 					className="h-11 flex-1 border-0 bg-transparent text-sm shadow-none focus-visible:ring-0"
 					disabled={isLoading}
+					onChange={(e) => setEmail(e.target.value)}
+					placeholder="Masukkan email kamu"
+					type="email"
+					value={email}
 				/>
 				<Button
-					type="submit"
 					className="h-11 rounded-l-none px-5 text-sm font-medium"
 					disabled={isLoading}
+					type="submit"
 				>
 					{isLoading ? "Loading..." : "Berlangganan"}
 				</Button>
@@ -66,7 +66,7 @@ export function NewsletterCTA() {
 					</div>
 					<div className="flex items-center gap-0.5 text-warning">
 						{[...Array(5)].map((_, i) => (
-							<Star key={i} className="h-3 w-3 fill-current" />
+							<Star className="h-3 w-3 fill-current" key={i} />
 						))}
 					</div>
 					<span className="text-xs">10K+ pelajar bergabung</span>

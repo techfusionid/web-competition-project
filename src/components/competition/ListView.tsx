@@ -1,11 +1,11 @@
-import { Competition } from "@/types/competition";
-import { Calendar, Users, MapPin, ArrowUpRight, Bookmark } from "lucide-react";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-import { Button } from "@/components/ui/button";
-import { StatusBadge } from "../StatusBadge";
-import { cn } from "@/lib/utils";
+import { ArrowUpRight, Bookmark, Calendar, MapPin, Users } from "lucide-react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import type { Competition } from "@/types/competition";
+import { StatusBadge } from "../StatusBadge";
 
 interface ListViewProps {
 	competition: Competition;
@@ -42,9 +42,9 @@ export function ListView({
 			<div className="h-16 w-16 md:h-20 md:w-20 shrink-0 overflow-hidden rounded-lg bg-secondary">
 				{competition.imageUrl ? (
 					<img
-						src={competition.imageUrl}
 						alt={competition.title}
 						className="h-full w-full object-cover"
+						src={competition.imageUrl}
 					/>
 				) : (
 					<div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5">
@@ -100,8 +100,8 @@ export function ListView({
 					</span>
 					{competition.level.slice(0, 1).map((lvl) => (
 						<span
-							key={lvl}
 							className="rounded bg-secondary px-1.5 py-0.5 text-[9px] md:text-[10px] text-secondary-foreground"
+							key={lvl}
 						>
 							{levelLabels[lvl]}
 						</span>
@@ -112,18 +112,18 @@ export function ListView({
 			{/* Actions */}
 			<div className="flex shrink-0 flex-col items-end gap-2">
 				<Button
-					variant="ghost"
-					size="icon"
+					className={cn("h-8 w-8", isBookmarked && "text-foreground")}
 					onClick={(e) => {
 						e.stopPropagation();
 						onToggleBookmark(competition.id);
 					}}
-					className={cn("h-8 w-8", isBookmarked && "text-foreground")}
+					size="icon"
+					variant="ghost"
 				>
 					<Bookmark className={cn("h-4 w-4", isBookmarked && "fill-current")} />
 				</Button>
 				<Link href={`/competition/${competition.id}`}>
-					<Button variant="ghost" size="sm" className="gap-1 text-xs h-7 px-2">
+					<Button className="gap-1 text-xs h-7 px-2" size="sm" variant="ghost">
 						Detail
 						<ArrowUpRight className="h-3 w-3" />
 					</Button>

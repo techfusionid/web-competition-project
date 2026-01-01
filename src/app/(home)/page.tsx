@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { Header } from "@/components/Header";
-import { Hero } from "@/components/Hero";
+import { useCallback, useState } from "react";
 import { CompetitionList } from "@/components/CompetitionList";
 import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
+import { Hero } from "@/components/Hero";
 import { competitions } from "@/data/competitions";
 import { useBookmarks } from "@/hooks/useBookmarks";
 
@@ -29,12 +29,12 @@ export default function Home() {
 				<Hero onTagClick={handleTagClick} />
 				<div id="competitions">
 					<CompetitionList
-						competitions={competitions}
-						searchQuery={searchQuery}
-						onSearchChange={setSearchQuery}
 						bookmarks={bookmarks}
-						onToggleBookmark={toggleBookmark}
+						competitions={competitions}
 						onOrganizerClick={handleOrganizerClick}
+						onSearchChange={setSearchQuery}
+						onToggleBookmark={toggleBookmark}
+						searchQuery={searchQuery}
 					/>
 				</div>
 			</main>

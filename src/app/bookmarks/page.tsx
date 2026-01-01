@@ -1,19 +1,19 @@
 "use client";
 
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { CompetitionCard } from "@/components/CompetitionCard";
-import { competitions } from "@/data/competitions";
-import { useBookmarks } from "@/hooks/useBookmarks";
 import { Bookmark } from "lucide-react";
 import Link from "next/link";
+import { CompetitionCard } from "@/components/CompetitionCard";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
+import { competitions } from "@/data/competitions";
+import { useBookmarks } from "@/hooks/useBookmarks";
 
 export default function BookmarksPage() {
 	const { bookmarks, toggleBookmark } = useBookmarks();
 
 	const bookmarkedCompetitions = competitions.filter((c) =>
-		bookmarks.includes(c.id),
+		bookmarks.includes(c.id)
 	);
 
 	return (
@@ -41,7 +41,7 @@ export default function BookmarksPage() {
 							Simpan kompetisi yang menarik untuk akses cepat
 						</p>
 						<Link href="/">
-							<Button size="sm" className="mt-4 text-xs">
+							<Button className="mt-4 text-xs" size="sm">
 								Jelajahi Kompetisi
 							</Button>
 						</Link>
@@ -50,9 +50,9 @@ export default function BookmarksPage() {
 					<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 						{bookmarkedCompetitions.map((competition) => (
 							<CompetitionCard
-								key={competition.id}
 								competition={competition}
 								isBookmarked={true}
+								key={competition.id}
 								onToggleBookmark={toggleBookmark}
 							/>
 						))}

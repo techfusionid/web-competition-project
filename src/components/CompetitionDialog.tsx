@@ -1,27 +1,27 @@
-import { Competition, LEVELS } from "@/types/competition";
-import {
-	Calendar,
-	Users,
-	MapPin,
-	ExternalLink,
-	ChevronLeft,
-	ChevronRight,
-	Share2,
-	X,
-} from "lucide-react";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-import { Button } from "@/components/ui/button";
-import { StatusBadge } from "./StatusBadge";
 import {
-	Dialog,
-	DialogTitle,
-	DialogOverlay,
-	DialogPortal,
-} from "@/components/ui/dialog";
-import * as DialogPrimitive from "@radix-ui/react-dialog";
+	Calendar,
+	ChevronLeft,
+	ChevronRight,
+	ExternalLink,
+	MapPin,
+	Share2,
+	Users,
+	X,
+} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import {
+	Dialog,
+	DialogOverlay,
+	DialogPortal,
+	DialogTitle,
+} from "@/components/ui/dialog";
+import { type Competition, LEVELS } from "@/types/competition";
+import { StatusBadge } from "./StatusBadge";
 
 interface CompetitionDialogProps {
 	competition: Competition | null;
@@ -44,10 +44,10 @@ export function CompetitionDialog({
 }: CompetitionDialogProps) {
 	const contentRef = useRef<HTMLDivElement>(null);
 	const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(
-		null,
+		null
 	);
 	const [touchEnd, setTouchEnd] = useState<{ x: number; y: number } | null>(
-		null,
+		null
 	);
 
 	// Minimum swipe distance (in px)
@@ -131,39 +131,39 @@ export function CompetitionDialog({
 			acc[l.value] = l.label;
 			return acc;
 		},
-		{} as Record<string, string>,
+		{} as Record<string, string>
 	);
 
 	return (
-		<Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+		<Dialog onOpenChange={(open) => !open && onClose()} open={isOpen}>
 			<DialogPortal>
 				<DialogOverlay className="bg-transparent md:bg-black/80" />
 
 				{/* Navigation Arrows - Outside the dialog, hidden on mobile */}
 				<Button
-					variant="ghost"
-					size="icon"
-					onClick={onPrevious}
-					disabled={!hasPrevious}
 					className="fixed left-4 top-1/2 z-[60] h-10 w-10 -translate-y-1/2 rounded-full bg-background/90 shadow-lg hover:bg-accent disabled:opacity-30 hidden md:flex"
+					disabled={!hasPrevious}
+					onClick={onPrevious}
+					size="icon"
+					variant="ghost"
 				>
 					<ChevronLeft className="h-5 w-5" />
 				</Button>
 				<Button
-					variant="ghost"
-					size="icon"
-					onClick={onNext}
-					disabled={!hasNext}
 					className="fixed right-4 top-1/2 z-[60] h-10 w-10 -translate-y-1/2 rounded-full bg-background/90 shadow-lg hover:bg-accent disabled:opacity-30 hidden md:flex"
+					disabled={!hasNext}
+					onClick={onNext}
+					size="icon"
+					variant="ghost"
 				>
 					<ChevronRight className="h-5 w-5" />
 				</Button>
 
 				<DialogPrimitive.Content
-					ref={contentRef}
 					className={
 						"fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-[340px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-xl border bg-background p-0 shadow-lg md:max-w-lg md:w-full"
 					}
+					ref={contentRef}
 				>
 					<DialogTitle className="sr-only">{competition.title}</DialogTitle>
 
@@ -177,15 +177,15 @@ export function CompetitionDialog({
 						{/* Poster Image - 3:4 on mobile, 16:9 on desktop */}
 						<div
 							className="relative aspect-[3/4] md:aspect-[16/9] w-full overflow-hidden bg-secondary"
-							onTouchStart={onTouchStart}
-							onTouchMove={onTouchMove}
 							onTouchEnd={onTouchEnd}
+							onTouchMove={onTouchMove}
+							onTouchStart={onTouchStart}
 						>
 							{competition.imageUrl ? (
 								<img
-									src={competition.imageUrl}
 									alt={competition.title}
 									className="h-full w-full object-cover"
+									src={competition.imageUrl}
 								/>
 							) : (
 								<div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5">
@@ -197,10 +197,10 @@ export function CompetitionDialog({
 
 							{/* Share Button on Image */}
 							<Button
-								variant="ghost"
-								size="icon"
-								onClick={handleShare}
 								className="absolute right-2 top-2 h-8 w-8 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
+								onClick={handleShare}
+								size="icon"
+								variant="ghost"
 							>
 								<Share2 className="h-4 w-4" />
 							</Button>
@@ -235,8 +235,8 @@ export function CompetitionDialog({
 								</span>
 								{competition.level.slice(0, 2).map((l) => (
 									<span
-										key={l}
 										className="rounded-full bg-secondary px-2 py-0.5 text-[10px] md:text-xs text-muted-foreground"
+										key={l}
 									>
 										{levelLabels[l]}
 									</span>
@@ -296,10 +296,10 @@ export function CompetitionDialog({
 
 							{/* CTA Button */}
 							<a
-								href={competition.registrationUrl}
-								target="_blank"
-								rel="noopener noreferrer"
 								className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2 md:py-2.5 text-[11px] md:text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+								href={competition.registrationUrl}
+								rel="noopener noreferrer"
+								target="_blank"
 							>
 								Daftar Sekarang
 								<ExternalLink className="h-3 w-3 md:h-4 md:w-4" />

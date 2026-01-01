@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const BOOKMARKS_KEY = "lombahub-bookmarks";
 
@@ -28,13 +28,13 @@ export function useBookmarks() {
 
 	const toggleBookmark = useCallback((id: string) => {
 		setBookmarks((prev) =>
-			prev.includes(id) ? prev.filter((b) => b !== id) : [...prev, id],
+			prev.includes(id) ? prev.filter((b) => b !== id) : [...prev, id]
 		);
 	}, []);
 
 	const isBookmarked = useCallback(
 		(id: string) => bookmarks.includes(id),
-		[bookmarks],
+		[bookmarks]
 	);
 
 	return { bookmarks, toggleBookmark, isBookmarked };

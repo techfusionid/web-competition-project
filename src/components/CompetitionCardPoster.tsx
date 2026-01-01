@@ -1,10 +1,10 @@
-import { useState, useRef, useCallback } from "react";
-import { Competition } from "@/types/competition";
-import { Calendar, Users, Share2, ExternalLink } from "lucide-react";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-import { cn } from "@/lib/utils";
+import { Calendar, ExternalLink, Share2, Users } from "lucide-react";
+import { useCallback, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import type { Competition } from "@/types/competition";
 import { SharePopup } from "./SharePopup";
 
 interface CompetitionCardPosterProps {
@@ -67,18 +67,18 @@ export function CompetitionCardPoster({
 			<div
 				className="group relative cursor-pointer overflow-hidden rounded-lg border border-border bg-card select-none"
 				onClick={handleClick}
-				onPointerDown={handlePointerDown}
-				onPointerUp={handlePointerUp}
-				onPointerLeave={handlePointerUp}
 				onContextMenu={(e) => e.preventDefault()}
+				onPointerDown={handlePointerDown}
+				onPointerLeave={handlePointerUp}
+				onPointerUp={handlePointerUp}
 			>
 				{/* Poster Image - 3:4 aspect ratio */}
 				<div className="relative aspect-[3/4] w-full overflow-hidden bg-secondary">
 					{competition.imageUrl ? (
 						<img
-							src={competition.imageUrl}
 							alt={competition.title}
 							className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+							src={competition.imageUrl}
 						/>
 					) : (
 						<div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5">
@@ -118,25 +118,25 @@ export function CompetitionCardPoster({
 							<div className="flex gap-2 mt-2">
 								{competition.registrationUrl && (
 									<Button
-										size="sm"
 										className="flex-1 gap-1.5 text-xs"
 										onClick={(e) => {
 											e.stopPropagation();
 											window.open(competition.registrationUrl, "_blank");
 										}}
+										size="sm"
 									>
 										<ExternalLink className="h-3.5 w-3.5" />
 										Daftar
 									</Button>
 								)}
 								<Button
-									size="sm"
-									variant="secondary"
 									className="gap-1.5 text-xs"
 									onClick={(e) => {
 										e.stopPropagation();
 										setShowShare(true);
 									}}
+									size="sm"
+									variant="secondary"
 								>
 									<Share2 className="h-3.5 w-3.5" />
 								</Button>

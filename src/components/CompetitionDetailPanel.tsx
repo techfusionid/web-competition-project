@@ -1,11 +1,11 @@
-import { Competition, LEVELS } from "@/types/competition";
-import { Calendar, Users, MapPin, ExternalLink, Share2, X } from "lucide-react";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-import { Button } from "@/components/ui/button";
-import { StatusBadge } from "./StatusBadge";
+import { Calendar, ExternalLink, MapPin, Share2, Users, X } from "lucide-react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { type Competition, LEVELS } from "@/types/competition";
+import { StatusBadge } from "./StatusBadge";
 
 interface CompetitionDetailPanelProps {
 	competition: Competition | null;
@@ -42,7 +42,7 @@ export function CompetitionDetailPanel({
 			acc[l.value] = l.label;
 			return acc;
 		},
-		{} as Record<string, string>,
+		{} as Record<string, string>
 	);
 
 	if (!competition) {
@@ -62,9 +62,9 @@ export function CompetitionDetailPanel({
 				<div className="relative aspect-[16/9] w-full overflow-hidden bg-secondary">
 					{competition.imageUrl ? (
 						<img
-							src={competition.imageUrl}
 							alt={competition.title}
 							className="h-full w-full object-cover"
+							src={competition.imageUrl}
 						/>
 					) : (
 						<div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5">
@@ -77,10 +77,10 @@ export function CompetitionDetailPanel({
 					{/* Close Button */}
 					{onClose && (
 						<Button
-							variant="ghost"
-							size="icon"
-							onClick={onClose}
 							className="absolute left-3 top-3 h-9 w-9 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
+							onClick={onClose}
+							size="icon"
+							variant="ghost"
 						>
 							<X className="h-4 w-4" />
 						</Button>
@@ -88,10 +88,10 @@ export function CompetitionDetailPanel({
 
 					{/* Share Button */}
 					<Button
-						variant="ghost"
-						size="icon"
-						onClick={handleShare}
 						className="absolute right-3 top-3 h-9 w-9 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
+						onClick={handleShare}
+						size="icon"
+						variant="ghost"
 					>
 						<Share2 className="h-4 w-4" />
 					</Button>
@@ -119,8 +119,8 @@ export function CompetitionDetailPanel({
 						</span>
 						{competition.level.map((l) => (
 							<span
-								key={l}
 								className="rounded-full bg-secondary px-2.5 py-0.5 text-xs text-muted-foreground"
+								key={l}
 							>
 								{levelLabels[l]}
 							</span>
@@ -178,10 +178,10 @@ export function CompetitionDetailPanel({
 
 					{/* CTA Button */}
 					<a
-						href={competition.registrationUrl}
-						target="_blank"
-						rel="noopener noreferrer"
 						className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+						href={competition.registrationUrl}
+						rel="noopener noreferrer"
+						target="_blank"
 					>
 						Daftar Sekarang
 						<ExternalLink className="h-4 w-4" />

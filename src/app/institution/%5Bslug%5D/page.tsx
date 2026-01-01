@@ -1,13 +1,13 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { ArrowLeft, Building2, Trophy } from "lucide-react";
 import Link from "next/link";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { competitions } from "@/data/competitions";
-import { Building2, ArrowLeft, Trophy } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useParams } from "next/navigation";
 import { CompetitionCard } from "@/components/CompetitionCard";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
+import { Button } from "@/components/ui/button";
+import { competitions } from "@/data/competitions";
 import { useBookmarks } from "@/hooks/useBookmarks";
 
 export default function InstitutionDetailPage() {
@@ -17,7 +17,7 @@ export default function InstitutionDetailPage() {
 	const { isBookmarked, toggleBookmark } = useBookmarks();
 
 	const institutionCompetitions = competitions.filter((comp) =>
-		comp.institutions?.includes(decodedName),
+		comp.institutions?.includes(decodedName)
 	);
 
 	return (
@@ -26,7 +26,7 @@ export default function InstitutionDetailPage() {
 
 			<main className="flex-1 container py-8">
 				<Link href="/institution">
-					<Button variant="ghost" size="sm" className="mb-6 -ml-2">
+					<Button className="mb-6 -ml-2" size="sm" variant="ghost">
 						<ArrowLeft className="h-4 w-4 mr-2" />
 						Kembali ke Institusi
 					</Button>
@@ -51,9 +51,9 @@ export default function InstitutionDetailPage() {
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 						{institutionCompetitions.map((competition) => (
 							<CompetitionCard
-								key={competition.id}
 								competition={competition}
 								isBookmarked={isBookmarked(competition.id)}
+								key={competition.id}
 								onToggleBookmark={toggleBookmark}
 							/>
 						))}

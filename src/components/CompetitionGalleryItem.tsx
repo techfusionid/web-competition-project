@@ -1,8 +1,8 @@
-import { Competition } from "@/types/competition";
-import { Calendar, Trophy } from "lucide-react";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
+import { Calendar, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { Competition } from "@/types/competition";
 import { StatusBadge } from "./StatusBadge";
 
 interface CompetitionGalleryItemProps {
@@ -20,7 +20,7 @@ export function CompetitionGalleryItem({
 		<div
 			className={cn(
 				"group relative cursor-pointer overflow-hidden rounded-lg border bg-card transition-all hover:shadow-md",
-				isSelected ? "border-primary ring-2 ring-primary/20" : "border-border",
+				isSelected ? "border-primary ring-2 ring-primary/20" : "border-border"
 			)}
 			onClick={onClick}
 		>
@@ -28,9 +28,9 @@ export function CompetitionGalleryItem({
 			<div className="relative aspect-[4/3] w-full overflow-hidden bg-secondary">
 				{competition.imageUrl ? (
 					<img
-						src={competition.imageUrl}
 						alt={competition.title}
 						className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+						src={competition.imageUrl}
 					/>
 				) : (
 					<div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5">
@@ -51,7 +51,7 @@ export function CompetitionGalleryItem({
 						"truncate text-xs font-medium transition-colors",
 						isSelected
 							? "text-primary"
-							: "text-foreground group-hover:text-primary",
+							: "text-foreground group-hover:text-primary"
 					)}
 				>
 					{competition.title}

@@ -1,18 +1,18 @@
 "use client";
 
 import {
+	BookOpen,
+	Building2,
+	Grid,
+	Home,
+	Info,
 	Menu,
 	Shuffle,
-	BookOpen,
-	Grid,
-	Building2,
-	Info,
-	Home,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -39,7 +39,7 @@ export function Header() {
 	return (
 		<header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
 			<div className="container flex h-14 items-center">
-				<Link href="/" className="mr-8 flex items-center gap-2">
+				<Link className="mr-8 flex items-center gap-2" href="/">
 					<div className="flex h-7 w-7 items-center justify-center rounded-md bg-foreground">
 						<span className="text-xs font-bold text-background">LH</span>
 					</div>
@@ -53,11 +53,11 @@ export function Header() {
 						const Icon = item.icon;
 						const active = isActive(item.path);
 						return (
-							<Link key={item.path} href={item.path}>
+							<Link href={item.path} key={item.path}>
 								<Button
-									variant="ghost"
-									size="sm"
 									className={`text-sm font-normal gap-1.5 ${active ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+									size="sm"
+									variant="ghost"
 								>
 									{active && <Icon className="h-3.5 w-3.5" />}
 									{item.label}
@@ -72,19 +72,19 @@ export function Header() {
 						<ThemeToggle />
 					</div>
 
-					<Link href="/submit" className="hidden md:block">
-						<Button variant="outline" size="sm" className="h-8 text-sm">
+					<Link className="hidden md:block" href="/submit">
+						<Button className="h-8 text-sm" size="sm" variant="outline">
 							Submit
 						</Button>
 					</Link>
 
-					<Sheet open={isOpen} onOpenChange={setIsOpen}>
+					<Sheet onOpenChange={setIsOpen} open={isOpen}>
 						<SheetTrigger asChild>
-							<Button variant="ghost" size="icon" className="h-8 w-8 md:hidden">
+							<Button className="h-8 w-8 md:hidden" size="icon" variant="ghost">
 								<Menu className="h-4 w-4" />
 							</Button>
 						</SheetTrigger>
-						<SheetContent side="right" className="w-[280px]">
+						<SheetContent className="w-[280px]" side="right">
 							<div className="flex items-center justify-between pt-4 pb-4 border-b border-border">
 								<span className="text-sm font-medium text-foreground">
 									Tema
@@ -93,9 +93,9 @@ export function Header() {
 							</div>
 							<nav className="flex flex-col gap-3 pt-6">
 								<Link
+									className={`flex items-center gap-2 text-base font-medium ${isActive("/") ? "text-foreground" : "text-muted-foreground"}`}
 									href="/"
 									onClick={() => setIsOpen(false)}
-									className={`flex items-center gap-2 text-base font-medium ${isActive("/") ? "text-foreground" : "text-muted-foreground"}`}
 								>
 									{isActive("/") && <Home className="h-4 w-4" />}
 									Beranda
@@ -105,10 +105,10 @@ export function Header() {
 									const active = isActive(item.path);
 									return (
 										<Link
-											key={item.path}
-											href={item.path}
-											onClick={() => setIsOpen(false)}
 											className={`flex items-center gap-2 text-base font-medium ${active ? "text-foreground" : "text-muted-foreground"}`}
+											href={item.path}
+											key={item.path}
+											onClick={() => setIsOpen(false)}
 										>
 											{active && <Icon className="h-4 w-4" />}
 											{item.label}
@@ -116,9 +116,9 @@ export function Header() {
 									);
 								})}
 								<Link
+									className={`flex items-center gap-2 text-base font-medium ${isActive("/submit") ? "text-foreground" : "text-muted-foreground"}`}
 									href="/submit"
 									onClick={() => setIsOpen(false)}
-									className={`flex items-center gap-2 text-base font-medium ${isActive("/submit") ? "text-foreground" : "text-muted-foreground"}`}
 								>
 									Submit Kompetisi
 								</Link>

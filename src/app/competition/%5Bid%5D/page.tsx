@@ -1,28 +1,28 @@
 "use client";
 
-import { useParams } from "next/navigation";
-import Link from "next/link";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { StatusBadge } from "@/components/StatusBadge";
-import { Button } from "@/components/ui/button";
-import { competitions } from "@/data/competitions";
-import { useBookmarks } from "@/hooks/useBookmarks";
+import { format } from "date-fns";
+import { id } from "date-fns/locale";
 import {
 	ArrowLeft,
 	Bookmark,
 	Calendar,
-	MapPin,
-	Users,
-	Globe,
 	ExternalLink,
+	Globe,
+	MapPin,
 	Share2,
 	Trophy,
+	Users,
 } from "lucide-react";
-import { format } from "date-fns";
-import { id } from "date-fns/locale";
-import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import { toast } from "sonner"; // Changed from use-toast as sonner seems to be the preferred toast in this project
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
+import { StatusBadge } from "@/components/StatusBadge";
+import { Button } from "@/components/ui/button";
+import { competitions } from "@/data/competitions";
+import { useBookmarks } from "@/hooks/useBookmarks";
+import { cn } from "@/lib/utils";
 
 export default function CompetitionDetailPage() {
 	const params = useParams();
@@ -39,7 +39,7 @@ export default function CompetitionDetailPage() {
 					<h1 className="text-xl font-medium text-foreground">
 						Kompetisi tidak ditemukan
 					</h1>
-					<Link href="/" className="mt-4 text-sm text-primary hover:underline">
+					<Link className="mt-4 text-sm text-primary hover:underline" href="/">
 						Kembali ke beranda
 					</Link>
 				</main>
@@ -74,7 +74,7 @@ export default function CompetitionDetailPage() {
 		toggleBookmark(competition.id);
 		if (bookmarked) {
 			toast.info(
-				"Dihapus dari tersimpan. Kompetisi dihapus dari daftar tersimpan.",
+				"Dihapus dari tersimpan. Kompetisi dihapus dari daftar tersimpan."
 			);
 		} else {
 			toast.success("Disimpan! Kompetisi ditambahkan ke daftar tersimpan.");
@@ -88,8 +88,8 @@ export default function CompetitionDetailPage() {
 				<div className="border-b border-border bg-card">
 					<div className="container py-6">
 						<Link
-							href="/"
 							className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+							href="/"
 						>
 							<ArrowLeft className="h-3.5 w-3.5" />
 							Kembali
@@ -117,10 +117,10 @@ export default function CompetitionDetailPage() {
 
 						<div className="mt-6 flex flex-wrap gap-2">
 							<Button
-								variant={bookmarked ? "default" : "outline"}
-								size="sm"
-								onClick={handleBookmark}
 								className="gap-1.5 text-xs"
+								onClick={handleBookmark}
+								size="sm"
+								variant={bookmarked ? "default" : "outline"}
 							>
 								<Bookmark
 									className={cn("h-3.5 w-3.5", bookmarked && "fill-current")}
@@ -128,10 +128,10 @@ export default function CompetitionDetailPage() {
 								{bookmarked ? "Tersimpan" : "Simpan"}
 							</Button>
 							<Button
-								variant="outline"
-								size="sm"
-								onClick={handleShare}
 								className="gap-1.5 text-xs"
+								onClick={handleShare}
+								size="sm"
+								variant="outline"
 							>
 								<Share2 className="h-3.5 w-3.5" />
 								Bagikan
@@ -164,8 +164,8 @@ export default function CompetitionDetailPage() {
 								<div className="mt-3 flex flex-wrap gap-2">
 									{competition.level.map((lvl) => (
 										<span
-											key={lvl}
 											className="rounded-md border border-border bg-card px-3 py-1 text-xs text-foreground"
+											key={lvl}
 										>
 											{levelLabels[lvl]}
 										</span>
@@ -238,18 +238,18 @@ export default function CompetitionDetailPage() {
 
 									<div className="pt-2">
 										<Button
-											className="w-full gap-1.5"
-											size="sm"
-											disabled={competition.status === "closed"}
 											asChild={competition.status !== "closed"}
+											className="w-full gap-1.5"
+											disabled={competition.status === "closed"}
+											size="sm"
 										>
 											{competition.status === "closed" ? (
 												<span>Pendaftaran Ditutup</span>
 											) : (
 												<a
 													href={competition.registrationUrl}
-													target="_blank"
 													rel="noopener noreferrer"
+													target="_blank"
 												>
 													Daftar Sekarang
 													<ExternalLink className="h-3.5 w-3.5" />

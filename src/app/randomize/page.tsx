@@ -1,7 +1,7 @@
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import AnimatedCardStack from "@/components/ui/animate-card-animation";
 import { Shuffle } from "lucide-react";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
+import AnimatedCardStack from "@/components/ui/animate-card-animation";
 
 export default function RandomizePage() {
 	return (

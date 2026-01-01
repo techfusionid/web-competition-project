@@ -1,20 +1,20 @@
-import Link from "next/link";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { competitions } from "@/data/competitions";
 import {
-	Monitor,
 	Briefcase,
+	Heart,
+	type LucideIcon,
+	MessageSquare,
 	Microscope,
+	Monitor,
+	Music,
 	Palette,
 	PenTool,
-	MessageSquare,
 	Trophy as TrophyIcon,
-	Music,
-	Heart,
-	LucideIcon,
 } from "lucide-react";
+import Link from "next/link";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
 import { Card, CardContent } from "@/components/ui/card";
+import { competitions } from "@/data/competitions";
 import { CATEGORIES } from "@/types/competition";
 
 // Map categories to icons and colors
@@ -69,8 +69,8 @@ export default function CategoriesPage() {
 						const IconComponent = category.config.icon;
 						return (
 							<Link
-								key={category.name}
 								href={`/category/${encodeURIComponent(category.name)}`}
+								key={category.name}
 							>
 								<Card className="h-full transition-all hover:shadow-md hover:border-primary/50">
 									<CardContent className="p-5">

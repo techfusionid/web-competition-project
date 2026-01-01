@@ -1,34 +1,34 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
-import { useParams, useRouter } from "next/navigation";
-import Link from "next/link";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { competitions } from "@/data/competitions";
-import { CompetitionCardPoster } from "@/components/CompetitionCardPoster";
-import { CompetitionCard } from "@/components/CompetitionCard";
-import { CompetitionDialog } from "@/components/CompetitionDialog";
-import { Calendar } from "@/components/ui/calendar";
-import { Badge } from "@/components/ui/badge";
 import {
-	Trophy,
-	Plus,
-	Rss,
-	Monitor,
 	Briefcase,
-	Microscope,
-	Palette,
-	PenTool,
-	MessageSquare,
-	Music,
 	Heart,
-	LucideIcon,
 	LayoutGrid,
 	List,
+	type LucideIcon,
+	MessageSquare,
+	Microscope,
+	Monitor,
+	Music,
+	Palette,
+	PenTool,
+	Plus,
+	Rss,
+	Trophy,
 	X,
 } from "lucide-react";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import { useCallback, useMemo, useState } from "react";
+import { CompetitionCard } from "@/components/CompetitionCard";
+import { CompetitionCardPoster } from "@/components/CompetitionCardPoster";
+import { CompetitionDialog } from "@/components/CompetitionDialog";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { competitions } from "@/data/competitions";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { cn } from "@/lib/utils";
 
@@ -138,11 +138,11 @@ export default function CategoryDetailPage() {
 	const allCategoryCompetitions = useMemo(() => {
 		return competitions
 			.filter(
-				(comp) => comp.category.toLowerCase() === categoryName.toLowerCase(),
+				(comp) => comp.category.toLowerCase() === categoryName.toLowerCase()
 			)
 			.sort(
 				(a, b) =>
-					new Date(a.deadline).getTime() - new Date(b.deadline).getTime(),
+					new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
 			);
 	}, [categoryName]);
 
@@ -177,7 +177,7 @@ export default function CategoryDetailPage() {
 
 	const handleNext = useCallback(() => {
 		setSelectedIndex((prev) =>
-			prev !== null && prev < categoryCompetitions.length - 1 ? prev + 1 : prev,
+			prev !== null && prev < categoryCompetitions.length - 1 ? prev + 1 : prev
 		);
 	}, [categoryCompetitions.length]);
 
@@ -217,7 +217,7 @@ export default function CategoryDetailPage() {
 							</p>
 						</div>
 
-						<Link href="/submit" className="hidden md:block">
+						<Link className="hidden md:block" href="/submit">
 							<Button className="gap-2">
 								<Plus className="h-4 w-4" />
 								Submit Kompetisi
@@ -234,22 +234,22 @@ export default function CategoryDetailPage() {
 					<div className="flex flex-wrap items-center gap-2">
 						{COMPETITION_TYPES.map((type) => (
 							<Badge
-								key={type}
-								variant={selectedType === type ? "default" : "outline"}
 								className={cn(
 									"cursor-pointer transition-colors hover:bg-primary hover:text-primary-foreground",
-									selectedType === type && "bg-primary text-primary-foreground",
+									selectedType === type && "bg-primary text-primary-foreground"
 								)}
+								key={type}
 								onClick={() => selectType(type)}
+								variant={selectedType === type ? "default" : "outline"}
 							>
 								{type}
 							</Badge>
 						))}
 						{selectedType && (
 							<Badge
-								variant="secondary"
 								className="cursor-pointer gap-1"
 								onClick={clearType}
+								variant="secondary"
 							>
 								<X className="h-3 w-3" />
 								Clear
@@ -267,33 +267,33 @@ export default function CategoryDetailPage() {
 								Kompetisi ({categoryCompetitions.length})
 							</h2>
 							<div className="flex items-center gap-2">
-								<Link href="/submit" className="lg:hidden">
-									<Button size="sm" className="gap-2">
+								<Link className="lg:hidden" href="/submit">
+									<Button className="gap-2" size="sm">
 										<Plus className="h-4 w-4" />
 										Submit
 									</Button>
 								</Link>
 								<Button
-									variant="outline"
-									size="icon"
 									className="shrink-0 h-8 w-8"
+									size="icon"
+									variant="outline"
 								>
 									<Rss className="h-4 w-4" />
 								</Button>
 								<div className="flex items-center gap-1 rounded-lg border border-border bg-card p-1">
 									<Button
-										variant={viewMode === "card" ? "secondary" : "ghost"}
-										size="icon"
 										className="h-8 w-8"
 										onClick={() => setViewMode("card")}
+										size="icon"
+										variant={viewMode === "card" ? "secondary" : "ghost"}
 									>
 										<LayoutGrid className="h-4 w-4" />
 									</Button>
 									<Button
-										variant={viewMode === "list" ? "secondary" : "ghost"}
-										size="icon"
 										className="h-8 w-8"
 										onClick={() => setViewMode("list")}
+										size="icon"
+										variant={viewMode === "list" ? "secondary" : "ghost"}
 									>
 										<List className="h-4 w-4" />
 									</Button>
@@ -307,11 +307,11 @@ export default function CategoryDetailPage() {
 								<div className="grid grid-cols-2 md:grid-cols-3 gap-4">
 									{categoryCompetitions.map((competition, index) => (
 										<CompetitionCardPoster
-											key={competition.id}
 											competition={competition}
 											isBookmarked={isBookmarked(competition.id)}
-											onToggleBookmark={toggleBookmark}
+											key={competition.id}
 											onClick={() => handleItemClick(index)}
+											onToggleBookmark={toggleBookmark}
 										/>
 									))}
 								</div>
@@ -319,11 +319,11 @@ export default function CategoryDetailPage() {
 								<div className="grid grid-cols-1 gap-3">
 									{categoryCompetitions.map((competition, index) => (
 										<CompetitionCard
-											key={competition.id}
 											competition={competition}
 											isBookmarked={bookmarks.includes(competition.id)}
-											onToggleBookmark={toggleBookmark}
+											key={competition.id}
 											onClick={() => handleItemClick(index)}
+											onToggleBookmark={toggleBookmark}
 										/>
 									))}
 								</div>
@@ -345,9 +345,8 @@ export default function CategoryDetailPage() {
 								Kalender Deadline
 							</h3>
 							<Calendar
-								mode="multiple"
-								selected={competitionDates}
 								className="pointer-events-auto"
+								mode="multiple"
 								modifiers={{
 									deadline: competitionDates,
 								}}
@@ -358,6 +357,7 @@ export default function CategoryDetailPage() {
 										borderRadius: "50%",
 									},
 								}}
+								selected={competitionDates}
 							/>
 							<p className="text-xs text-muted-foreground mt-3">
 								Tanggal yang ditandai menunjukkan deadline kompetisi
@@ -370,15 +370,15 @@ export default function CategoryDetailPage() {
 			{/* Competition Dialog */}
 			<CompetitionDialog
 				competition={selectedCompetition}
-				isOpen={selectedIndex !== null}
-				onClose={handleCloseDialog}
-				onPrevious={handlePrevious}
-				onNext={handleNext}
-				hasPrevious={selectedIndex !== null && selectedIndex > 0}
 				hasNext={
 					selectedIndex !== null &&
 					selectedIndex < categoryCompetitions.length - 1
 				}
+				hasPrevious={selectedIndex !== null && selectedIndex > 0}
+				isOpen={selectedIndex !== null}
+				onClose={handleCloseDialog}
+				onNext={handleNext}
+				onPrevious={handlePrevious}
 			/>
 
 			<Footer />

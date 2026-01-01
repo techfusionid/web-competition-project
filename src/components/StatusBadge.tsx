@@ -1,6 +1,6 @@
-import { CompetitionStatus } from "@/types/competition";
-import { cn } from "@/lib/utils";
 import { Circle } from "lucide-react";
+import { cn } from "@/lib/utils";
+import type { CompetitionStatus } from "@/types/competition";
 
 interface StatusBadgeProps {
 	status: CompetitionStatus;
@@ -29,7 +29,7 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
 		<span
 			className={cn(
 				"inline-flex items-center gap-1.5 text-xs text-muted-foreground",
-				className,
+				className
 			)}
 		>
 			<Circle className={cn("h-2 w-2 fill-current", config.dotColor)} />

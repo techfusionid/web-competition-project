@@ -1,6 +1,6 @@
-import { Header } from "@/components/Header";
+import { Briefcase, Building2, ExternalLink, Shield } from "lucide-react";
 import { Footer } from "@/components/Footer";
-import { Building2, Shield, Briefcase, ExternalLink } from "lucide-react";
+import { Header } from "@/components/Header";
 import { Card, CardContent } from "@/components/ui/card";
 
 export default function About() {

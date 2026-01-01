@@ -1,24 +1,24 @@
-import { useState } from "react";
+import { format } from "date-fns";
+import { id } from "date-fns/locale";
 import {
-	Calendar,
-	MapPin,
-	Users,
-	Bookmark,
 	ArrowUpRight,
-	Trophy,
+	Bookmark,
+	Calendar,
+	ChevronDown,
+	ChevronUp,
 	Globe,
 	Instagram,
 	Mail,
-	ChevronDown,
-	ChevronUp,
+	MapPin,
+	Trophy,
+	Users,
 } from "lucide-react";
-import { Competition } from "@/types/competition";
-import { StatusBadge } from "./StatusBadge";
-import { Button } from "@/components/ui/button";
-import { format } from "date-fns";
-import { id } from "date-fns/locale";
-import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import type { Competition } from "@/types/competition";
+import { StatusBadge } from "./StatusBadge";
 
 interface CompetitionCardProps {
 	competition: Competition;
@@ -69,32 +69,36 @@ export function CompetitionCard({
 							</h3>
 						</Link>
 						<button
+							className="truncate text-[10px] md:text-xs text-muted-foreground hover:text-primary hover:underline text-left w-full"
 							onClick={(e) => {
 								e.stopPropagation();
 								onOrganizerClick?.(competition.organizer);
 							}}
-							className="truncate text-[10px] md:text-xs text-muted-foreground hover:text-primary hover:underline text-left w-full"
 						>
 							{competition.organizer}
 						</button>
 					</div>
 				</div>
 				<Button
-					variant="ghost"
-					size="icon"
+					className={cn(
+						"h-7 w-7 md:h-8 md:w-8 shrink-0",
+<<<<<<< Updated upstream
+						isBookmarked && "text-foreground"
+=======
+						isBookmarked && "text-foreground",
+>>>>>>> Stashed changes
+					)}
 					onClick={(e) => {
 						e.stopPropagation();
 						onToggleBookmark(competition.id);
 					}}
-					className={cn(
-						"h-7 w-7 md:h-8 md:w-8 shrink-0",
-						isBookmarked && "text-foreground",
-					)}
+					size="icon"
+					variant="ghost"
 				>
 					<Bookmark
 						className={cn(
 							"h-3.5 w-3.5 md:h-4 md:w-4",
-							isBookmarked && "fill-current",
+							isBookmarked && "fill-current"
 						)}
 					/>
 				</Button>
@@ -105,18 +109,18 @@ export function CompetitionCard({
 				<p
 					className={cn(
 						"text-[10px] md:text-xs text-muted-foreground leading-relaxed",
-						!isExpanded && "line-clamp-2",
+						!isExpanded && "line-clamp-2"
 					)}
 				>
 					{competition.description}
 				</p>
 				{shouldShowReadMore && (
 					<button
+						className="mt-1 flex items-center gap-0.5 text-[10px] md:text-xs text-primary hover:underline"
 						onClick={(e) => {
 							e.stopPropagation();
 							setIsExpanded(!isExpanded);
 						}}
-						className="mt-1 flex items-center gap-0.5 text-[10px] md:text-xs text-primary hover:underline"
 					>
 						{isExpanded ? (
 							<>
@@ -155,8 +159,8 @@ export function CompetitionCard({
 					<div className="mt-1.5 flex flex-wrap gap-1">
 						{competition.institutions.map((inst, idx) => (
 							<span
-								key={idx}
 								className="rounded bg-muted px-1.5 py-0.5 text-[9px] md:text-[10px] text-muted-foreground"
+								key={idx}
 							>
 								{inst}
 							</span>
@@ -169,11 +173,11 @@ export function CompetitionCard({
 				<div className="mt-2 flex flex-wrap items-center gap-2">
 					{competition.socialMedia.instagram && (
 						<a
-							href={`https://instagram.com/${competition.socialMedia.instagram.replace("@", "")}`}
-							target="_blank"
-							rel="noopener noreferrer"
-							onClick={(e) => e.stopPropagation()}
 							className="flex items-center gap-1 text-[10px] md:text-xs text-muted-foreground hover:text-primary"
+							href={`https://instagram.com/${competition.socialMedia.instagram.replace("@", "")}`}
+							onClick={(e) => e.stopPropagation()}
+							rel="noopener noreferrer"
+							target="_blank"
 						>
 							<Instagram className="h-3 w-3" />
 							<span className="hidden md:inline">
@@ -183,11 +187,11 @@ export function CompetitionCard({
 					)}
 					{competition.socialMedia.website && (
 						<a
-							href={competition.socialMedia.website}
-							target="_blank"
-							rel="noopener noreferrer"
-							onClick={(e) => e.stopPropagation()}
 							className="flex items-center gap-1 text-[10px] md:text-xs text-muted-foreground hover:text-primary"
+							href={competition.socialMedia.website}
+							onClick={(e) => e.stopPropagation()}
+							rel="noopener noreferrer"
+							target="_blank"
 						>
 							<Globe className="h-3 w-3" />
 							<span className="hidden md:inline">Website</span>
@@ -195,9 +199,9 @@ export function CompetitionCard({
 					)}
 					{competition.socialMedia.email && (
 						<a
+							className="flex items-center gap-1 text-[10px] md:text-xs text-muted-foreground hover:text-primary"
 							href={`mailto:${competition.socialMedia.email}`}
 							onClick={(e) => e.stopPropagation()}
-							className="flex items-center gap-1 text-[10px] md:text-xs text-muted-foreground hover:text-primary"
 						>
 							<Mail className="h-3 w-3" />
 							<span className="hidden md:inline">
@@ -228,8 +232,8 @@ export function CompetitionCard({
 				</span>
 				{competition.level.slice(0, 1).map((lvl) => (
 					<span
-						key={lvl}
 						className="rounded bg-secondary px-1.5 md:px-2 py-0.5 text-[9px] md:text-xs text-secondary-foreground"
+						key={lvl}
 					>
 						{levelLabels[lvl]}
 					</span>
@@ -245,9 +249,9 @@ export function CompetitionCard({
 				</div>
 				<Link href={`/competition/${competition.id}`}>
 					<Button
-						variant="ghost"
-						size="sm"
 						className="gap-1 text-[10px] md:text-xs h-7 px-2 md:px-3"
+						size="sm"
+						variant="ghost"
 					>
 						Detail
 						<ArrowUpRight className="h-2.5 w-2.5 md:h-3 md:w-3" />

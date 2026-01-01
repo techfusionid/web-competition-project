@@ -1,16 +1,16 @@
-import { Competition } from "@/types/competition";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useIsMobile } from "@/hooks/use-mobile";
+import type { Competition } from "@/types/competition";
 import { CompetitionCard } from "./CompetitionCard";
 import { CompetitionCardPoster } from "./CompetitionCardPoster";
-import { CompetitionDialog } from "./CompetitionDialog";
 import { CompetitionDetailPanel } from "./CompetitionDetailPanel";
+import { CompetitionDialog } from "./CompetitionDialog";
 import { CompetitionGalleryItem } from "./CompetitionGalleryItem";
-import { FilterState, Filters } from "./Filters";
+import { type FilterState, Filters } from "./Filters";
 import { SearchBar } from "./SearchBar";
-import { ViewToggle, ViewMode } from "./ViewToggle";
-import { useState, useMemo, useCallback, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { type ViewMode, ViewToggle } from "./ViewToggle";
 
 interface CompetitionListProps {
 	competitions: Competition[];
@@ -80,7 +80,7 @@ export function CompetitionList({
 	}, [searchQuery, filters]);
 
 	const filteredCompetitions = useMemo(() => {
-		let result = competitions.filter((comp) => {
+		const result = competitions.filter((comp) => {
 			if (searchQuery) {
 				const query = searchQuery.toLowerCase();
 				const matchesSearch =
@@ -165,7 +165,7 @@ export function CompetitionList({
 
 	const handleNext = useCallback(() => {
 		setSelectedIndex((prev) =>
-			prev !== null && prev < filteredCompetitions.length - 1 ? prev + 1 : prev,
+			prev !== null && prev < filteredCompetitions.length - 1 ? prev + 1 : prev
 		);
 	}, [filteredCompetitions.length]);
 
@@ -179,22 +179,23 @@ export function CompetitionList({
 				<div className="container">
 					<div className="mb-6 flex flex-col gap-3">
 						<SearchBar
-							value={searchQuery}
 							onChange={onSearchChange}
-							sortBy={sortBy}
 							onSortChange={(v) => setSortBy(v as SortOption)}
-							resultCount={filteredCompetitions.length}
 							onToggleFilters={() => setShowFilters(!showFilters)}
+							resultCount={filteredCompetitions.length}
 							showFilters={showFilters}
+							sortBy={sortBy}
+							value={searchQuery}
 						/>
 						<div
-							className={`overflow-hidden transition-all duration-300 ease-out ${showFilters ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-								}`}
+							className={`overflow-hidden transition-all duration-300 ease-out ${
+								showFilters ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+							}`}
 						>
 							<Filters
 								filters={filters}
-								onFiltersChange={setFilters}
 								onClearFilters={clearFilters}
+								onFiltersChange={setFilters}
 							/>
 						</div>
 						<div className="flex items-center justify-between">
@@ -202,8 +203,8 @@ export function CompetitionList({
 								{filteredCompetitions.length} kompetisi
 							</p>
 							<ViewToggle
-								viewMode={viewMode}
 								onViewModeChange={handleViewModeChange}
+								viewMode={viewMode}
 							/>
 						</div>
 					</div>
@@ -214,10 +215,10 @@ export function CompetitionList({
 								Tidak ada kompetisi yang cocok
 							</p>
 							<Button
-								variant="outline"
-								size="sm"
-								onClick={clearFilters}
 								className="mt-4 text-xs"
+								onClick={clearFilters}
+								size="sm"
+								variant="outline"
 							>
 								Reset Filter
 							</Button>
@@ -227,18 +228,18 @@ export function CompetitionList({
 							<div className="grid gap-3 grid-cols-1">
 								{visibleCompetitions.map((competition, index) => (
 									<CompetitionCard
-										key={competition.id}
 										competition={competition}
 										isBookmarked={bookmarks.includes(competition.id)}
-										onToggleBookmark={onToggleBookmark}
-										onOrganizerClick={onOrganizerClick}
+										key={competition.id}
 										onClick={() => handleItemClick(index)}
+										onOrganizerClick={onOrganizerClick}
+										onToggleBookmark={onToggleBookmark}
 									/>
 								))}
 							</div>
 							{hasMore && (
 								<div className="mt-6 flex justify-center">
-									<Button variant="outline" onClick={handleLoadMore}>
+									<Button onClick={handleLoadMore} variant="outline">
 										Muat lebih banyak (
 										{filteredCompetitions.length - visibleCount} lagi)
 									</Button>
@@ -250,17 +251,17 @@ export function CompetitionList({
 							<div className="grid gap-4 grid-cols-1">
 								{visibleCompetitions.map((competition, index) => (
 									<CompetitionCardPoster
-										key={competition.id}
 										competition={competition}
 										isBookmarked={bookmarks.includes(competition.id)}
-										onToggleBookmark={onToggleBookmark}
+										key={competition.id}
 										onClick={() => handleItemClick(index)}
+										onToggleBookmark={onToggleBookmark}
 									/>
 								))}
 							</div>
 							{hasMore && (
 								<div className="mt-6 flex justify-center">
-									<Button variant="outline" onClick={handleLoadMore}>
+									<Button onClick={handleLoadMore} variant="outline">
 										Muat lebih banyak (
 										{filteredCompetitions.length - visibleCount} lagi)
 									</Button>
@@ -272,15 +273,15 @@ export function CompetitionList({
 					{/* Mobile Dialog */}
 					<CompetitionDialog
 						competition={selectedCompetition}
-						isOpen={selectedIndex !== null}
-						onClose={handleCloseDialog}
-						onPrevious={handlePrevious}
-						onNext={handleNext}
-						hasPrevious={selectedIndex !== null && selectedIndex > 0}
 						hasNext={
 							selectedIndex !== null &&
 							selectedIndex < filteredCompetitions.length - 1
 						}
+						hasPrevious={selectedIndex !== null && selectedIndex > 0}
+						isOpen={selectedIndex !== null}
+						onClose={handleCloseDialog}
+						onNext={handleNext}
+						onPrevious={handlePrevious}
 					/>
 				</div>
 			</section>
@@ -293,22 +294,23 @@ export function CompetitionList({
 			<div className="container">
 				<div className="mb-6 flex flex-col gap-3">
 					<SearchBar
-						value={searchQuery}
 						onChange={onSearchChange}
-						sortBy={sortBy}
 						onSortChange={(v) => setSortBy(v as SortOption)}
-						resultCount={filteredCompetitions.length}
 						onToggleFilters={() => setShowFilters(!showFilters)}
+						resultCount={filteredCompetitions.length}
 						showFilters={showFilters}
+						sortBy={sortBy}
+						value={searchQuery}
 					/>
 					<div
-						className={`overflow-hidden transition-all duration-300 ease-out ${showFilters ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-							}`}
+						className={`overflow-hidden transition-all duration-300 ease-out ${
+							showFilters ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+						}`}
 					>
 						<Filters
 							filters={filters}
-							onFiltersChange={setFilters}
 							onClearFilters={clearFilters}
+							onFiltersChange={setFilters}
 						/>
 					</div>
 					<div className="flex items-center justify-between">
@@ -316,8 +318,8 @@ export function CompetitionList({
 							{filteredCompetitions.length} kompetisi ditemukan
 						</p>
 						<ViewToggle
-							viewMode={viewMode}
 							onViewModeChange={handleViewModeChange}
+							viewMode={viewMode}
 						/>
 					</div>
 				</div>
@@ -328,10 +330,10 @@ export function CompetitionList({
 							Tidak ada kompetisi yang cocok
 						</p>
 						<Button
-							variant="outline"
-							size="sm"
-							onClick={clearFilters}
 							className="mt-4 text-xs"
+							onClick={clearFilters}
+							size="sm"
+							variant="outline"
 						>
 							Reset Filter
 						</Button>
@@ -345,23 +347,23 @@ export function CompetitionList({
 								<div className="flex flex-col gap-3 pr-4">
 									{visibleCompetitions.map((competition, index) => (
 										<CompetitionGalleryItem
-											key={competition.id}
 											competition={competition}
 											isSelected={selectedIndex === index}
+											key={competition.id}
 											onClick={() => handleItemClick(index)}
 										/>
 									))}
 									{hasMore && (
 										<Button
-											variant="outline"
-											size="sm"
-											onClick={handleLoadMore}
 											className="mt-2"
+											onClick={handleLoadMore}
+											size="sm"
+											variant="outline"
 										>
 											Muat{" "}
 											{Math.min(
 												ITEMS_PER_PAGE,
-												filteredCompetitions.length - visibleCount,
+												filteredCompetitions.length - visibleCount
 											)}{" "}
 											lagi
 										</Button>
@@ -384,18 +386,18 @@ export function CompetitionList({
 						<div className="grid gap-4 grid-cols-2 lg:grid-cols-3">
 							{visibleCompetitions.map((competition, index) => (
 								<CompetitionCard
-									key={competition.id}
 									competition={competition}
 									isBookmarked={bookmarks.includes(competition.id)}
-									onToggleBookmark={onToggleBookmark}
-									onOrganizerClick={onOrganizerClick}
+									key={competition.id}
 									onClick={() => handleItemClick(index)}
+									onOrganizerClick={onOrganizerClick}
+									onToggleBookmark={onToggleBookmark}
 								/>
 							))}
 						</div>
 						{hasMore && (
 							<div className="mt-6 flex justify-center">
-								<Button variant="outline" onClick={handleLoadMore}>
+								<Button onClick={handleLoadMore} variant="outline">
 									Muat lebih banyak (
 									{filteredCompetitions.length - visibleCount} lagi)
 								</Button>
@@ -408,18 +410,18 @@ export function CompetitionList({
 						<div className="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
 							{visibleCompetitions.map((competition, index) => (
 								<CompetitionCardPoster
-									key={competition.id}
 									competition={competition}
 									isBookmarked={bookmarks.includes(competition.id)}
-									onToggleBookmark={onToggleBookmark}
+									key={competition.id}
 									onClick={() => handleItemClick(index)}
 									onLongPress={() => setDialogIndex(index)}
+									onToggleBookmark={onToggleBookmark}
 								/>
 							))}
 						</div>
 						{hasMore && (
 							<div className="mt-6 flex justify-center">
-								<Button variant="outline" onClick={handleLoadMore}>
+								<Button onClick={handleLoadMore} variant="outline">
 									Muat lebih banyak (
 									{filteredCompetitions.length - visibleCount} lagi)
 								</Button>
@@ -430,24 +432,28 @@ export function CompetitionList({
 							competition={
 								dialogIndex !== null ? filteredCompetitions[dialogIndex] : null
 							}
+							hasNext={
+								dialogIndex !== null &&
+								dialogIndex < filteredCompetitions.length - 1
+							}
+							hasPrevious={dialogIndex !== null && dialogIndex > 0}
 							isOpen={dialogIndex !== null}
 							onClose={() => setDialogIndex(null)}
-							onPrevious={() =>
-								setDialogIndex((prev) =>
-									prev !== null && prev > 0 ? prev - 1 : prev,
-								)
-							}
 							onNext={() =>
 								setDialogIndex((prev) =>
 									prev !== null && prev < filteredCompetitions.length - 1
 										? prev + 1
-										: prev,
+										: prev
 								)
 							}
-							hasPrevious={dialogIndex !== null && dialogIndex > 0}
-							hasNext={
-								dialogIndex !== null &&
-								dialogIndex < filteredCompetitions.length - 1
+							onPrevious={() =>
+								setDialogIndex((prev) =>
+<<<<<<< Updated upstream
+									prev !== null && prev > 0 ? prev - 1 : prev
+=======
+									prev !== null && prev > 0 ? prev - 1 : prev,
+>>>>>>> Stashed changes
+								)
 							}
 						/>
 					</>

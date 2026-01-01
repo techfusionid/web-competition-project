@@ -1,9 +1,9 @@
-import Link from "next/link";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { competitions } from "@/data/competitions";
 import { Building2, Trophy } from "lucide-react";
+import Link from "next/link";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
 import { Card, CardContent } from "@/components/ui/card";
+import { competitions } from "@/data/competitions";
 
 // Extract unique institutions from competitions
 function getInstitutions() {
@@ -31,7 +31,7 @@ function getInstitutions() {
 	});
 
 	return Array.from(institutionMap.values()).sort(
-		(a, b) => b.competitionCount - a.competitionCount,
+		(a, b) => b.competitionCount - a.competitionCount
 	);
 }
 
@@ -53,8 +53,8 @@ export default function InstitutionsPage() {
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 					{institutions.map((institution) => (
 						<Link
-							key={institution.name}
 							href={`/institution/${encodeURIComponent(institution.name)}`}
+							key={institution.name}
 						>
 							<Card className="h-full transition-all hover:shadow-md hover:border-primary/50">
 								<CardContent className="p-5">
@@ -75,8 +75,8 @@ export default function InstitutionsPage() {
 													.slice(0, 3)
 													.map((cat) => (
 														<span
-															key={cat}
 															className="inline-flex items-center rounded-full bg-secondary px-2 py-0.5 text-xs text-secondary-foreground"
+															key={cat}
 														>
 															{cat}
 														</span>

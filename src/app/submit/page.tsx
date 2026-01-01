@@ -1,14 +1,16 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { id } from "date-fns/locale";
+import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 import { z } from "zod";
-import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
 import {
 	Form,
@@ -18,6 +20,12 @@ import {
 	FormLabel,
 	FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
 import {
 	Select,
 	SelectContent,
@@ -25,17 +33,9 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
-import { format } from "date-fns";
-import { id } from "date-fns/locale";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { CATEGORIES, LEVELS } from "@/types/competition";
-import { toast } from "sonner";
 
 const formSchema = z.object({
 	title: z
@@ -95,7 +95,7 @@ export default function SubmitPage() {
 
 		console.log("Submitted:", data);
 		toast.success(
-			"Kompetisi berhasil disubmit! Tim kami akan mereview dalam 1-2 hari kerja.",
+			"Kompetisi berhasil disubmit! Tim kami akan mereview dalam 1-2 hari kerja."
 		);
 		form.reset();
 		setIsSubmitting(false);
@@ -119,8 +119,8 @@ export default function SubmitPage() {
 
 						<Form {...form}>
 							<form
-								onSubmit={form.handleSubmit(onSubmit)}
 								className="space-y-6"
+								onSubmit={form.handleSubmit(onSubmit)}
 							>
 								<FormField
 									control={form.control}
@@ -161,8 +161,8 @@ export default function SubmitPage() {
 											<FormLabel>Deskripsi</FormLabel>
 											<FormControl>
 												<Textarea
-													placeholder="Jelaskan tentang kompetisi ini..."
 													className="min-h-[100px] resize-none"
+													placeholder="Jelaskan tentang kompetisi ini..."
 													{...field}
 												/>
 											</FormControl>
@@ -295,11 +295,11 @@ export default function SubmitPage() {
 													<PopoverTrigger asChild>
 														<FormControl>
 															<Button
-																variant="outline"
 																className={cn(
 																	"w-full justify-start text-left font-normal",
-																	!field.value && "text-muted-foreground",
+																	!field.value && "text-muted-foreground"
 																)}
+																variant="outline"
 															>
 																<CalendarIcon className="mr-2 h-4 w-4" />
 																{field.value ? (
@@ -312,13 +312,13 @@ export default function SubmitPage() {
 															</Button>
 														</FormControl>
 													</PopoverTrigger>
-													<PopoverContent className="w-auto p-0" align="start">
+													<PopoverContent align="start" className="w-auto p-0">
 														<Calendar
-															mode="single"
-															selected={field.value}
-															onSelect={field.onChange}
-															initialFocus
 															className={cn("p-3 pointer-events-auto")}
+															initialFocus
+															mode="single"
+															onSelect={field.onChange}
+															selected={field.value}
 														/>
 													</PopoverContent>
 												</Popover>
@@ -337,11 +337,11 @@ export default function SubmitPage() {
 													<PopoverTrigger asChild>
 														<FormControl>
 															<Button
-																variant="outline"
 																className={cn(
 																	"w-full justify-start text-left font-normal",
-																	!field.value && "text-muted-foreground",
+																	!field.value && "text-muted-foreground"
 																)}
+																variant="outline"
 															>
 																<CalendarIcon className="mr-2 h-4 w-4" />
 																{field.value ? (
@@ -354,18 +354,18 @@ export default function SubmitPage() {
 															</Button>
 														</FormControl>
 													</PopoverTrigger>
-													<PopoverContent className="w-auto p-0" align="start">
+													<PopoverContent align="start" className="w-auto p-0">
 														<Calendar
-															mode="single"
-															selected={field.value}
-															onSelect={field.onChange}
+															className={cn("p-3 pointer-events-auto")}
 															disabled={(date) => {
 																const startDate =
 																	form.getValues("registrationStart");
 																return startDate ? date < startDate : false;
 															}}
 															initialFocus
-															className={cn("p-3 pointer-events-auto")}
+															mode="single"
+															onSelect={field.onChange}
+															selected={field.value}
 														/>
 													</PopoverContent>
 												</Popover>
@@ -407,9 +407,9 @@ export default function SubmitPage() {
 								/>
 
 								<Button
-									type="submit"
 									className="w-full"
 									disabled={isSubmitting}
+									type="submit"
 								>
 									{isSubmitting ? "Mengirim..." : "Submit Kompetisi"}
 								</Button>

@@ -1,16 +1,16 @@
 "use client";
 
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import {
+	ExternalLink,
 	Instagram,
 	MessageCircle,
-	ExternalLink,
 	Users,
 	Wrench,
 } from "lucide-react";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface InstagramAccount {
 	id: string;
@@ -265,15 +265,14 @@ export default function ResourcesPage() {
 					<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 						{tools.map((tool) => (
 							<Card
-								key={tool.id}
 								className="overflow-hidden group hover:shadow-md transition-shadow"
+								key={tool.id}
 							>
 								<CardContent className="p-4">
 									<div className="flex items-start gap-3">
 										<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-secondary p-2">
 											{/* eslint-disable-next-line @next/next/no-img-element */}
 											<img
-												src={tool.iconUrl}
 												alt={tool.name}
 												className="h-6 w-6 object-contain"
 												onError={(e) => {
@@ -281,6 +280,7 @@ export default function ResourcesPage() {
 														"https://placehold.co/24x24?text=" +
 														tool.name.charAt(0);
 												}}
+												src={tool.iconUrl}
 											/>
 										</div>
 										<div className="flex-1 min-w-0">
@@ -303,10 +303,10 @@ export default function ResourcesPage() {
 										{tool.description}
 									</p>
 									<Button
-										variant="outline"
-										size="sm"
 										className="w-full mt-3"
 										onClick={() => window.open(tool.link, "_blank")}
+										size="sm"
+										variant="outline"
 									>
 										Kunjungi
 										<ExternalLink className="h-3 w-3 ml-auto" />
@@ -328,14 +328,14 @@ export default function ResourcesPage() {
 
 					<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 						{instagramAccounts.map((account) => (
-							<Card key={account.id} className="overflow-hidden">
+							<Card className="overflow-hidden" key={account.id}>
 								<CardContent className="p-4">
 									<div className="flex items-start gap-3">
 										{/* eslint-disable-next-line @next/next/no-img-element */}
 										<img
-											src={account.imageUrl}
 											alt={account.name}
 											className="h-12 w-12 rounded-full object-cover"
+											src={account.imageUrl}
 										/>
 										<div className="flex-1 min-w-0">
 											<h3 className="font-medium text-foreground truncate">
@@ -356,15 +356,15 @@ export default function ResourcesPage() {
 										{account.description}
 									</p>
 									<Button
-										variant="outline"
-										size="sm"
 										className="w-full mt-3"
 										onClick={() =>
 											window.open(
 												`https://instagram.com/${account.username.replace("@", "")}`,
-												"_blank",
+												"_blank"
 											)
 										}
+										size="sm"
+										variant="outline"
 									>
 										<Instagram className="h-4 w-4 mr-2" />
 										Kunjungi
@@ -387,7 +387,7 @@ export default function ResourcesPage() {
 
 					<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 						{whatsAppChannels.map((channel) => (
-							<Card key={channel.id} className="overflow-hidden">
+							<Card className="overflow-hidden" key={channel.id}>
 								<CardContent className="p-4">
 									<div className="flex items-start gap-3">
 										<div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-500/10">
@@ -409,10 +409,10 @@ export default function ResourcesPage() {
 										{channel.description}
 									</p>
 									<Button
-										variant="outline"
-										size="sm"
 										className="w-full mt-3"
 										onClick={() => window.open(channel.link, "_blank")}
+										size="sm"
+										variant="outline"
 									>
 										<MessageCircle className="h-4 w-4 mr-2" />
 										Gabung Channel

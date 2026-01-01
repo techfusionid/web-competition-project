@@ -20,13 +20,13 @@ export function Hero({ onTagClick }: HeroProps) {
 						{["Hackathon", "Business Case", "UI/UX", "Data Science"].map(
 							(tag) => (
 								<button
+									className="rounded-md border border-border bg-card px-3 py-1 text-foreground transition-colors hover:bg-secondary"
 									key={tag}
 									onClick={() => onTagClick(tag)}
-									className="rounded-md border border-border bg-card px-3 py-1 text-foreground transition-colors hover:bg-secondary"
 								>
 									{tag}
 								</button>
-							),
+							)
 						)}
 					</div>
 				</div>
