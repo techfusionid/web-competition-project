@@ -448,11 +448,7 @@ export function CompetitionList({
 							}
 							onPrevious={() =>
 								setDialogIndex((prev) =>
-<<<<<<< Updated upstream
 									prev !== null && prev > 0 ? prev - 1 : prev
-=======
-									prev !== null && prev > 0 ? prev - 1 : prev,
->>>>>>> Stashed changes
 								)
 							}
 						/>

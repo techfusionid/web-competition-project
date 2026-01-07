@@ -104,13 +104,7 @@ function AnimatedCard({
 export default function AnimatedCardStack() {
 	const [randomComps] = useState(() => getRandomCompetitions(10));
 	const [cards, setCards] = useState<Card[]>(() =>
-<<<<<<< Updated upstream
 		randomComps.slice(0, 3).map((comp, i) => ({ id: i + 1, competition: comp }))
-=======
-		randomComps
-			.slice(0, 3)
-			.map((comp, i) => ({ id: i + 1, competition: comp })),
->>>>>>> Stashed changes
 	);
 	const [isAnimating, setIsAnimating] = useState(false);
 	const [nextId, setNextId] = useState(4);

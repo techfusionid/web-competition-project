@@ -19,7 +19,7 @@
 - **novu** - notification
 - **openstatus** / betterstack
 - **posthog** - analytics
-- **featurebase / crisp** - customer support & feedback platform
+- **featurebase** - customer support & feedback platform
 
 ## Getting Started
 
@@ -67,6 +67,10 @@ heroes sederhana yang menampilkan, +23 lomba per minggu
 
 nampilin grid lomba lomba dalam ui yg mudah dibaca user, interaksinya mirip seperti instagram
 
+#### component card
+- poster
+- card
+- semi poster card
 ### about-us
 
 nyeritain siapa kami dan apa tujuan kami 

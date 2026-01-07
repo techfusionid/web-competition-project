@@ -82,11 +82,7 @@ export function CompetitionCard({
 				<Button
 					className={cn(
 						"h-7 w-7 md:h-8 md:w-8 shrink-0",
-<<<<<<< Updated upstream
 						isBookmarked && "text-foreground"
-=======
-						isBookmarked && "text-foreground",
->>>>>>> Stashed changes
 					)}
 					onClick={(e) => {
 						e.stopPropagation();
