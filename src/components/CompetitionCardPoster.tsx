@@ -88,8 +88,8 @@ export function CompetitionCardPoster({
 						</div>
 					)}
 
-					{/* Hover Overlay */}
-					<div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-foreground/95 via-foreground/60 to-transparent p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+					{/* Hover Overlay - Always visible on mobile, hover on desktop */}
+					<div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-foreground/95 via-foreground/60 to-transparent p-3 opacity-100 md:opacity-0 transition-opacity duration-300 md:group-hover:opacity-100">
 						<div className="space-y-2 text-background">
 							<div className="flex flex-wrap gap-1.5">
 								<span className="rounded bg-background/20 px-2 py-0.5 text-xs backdrop-blur-sm">
