@@ -37,7 +37,7 @@ export function Header() {
 	const isActive = (path: string) => pathname === path;
 
 	return (
-		<header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+		<header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
 			<div className="container flex h-14 items-center">
 				<Link className="mr-8 flex items-center gap-2" href="/">
 					<div className="flex h-7 w-7 items-center justify-center rounded-md bg-foreground">
@@ -84,14 +84,14 @@ export function Header() {
 								<Menu className="h-4 w-4" />
 							</Button>
 						</SheetTrigger>
-						<SheetContent className="w-[280px]" side="right">
-							<div className="flex items-center justify-between pt-4 pb-4 border-b border-border">
+						<SheetContent className="w-[280px] px-6" side="right">
+							<div className="flex items-center justify-between pt-4 pb-4 pr-8 border-b border-border">
 								<span className="text-sm font-medium text-foreground">
 									Tema
 								</span>
 								<ThemeToggle />
 							</div>
-							<nav className="flex flex-col gap-3 pt-6">
+							<nav className="flex flex-col gap-3 pt-6 pr-2">
 								<Link
 									className={`flex items-center gap-2 text-base font-medium ${isActive("/") ? "text-foreground" : "text-muted-foreground"}`}
 									href="/"

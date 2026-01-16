@@ -1,5 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+	Carousel,
+	CarouselContent,
+	CarouselItem,
+} from "@/components/ui/carousel";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { Competition } from "@/types/competition";
@@ -7,6 +12,7 @@ import { CompetitionCard } from "./CompetitionCard";
 import { CompetitionCardPoster } from "./CompetitionCardPoster";
 import { CompetitionDetailPanel } from "./CompetitionDetailPanel";
 import { CompetitionDialog } from "./CompetitionDialog";
+import { CompetitionDrawer } from "./CompetitionDrawer";
 import { CompetitionGalleryItem } from "./CompetitionGalleryItem";
 import { type FilterState, Filters } from "./Filters";
 import { SearchBar } from "./SearchBar";
@@ -58,8 +64,19 @@ export function CompetitionList({
 	const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 	const [dialogIndex, setDialogIndex] = useState<number | null>(null);
 	const [visibleCount, setVisibleCount] = useState(20);
+	const selectedItemRef = useRef<HTMLDivElement>(null);
 
 	const ITEMS_PER_PAGE = 20;
+
+	// Auto-scroll to selected item in gallery
+	useEffect(() => {
+		if (selectedIndex !== null && selectedItemRef.current) {
+			selectedItemRef.current.scrollIntoView({
+				behavior: "smooth",
+				block: "center",
+			});
+		}
+	}, [selectedIndex]);
 
 	// Update view mode when it changes and persist to localStorage
 	const handleViewModeChange = useCallback((mode: ViewMode) => {
@@ -172,7 +189,7 @@ export function CompetitionList({
 	const selectedCompetition =
 		selectedIndex !== null ? filteredCompetitions[selectedIndex] : null;
 
-	// Mobile View - keeps existing card/poster view with dialog
+	// Mobile View - Horizontal carousel with drawer
 	if (isMobile) {
 		return (
 			<section className="py-8">
@@ -223,65 +240,60 @@ export function CompetitionList({
 								Reset Filter
 							</Button>
 						</div>
-					) : viewMode === "grid" ? (
-						<>
-							<div className="grid gap-3 grid-cols-1">
-								{visibleCompetitions.map((competition, index) => (
-									<CompetitionCard
-										competition={competition}
-										isBookmarked={bookmarks.includes(competition.id)}
-										key={competition.id}
-										onClick={() => handleItemClick(index)}
-										onOrganizerClick={onOrganizerClick}
-										onToggleBookmark={onToggleBookmark}
-									/>
-								))}
-							</div>
-							{hasMore && (
-								<div className="mt-6 flex justify-center">
-									<Button onClick={handleLoadMore} variant="outline">
-										Muat lebih banyak (
-										{filteredCompetitions.length - visibleCount} lagi)
-									</Button>
-								</div>
-							)}
-						</>
 					) : (
 						<>
-							<div className="grid gap-4 grid-cols-1">
-								{visibleCompetitions.map((competition, index) => (
-									<CompetitionCardPoster
-										competition={competition}
-										isBookmarked={bookmarks.includes(competition.id)}
-										key={competition.id}
-										onClick={() => handleItemClick(index)}
-										onToggleBookmark={onToggleBookmark}
-									/>
-								))}
-							</div>
-							{hasMore && (
-								<div className="mt-6 flex justify-center">
-									<Button onClick={handleLoadMore} variant="outline">
-										Muat lebih banyak (
-										{filteredCompetitions.length - visibleCount} lagi)
-									</Button>
-								</div>
-							)}
+							{/* Horizontal Carousel */}
+							<Carousel
+								className="w-full"
+								opts={{
+									align: "center",
+									loop: false,
+									dragFree: false,
+								}}
+							>
+								<CarouselContent className="-ml-3">
+									{visibleCompetitions.map((competition, index) => (
+										<CarouselItem
+											className="pl-3 basis-[80%] sm:basis-[65%]"
+											key={competition.id}
+										>
+											{viewMode === "grid" ? (
+												<CompetitionCard
+													competition={competition}
+													isBookmarked={bookmarks.includes(competition.id)}
+													onClick={() => handleItemClick(index)}
+													onOrganizerClick={onOrganizerClick}
+													onToggleBookmark={onToggleBookmark}
+												/>
+											) : (
+												<CompetitionCardPoster
+													competition={competition}
+													isBookmarked={bookmarks.includes(competition.id)}
+													onClick={() => handleItemClick(index)}
+													onToggleBookmark={onToggleBookmark}
+												/>
+											)}
+										</CarouselItem>
+									))}
+									{hasMore && (
+										<CarouselItem className="pl-3 basis-[80%] sm:basis-[65%]">
+											<div className="flex h-full min-h-[200px] items-center justify-center rounded-lg border border-dashed border-border bg-muted/30">
+												<Button onClick={handleLoadMore} size="sm" variant="outline">
+													Muat {filteredCompetitions.length - visibleCount} lagi
+												</Button>
+											</div>
+										</CarouselItem>
+									)}
+								</CarouselContent>
+							</Carousel>
 						</>
 					)}
 
-					{/* Mobile Dialog */}
-					<CompetitionDialog
+					{/* Mobile Drawer */}
+					<CompetitionDrawer
 						competition={selectedCompetition}
-						hasNext={
-							selectedIndex !== null &&
-							selectedIndex < filteredCompetitions.length - 1
-						}
-						hasPrevious={selectedIndex !== null && selectedIndex > 0}
 						isOpen={selectedIndex !== null}
 						onClose={handleCloseDialog}
-						onNext={handleNext}
-						onPrevious={handlePrevious}
 					/>
 				</div>
 			</section>
@@ -340,19 +352,37 @@ export function CompetitionList({
 					</div>
 				) : selectedIndex !== null ? (
 					/* Split View - when a card is clicked */
-					<div className="grid grid-cols-3 gap-6">
-						{/* Left - Single column gallery */}
-						<div className="col-span-1">
-							<ScrollArea className="h-[calc(100vh-280px)]">
-								<div className="flex flex-col gap-3 pr-4">
-									{visibleCompetitions.map((competition, index) => (
-										<CompetitionGalleryItem
-											competition={competition}
-											isSelected={selectedIndex === index}
-											key={competition.id}
-											onClick={() => handleItemClick(index)}
-										/>
-									))}
+					<div className="grid grid-cols-5 gap-6">
+						{/* Left - Scrollable gallery with 3 items visible */}
+						<div className="col-span-2 min-w-0">
+							<ScrollArea className="h-[calc(100vh-6rem)]">
+								<div className="flex flex-col gap-3 pr-4 pl-1 min-w-0">
+									{visibleCompetitions.map((competition, index) => {
+										const isCurrentlySelected = selectedIndex === index;
+										const isPrevious = index === selectedIndex - 1;
+										const isNext = index === selectedIndex + 1;
+										const isVisible = isCurrentlySelected || isPrevious || isNext;
+
+										return (
+											<div
+												className={`min-w-0 transition-all duration-300 ${
+													isCurrentlySelected
+														? "scale-[1.02] opacity-100"
+														: isVisible
+														? "opacity-80 hover:opacity-100"
+														: "opacity-40 hover:opacity-70"
+												}`}
+												key={competition.id}
+												ref={isCurrentlySelected ? selectedItemRef : null}
+											>
+												<CompetitionGalleryItem
+													competition={competition}
+													isSelected={isCurrentlySelected}
+													onClick={() => handleItemClick(index)}
+												/>
+											</div>
+										);
+									})}
 									{hasMore && (
 										<Button
 											className="mt-2"
@@ -373,7 +403,7 @@ export function CompetitionList({
 						</div>
 
 						{/* Right - Large detail panel */}
-						<div className="col-span-2 sticky top-[4.5rem] h-[calc(100vh-6rem)]">
+						<div className="col-span-3 sticky top-18 h-[calc(100vh-6rem)]">
 							<CompetitionDetailPanel
 								competition={selectedCompetition}
 								onClose={handleCloseDialog}

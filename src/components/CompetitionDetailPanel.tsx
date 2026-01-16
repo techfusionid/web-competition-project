@@ -56,7 +56,7 @@ export function CompetitionDetailPanel({
 	}
 
 	return (
-		<ScrollArea className="h-[calc(100vh-200px)] rounded-lg border border-border bg-card">
+		<ScrollArea className="h-full rounded-lg border border-border bg-card">
 			<div className="p-0">
 				{/* Poster Image */}
 				<div className="relative aspect-[16/9] w-full overflow-hidden bg-secondary">

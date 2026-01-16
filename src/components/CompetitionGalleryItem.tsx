@@ -25,7 +25,7 @@ export function CompetitionGalleryItem({
 			onClick={onClick}
 		>
 			{/* Image */}
-			<div className="relative aspect-[4/3] w-full overflow-hidden bg-secondary">
+			<div className="relative aspect-[3/2.5] w-full overflow-hidden bg-secondary">
 				{competition.imageUrl ? (
 					<img
 						alt={competition.title}
