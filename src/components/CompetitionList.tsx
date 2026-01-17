@@ -15,6 +15,7 @@ import { CompetitionDialog } from "./CompetitionDialog";
 import { CompetitionDrawer } from "./CompetitionDrawer";
 import { CompetitionGalleryItem } from "./CompetitionGalleryItem";
 import { type FilterState, Filters } from "./Filters";
+import { PosterPopup } from "./PosterPopup";
 import { SearchBar } from "./SearchBar";
 import { type ViewMode, ViewToggle } from "./ViewToggle";
 
@@ -65,6 +66,7 @@ export function CompetitionList({
 	const [viewMode, setViewMode] = useState<ViewMode>("grid");
 	const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 	const [dialogIndex, setDialogIndex] = useState<number | null>(null);
+	const [posterPopupIndex, setPosterPopupIndex] = useState<number | null>(null);
 	const [visibleCount, setVisibleCount] = useState(20);
 	const selectedItemRef = useRef<HTMLDivElement>(null);
 
@@ -279,6 +281,7 @@ export function CompetitionList({
 													competition={competition}
 													isBookmarked={bookmarks.includes(competition.id)}
 													onClick={() => handleItemClick(index)}
+													onLongPress={() => setPosterPopupIndex(index)}
 													onToggleBookmark={onToggleBookmark}
 												/>
 											)}
@@ -303,6 +306,15 @@ export function CompetitionList({
 						competition={selectedCompetition}
 						isOpen={selectedIndex !== null}
 						onClose={handleCloseDialog}
+					/>
+
+					{/* Mobile Poster Popup - Shows clear poster on long press */}
+					<PosterPopup
+						competition={
+							posterPopupIndex !== null ? filteredCompetitions[posterPopupIndex] : null
+						}
+						isOpen={posterPopupIndex !== null}
+						onClose={() => setPosterPopupIndex(null)}
 					/>
 				</div>
 			</section>
@@ -450,7 +462,14 @@ export function CompetitionList({
 									isBookmarked={bookmarks.includes(competition.id)}
 									key={competition.id}
 									onClick={() => handleItemClick(index)}
-									onLongPress={() => setDialogIndex(index)}
+									onLongPress={() => {
+										// On mobile, show poster popup; on desktop, show full dialog
+										if (isMobile) {
+											setPosterPopupIndex(index);
+										} else {
+											setDialogIndex(index);
+										}
+									}}
 									onToggleBookmark={onToggleBookmark}
 								/>
 							))}
@@ -487,6 +506,14 @@ export function CompetitionList({
 									prev !== null && prev > 0 ? prev - 1 : prev
 								)
 							}
+						/>
+						{/* Mobile Poster Popup - Shows clear poster on long press */}
+						<PosterPopup
+							competition={
+								posterPopupIndex !== null ? filteredCompetitions[posterPopupIndex] : null
+							}
+							isOpen={posterPopupIndex !== null}
+							onClose={() => setPosterPopupIndex(null)}
 						/>
 					</>
 				)}

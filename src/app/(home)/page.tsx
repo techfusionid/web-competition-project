@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { AdsBanner } from "@/components/AdsBanner";
 import { CompetitionList } from "@/components/CompetitionList";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
@@ -33,6 +34,7 @@ export default function Home() {
 			<Header onHomeClick={handleHomeClick} />
 			<main className="flex-1">
 				<Hero onTagClick={handleTagClick} />
+				<AdsBanner />
 				<div id="competitions">
 					<CompetitionList
 						bookmarks={bookmarks}
