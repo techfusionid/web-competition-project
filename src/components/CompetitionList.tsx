@@ -25,6 +25,7 @@ interface CompetitionListProps {
 	bookmarks: string[];
 	onToggleBookmark: (id: string) => void;
 	onOrganizerClick: (organizer: string) => void;
+	resetTrigger?: number;
 }
 
 const defaultFilters: FilterState = {
@@ -55,6 +56,7 @@ export function CompetitionList({
 	bookmarks,
 	onToggleBookmark,
 	onOrganizerClick,
+	resetTrigger,
 }: CompetitionListProps) {
 	const isMobile = useIsMobile();
 	const [filters, setFilters] = useState<FilterState>(defaultFilters);
@@ -95,6 +97,13 @@ export function CompetitionList({
 		setSelectedIndex(null);
 		setVisibleCount(20);
 	}, [searchQuery, filters]);
+
+	// Reset view when resetTrigger changes (e.g., when clicking home/logo)
+	useEffect(() => {
+		if (resetTrigger !== undefined) {
+			setSelectedIndex(null);
+		}
+	}, [resetTrigger]);
 
 	const filteredCompetitions = useMemo(() => {
 		const result = competitions.filter((comp) => {
@@ -352,25 +361,20 @@ export function CompetitionList({
 					</div>
 				) : selectedIndex !== null ? (
 					/* Split View - when a card is clicked */
-					<div className="grid grid-cols-5 gap-6">
-						{/* Left - Scrollable gallery with 3 items visible */}
-						<div className="col-span-2 min-w-0">
+					<div className="grid grid-cols-5 gap-4">
+						{/* Left - Scrollable gallery with 2 columns of posters */}
+						<div className="col-span-2 min-w-0 overflow-hidden">
 							<ScrollArea className="h-[calc(100vh-6rem)]">
-								<div className="flex flex-col gap-3 pr-4 pl-1 min-w-0">
+								<div className="grid grid-cols-2 gap-2 pr-3 pl-1 pt-1">
 									{visibleCompetitions.map((competition, index) => {
 										const isCurrentlySelected = selectedIndex === index;
-										const isPrevious = index === selectedIndex - 1;
-										const isNext = index === selectedIndex + 1;
-										const isVisible = isCurrentlySelected || isPrevious || isNext;
 
 										return (
 											<div
-												className={`min-w-0 transition-all duration-300 ${
+												className={`transition-all duration-300 ${
 													isCurrentlySelected
-														? "scale-[1.02] opacity-100"
-														: isVisible
-														? "opacity-80 hover:opacity-100"
-														: "opacity-40 hover:opacity-70"
+														? "opacity-100 scale-[1.02]"
+														: "opacity-60 hover:opacity-100"
 												}`}
 												key={competition.id}
 												ref={isCurrentlySelected ? selectedItemRef : null}
@@ -384,19 +388,21 @@ export function CompetitionList({
 										);
 									})}
 									{hasMore && (
-										<Button
-											className="mt-2"
-											onClick={handleLoadMore}
-											size="sm"
-											variant="outline"
-										>
-											Muat{" "}
-											{Math.min(
-												ITEMS_PER_PAGE,
-												filteredCompetitions.length - visibleCount
-											)}{" "}
-											lagi
-										</Button>
+										<div className="col-span-2">
+											<Button
+												className="mt-2 w-full"
+												onClick={handleLoadMore}
+												size="sm"
+												variant="outline"
+											>
+												Muat{" "}
+												{Math.min(
+													ITEMS_PER_PAGE,
+													filteredCompetitions.length - visibleCount
+												)}{" "}
+												lagi
+											</Button>
+										</div>
 									)}
 								</div>
 							</ScrollArea>

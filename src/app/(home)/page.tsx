@@ -10,6 +10,7 @@ import { useBookmarks } from "@/hooks/useBookmarks";
 
 export default function Home() {
 	const [searchQuery, setSearchQuery] = useState("");
+	const [resetTrigger, setResetTrigger] = useState(0);
 	const { bookmarks, toggleBookmark } = useBookmarks();
 
 	const handleTagClick = useCallback((tag: string) => {
@@ -22,9 +23,14 @@ export default function Home() {
 		setSearchQuery(organizer);
 	}, []);
 
+	const handleHomeClick = useCallback(() => {
+		setResetTrigger((prev) => prev + 1);
+		setSearchQuery("");
+	}, []);
+
 	return (
 		<div className="flex min-h-screen flex-col bg-background">
-			<Header />
+			<Header onHomeClick={handleHomeClick} />
 			<main className="flex-1">
 				<Hero onTagClick={handleTagClick} />
 				<div id="competitions">
@@ -34,6 +40,7 @@ export default function Home() {
 						onOrganizerClick={handleOrganizerClick}
 						onSearchChange={setSearchQuery}
 						onToggleBookmark={toggleBookmark}
+						resetTrigger={resetTrigger}
 						searchQuery={searchQuery}
 					/>
 				</div>

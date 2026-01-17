@@ -30,16 +30,28 @@ const navItems: NavItem[] = [
 	{ path: "/about-us", label: "About", icon: Info },
 ];
 
-export function Header() {
+interface HeaderProps {
+	onHomeClick?: () => void;
+}
+
+export function Header({ onHomeClick }: HeaderProps = {}) {
 	const [isOpen, setIsOpen] = useState(false);
 	const pathname = usePathname();
+
+	const handleHomeClick = (e: React.MouseEvent) => {
+		if (pathname === "/" && onHomeClick) {
+			e.preventDefault();
+			onHomeClick();
+			window.scrollTo({ top: 0, behavior: "smooth" });
+		}
+	};
 
 	const isActive = (path: string) => pathname === path;
 
 	return (
 		<header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
 			<div className="container flex h-14 items-center">
-				<Link className="mr-8 flex items-center gap-2" href="/">
+				<Link className="mr-8 flex items-center gap-2" href="/" onClick={handleHomeClick}>
 					<div className="flex h-7 w-7 items-center justify-center rounded-md bg-foreground">
 						<span className="text-xs font-bold text-background">LH</span>
 					</div>
@@ -95,7 +107,10 @@ export function Header() {
 								<Link
 									className={`flex items-center gap-2 text-base font-medium ${isActive("/") ? "text-foreground" : "text-muted-foreground"}`}
 									href="/"
-									onClick={() => setIsOpen(false)}
+									onClick={(e) => {
+										setIsOpen(false);
+										handleHomeClick(e);
+									}}
 								>
 									{isActive("/") && <Home className="h-4 w-4" />}
 									Beranda

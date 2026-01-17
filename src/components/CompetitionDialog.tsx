@@ -139,25 +139,31 @@ export function CompetitionDialog({
 			<DialogPortal>
 				<DialogOverlay className="bg-transparent md:bg-black/80" />
 
-				{/* Navigation Arrows - Outside the dialog, hidden on mobile */}
-				<Button
-					className="fixed left-4 top-1/2 z-[60] h-10 w-10 -translate-y-1/2 rounded-full bg-background/90 shadow-lg hover:bg-accent disabled:opacity-30 hidden md:flex"
-					disabled={!hasPrevious}
-					onClick={onPrevious}
-					size="icon"
-					variant="ghost"
-				>
-					<ChevronLeft className="h-5 w-5" />
-				</Button>
-				<Button
-					className="fixed right-4 top-1/2 z-[60] h-10 w-10 -translate-y-1/2 rounded-full bg-background/90 shadow-lg hover:bg-accent disabled:opacity-30 hidden md:flex"
-					disabled={!hasNext}
-					onClick={onNext}
-					size="icon"
-					variant="ghost"
-				>
-					<ChevronRight className="h-5 w-5" />
-				</Button>
+				{/* Navigation Arrows - Outside the dialog, hidden on mobile, only show if navigation is available */}
+				{hasPrevious || hasNext ? (
+					<>
+						{hasPrevious && (
+							<Button
+								className="fixed left-4 top-1/2 z-[60] h-10 w-10 -translate-y-1/2 rounded-full bg-background/90 shadow-lg hover:bg-accent disabled:opacity-30 hidden md:flex"
+								onClick={onPrevious}
+								size="icon"
+								variant="ghost"
+							>
+								<ChevronLeft className="h-5 w-5" />
+							</Button>
+						)}
+						{hasNext && (
+							<Button
+								className="fixed right-4 top-1/2 z-[60] h-10 w-10 -translate-y-1/2 rounded-full bg-background/90 shadow-lg hover:bg-accent disabled:opacity-30 hidden md:flex"
+								onClick={onNext}
+								size="icon"
+								variant="ghost"
+							>
+								<ChevronRight className="h-5 w-5" />
+							</Button>
+						)}
+					</>
+				) : null}
 
 				<DialogPrimitive.Content
 					className={
@@ -167,7 +173,7 @@ export function CompetitionDialog({
 				>
 					<DialogTitle className="sr-only">{competition.title}</DialogTitle>
 
-					<DialogPrimitive.Close className="absolute right-2 top-2 z-10 inline-flex h-8 w-8 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm hover:bg-background focus:outline-none focus:ring-2 focus:ring-ring">
+					<DialogPrimitive.Close className="absolute left-2 top-2 z-10 inline-flex h-8 w-8 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm hover:bg-background focus:outline-none focus:ring-2 focus:ring-ring">
 						<X className="h-4 w-4" />
 						<span className="sr-only">Tutup</span>
 					</DialogPrimitive.Close>

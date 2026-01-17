@@ -1,9 +1,11 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { ArrowRight, Loader2 } from "lucide-react";
+import { useCallback, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { CompetitionDialog } from "@/components/CompetitionDialog";
+// Using the same data source as the home page
 import { competitions } from "@/data/competitions";
 import type { Competition } from "@/types/competition";
 
@@ -19,7 +21,7 @@ const positionStyles = [
 ];
 
 const exitAnimation = {
-	y: 340,
+	y: 100,
 	scale: 1,
 	zIndex: 10,
 };
@@ -29,22 +31,55 @@ const enterAnimation = {
 	scale: 0.9,
 };
 
-// Get random competitions
-function getRandomCompetitions(count: number): Competition[] {
-	const shuffled = [...competitions].sort(() => Math.random() - 0.5);
-	return shuffled.slice(0, count);
+// Get a random competition from the full list
+// Uses the same competitions data source as the home page (@/data/competitions)
+function getRandomCompetition(exclude?: string[]): Competition {
+	const available = exclude
+		? competitions.filter((c) => !exclude.includes(c.id))
+		: competitions;
+	const pool = available.length > 0 ? available : competitions;
+	return pool[Math.floor(Math.random() * pool.length)];
 }
 
-function CardContent({ competition }: { competition: Competition }) {
+// Get initial random competitions
+function getInitialCards(): Card[] {
+	const used: string[] = [];
+	const cards: Card[] = [];
+	for (let i = 0; i < 3; i++) {
+		const comp = getRandomCompetition(used);
+		used.push(comp.id);
+		cards.push({ id: i + 1, competition: comp });
+	}
+	return cards;
+}
+
+function CardContent({
+	competition,
+	onViewClick,
+}: {
+	competition: Competition;
+	onViewClick: () => void;
+}) {
 	return (
-		<div className="relative flex flex-col rounded-xl border border-border bg-card shadow-lg overflow-hidden h-[320px]">
+		<div 
+			className="relative flex flex-col rounded-xl border border-border bg-card shadow-lg overflow-hidden h-[320px]"
+			onClick={onViewClick}
+		>
 			<div className="relative h-40 w-full overflow-hidden">
-				<img
-					alt={competition.title}
-					className="h-full w-full object-cover"
-					src={competition.imageUrl}
-				/>
-				<div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+				{competition.imageUrl ? (
+					<img
+						alt={competition.title}
+						className="h-full w-full object-cover"
+						src={competition.imageUrl}
+					/>
+				) : (
+					<div className="flex h-full w-full items-center justify-center bg-linear-to-br from-primary/20 to-primary/5">
+						<span className="text-4xl font-bold text-primary/30">
+							{competition.title.charAt(0)}
+						</span>
+					</div>
+				)}
+				<div className="absolute inset-0 bg-linear-to-t from-background/80 to-transparent" />
 			</div>
 
 			<div className="flex flex-1 flex-col justify-between p-4">
@@ -61,7 +96,15 @@ function CardContent({ competition }: { competition: Competition }) {
 					<span className="text-xs text-primary font-medium">
 						{competition.category}
 					</span>
-					<Button className="gap-1 text-sm" size="sm" variant="ghost">
+					<Button
+						className="gap-1 text-sm"
+						onClick={(e) => {
+							e.stopPropagation();
+							onViewClick();
+						}}
+						size="sm"
+						variant="ghost"
+					>
 						Lihat
 						<ArrowRight className="h-4 w-4" />
 					</Button>
@@ -75,10 +118,14 @@ function AnimatedCard({
 	card,
 	index,
 	isAnimating,
+	transitionSpeed,
+	onViewClick,
 }: {
 	card: Card;
 	index: number;
 	isAnimating: boolean;
+	transitionSpeed: number;
+	onViewClick: () => void;
 }) {
 	const { scale, y } = positionStyles[index] ?? positionStyles[2];
 	const zIndex = index === 0 && isAnimating ? 10 : 3 - index;
@@ -94,38 +141,76 @@ function AnimatedCard({
 			initial={initialAnim}
 			key={card.id}
 			layout
-			transition={{ type: "spring", stiffness: 300, damping: 30 }}
+			transition={{
+				type: "spring",
+				stiffness: 300,
+				damping: 30,
+				duration: transitionSpeed,
+			}}
 		>
-			<CardContent competition={card.competition} />
+			<CardContent competition={card.competition} onViewClick={onViewClick} />
 		</motion.div>
 	);
 }
 
 export default function AnimatedCardStack() {
-	const [randomComps] = useState(() => getRandomCompetitions(10));
-	const [cards, setCards] = useState<Card[]>(() =>
-		randomComps.slice(0, 3).map((comp, i) => ({ id: i + 1, competition: comp }))
-	);
-	const [isAnimating, setIsAnimating] = useState(false);
-	const [nextId, setNextId] = useState(4);
-	const [compIndex, setCompIndex] = useState(3);
+	const [cards, setCards] = useState<Card[]>(getInitialCards);
+	const [isSpinning, setIsSpinning] = useState(false);
+	const [transitionSpeed, setTransitionSpeed] = useState(0.3);
+	const [selectedCompetition, setSelectedCompetition] =
+		useState<Competition | null>(null);
+	const nextIdRef = useRef(4);
 
-	const handleAnimate = () => {
-		if (isAnimating) return;
-		setIsAnimating(true);
+	const handleSpin = useCallback(() => {
+		if (isSpinning) return;
+		setIsSpinning(true);
 
-		const nextComp = randomComps[compIndex % randomComps.length];
+		// Spin configuration - random number of spins between 10-18
+		const totalSpins = 10 + Math.floor(Math.random() * 9);
+		let currentSpin = 0;
 
-		setTimeout(() => {
+		// Start fast, then slow down
+		const spin = () => {
+			if (currentSpin >= totalSpins) {
+				setIsSpinning(false);
+				setTransitionSpeed(0.3);
+				return;
+			}
+
+			// Calculate delay - starts fast (40ms), ends slow (500ms)
+			const progress = currentSpin / totalSpins;
+			const easeOut = 1 - Math.pow(1 - progress, 3); // Cubic ease out
+			const delay = 40 + easeOut * 460;
+
+			// Update transition speed based on progress
+			setTransitionSpeed(0.08 + easeOut * 0.35);
+
+			// Get truly random competition from full list
+			// Uses the same competitions data source as the home page
+			const randomIndex = Math.floor(Math.random() * competitions.length);
+			const nextComp = competitions[randomIndex];
+			const newId = nextIdRef.current++;
+
 			setCards((prev) => [
 				...prev.slice(1),
-				{ id: nextId, competition: nextComp },
+				{ id: newId, competition: nextComp },
 			]);
-			setNextId((prev) => prev + 1);
-			setCompIndex((prev) => prev + 1);
-			setIsAnimating(false);
-		}, 100);
-	};
+
+			currentSpin++;
+			setTimeout(spin, delay);
+		};
+
+		// Start spinning
+		spin();
+	}, [isSpinning]);
+
+	const handleViewClick = useCallback((competition: Competition) => {
+		setSelectedCompetition(competition);
+	}, []);
+
+	const handleCloseDialog = useCallback(() => {
+		setSelectedCompetition(null);
+	}, []);
 
 	return (
 		<div className="flex flex-col items-center justify-center gap-8 py-8">
@@ -136,8 +221,10 @@ export default function AnimatedCardStack() {
 							<AnimatedCard
 								card={card}
 								index={index}
-								isAnimating={isAnimating}
+								isAnimating={isSpinning}
 								key={card.id}
+								onViewClick={() => handleViewClick(card.competition)}
+								transitionSpeed={transitionSpeed}
 							/>
 						))}
 					</AnimatePresence>
@@ -146,17 +233,37 @@ export default function AnimatedCardStack() {
 
 			<div className="flex flex-col items-center gap-4">
 				<Button
-					className="px-8"
-					disabled={isAnimating}
-					onClick={handleAnimate}
+					className="px-8 gap-2"
+					disabled={isSpinning}
+					onClick={handleSpin}
 					size="lg"
 				>
-					🎲 Acak Kompetisi
+					{isSpinning ? (
+						<>
+							<Loader2 className="h-4 w-4 animate-spin" />
+							Mengacak...
+						</>
+					) : (
+						<>🎲 Acak Kompetisi</>
+					)}
 				</Button>
 				<p className="text-sm text-muted-foreground">
-					Klik untuk menemukan kompetisi secara acak
+					{isSpinning
+						? "Sedang mencari kompetisi untukmu..."
+						: "Klik untuk menemukan kompetisi secara acak"}
 				</p>
 			</div>
+
+			{/* Competition Detail Dialog */}
+			<CompetitionDialog
+				competition={selectedCompetition}
+				hasNext={false}
+				hasPrevious={false}
+				isOpen={selectedCompetition !== null}
+				onClose={handleCloseDialog}
+				onNext={() => {}}
+				onPrevious={() => {}}
+			/>
 		</div>
 	);
 }
