@@ -1,13 +1,6 @@
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-import {
-	Calendar,
-	ExternalLink,
-	MapPin,
-	Share2,
-	Users,
-	X,
-} from "lucide-react";
+import { Calendar, ExternalLink, MapPin, Share2, Users, X } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -63,10 +56,10 @@ export function CompetitionDrawer({
 
 	return (
 		<Drawer
+			fadeFromIndex={0}
 			onOpenChange={(open) => !open && onClose()}
 			open={isOpen}
 			snapPoints={[0.6, 0.9, 1]}
-			fadeFromIndex={0}
 		>
 			<DrawerContent className="max-h-[96vh] pb-0">
 				<DrawerTitle className="sr-only">{competition.title}</DrawerTitle>
@@ -137,7 +130,9 @@ export function CompetitionDrawer({
 							<div className="flex items-center gap-1.5 text-muted-foreground">
 								<Users className="h-4 w-4" />
 								<span className="capitalize">
-									{competition.participationType === "team" ? "Tim" : "Individual"}
+									{competition.participationType === "team"
+										? "Tim"
+										: "Individual"}
 								</span>
 							</div>
 							{competition.location && (

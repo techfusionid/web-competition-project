@@ -1,8 +1,9 @@
 type Metadata = {
- title?: string;
- description?: string;
- [key: string]: any;
+	title?: string;
+	description?: string;
+	[key: string]: any;
 };
+
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
@@ -38,8 +39,8 @@ export default function RootLayout({
 				<ThemeProvider
 					attribute="class"
 					defaultTheme="system"
-					enableSystem
 					disableTransitionOnChange
+					enableSystem
 				>
 					{children}
 				</ThemeProvider>

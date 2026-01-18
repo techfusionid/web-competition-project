@@ -15,7 +15,11 @@ interface PosterPopupProps {
 	onClose: () => void;
 }
 
-export function PosterPopup({ competition, isOpen, onClose }: PosterPopupProps) {
+export function PosterPopup({
+	competition,
+	isOpen,
+	onClose,
+}: PosterPopupProps) {
 	if (!competition) return null;
 
 	return (

@@ -290,7 +290,11 @@ export function CompetitionList({
 									{hasMore && (
 										<CarouselItem className="pl-3 basis-[80%] sm:basis-[65%]">
 											<div className="flex h-full min-h-[200px] items-center justify-center rounded-lg border border-dashed border-border bg-muted/30">
-												<Button onClick={handleLoadMore} size="sm" variant="outline">
+												<Button
+													onClick={handleLoadMore}
+													size="sm"
+													variant="outline"
+												>
 													Muat {filteredCompetitions.length - visibleCount} lagi
 												</Button>
 											</div>
@@ -311,7 +315,9 @@ export function CompetitionList({
 					{/* Mobile Poster Popup - Shows clear poster on long press */}
 					<PosterPopup
 						competition={
-							posterPopupIndex !== null ? filteredCompetitions[posterPopupIndex] : null
+							posterPopupIndex !== null
+								? filteredCompetitions[posterPopupIndex]
+								: null
 						}
 						isOpen={posterPopupIndex !== null}
 						onClose={() => setPosterPopupIndex(null)}
@@ -510,7 +516,9 @@ export function CompetitionList({
 						{/* Mobile Poster Popup - Shows clear poster on long press */}
 						<PosterPopup
 							competition={
-								posterPopupIndex !== null ? filteredCompetitions[posterPopupIndex] : null
+								posterPopupIndex !== null
+									? filteredCompetitions[posterPopupIndex]
+									: null
 							}
 							isOpen={posterPopupIndex !== null}
 							onClose={() => setPosterPopupIndex(null)}

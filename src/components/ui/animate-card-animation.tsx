@@ -3,8 +3,8 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
 import { CompetitionDialog } from "@/components/CompetitionDialog";
+import { Button } from "@/components/ui/button";
 // Using the same data source as the home page
 import { competitions } from "@/data/competitions";
 import type { Competition } from "@/types/competition";
@@ -61,7 +61,7 @@ function CardContent({
 	onViewClick: () => void;
 }) {
 	return (
-		<div 
+		<div
 			className="relative flex flex-col rounded-xl border border-border bg-card shadow-lg overflow-hidden h-[320px]"
 			onClick={onViewClick}
 		>

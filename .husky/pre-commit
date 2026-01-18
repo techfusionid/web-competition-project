@@ -1,5 +1,8 @@
 #!/bin/sh
 set -e
 
+# setup PATH for pnpm
+export PATH="/home/wahyudesu/.nvm/versions/node/v24.12.0/bin:$PATH"
+
 # format hanya file relevan
 pnpm dlx ultracite fix
