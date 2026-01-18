@@ -1,0 +1,20 @@
+[
+  {
+    "context": "Workspace",
+    "bindings": {
+      "ctrl-shift-e": null
+    }
+  },
+  {
+    "context": "ProjectPanel",
+    "bindings": {
+      "ctrl-shift-e": null
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-shift-e": null
+    }
+  }
+]

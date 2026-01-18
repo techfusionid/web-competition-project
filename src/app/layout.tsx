@@ -1,4 +1,8 @@
-import type { Metadata } from "next";
+type Metadata = {
+ title?: string;
+ description?: string;
+ [key: string]: any;
+};
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
