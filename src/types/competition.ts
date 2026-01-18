@@ -16,6 +16,7 @@ export interface Competition {
 	title: string;
 	organizer: string;
 	category: string;
+	tags?: string[];
 	level: CompetitionLevel[];
 	startDate?: Date;
 	deadline: Date;
@@ -32,20 +33,20 @@ export interface Competition {
 }
 
 export const CATEGORIES = [
-	"Teknologi",
-	"Bisnis",
-	"Sains",
-	"Desain",
-	"Penulisan",
-	"Debat",
-	"Olahraga",
-	"Seni",
-	"Sosial",
+	"Technology",
+	"Business",
+	"Science",
+	"Design",
+	"Writing",
+	"Debate",
+	"Sports",
+	"Art",
+	"Social",
 ] as const;
 
 export const LEVELS: { value: CompetitionLevel; label: string }[] = [
-	{ value: "sma", label: "SMA/SMK" },
-	{ value: "mahasiswa", label: "Mahasiswa" },
-	{ value: "umum", label: "Umum" },
-	{ value: "profesional", label: "Profesional" },
+	{ value: "sma", label: "High School" },
+	{ value: "mahasiswa", label: "University" },
+	{ value: "umum", label: "General" },
+	{ value: "profesional", label: "Professional" },
 ];

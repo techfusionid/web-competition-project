@@ -12,13 +12,13 @@ export function NewsletterCTA() {
 		e.preventDefault();
 
 		if (!email.trim()) {
-			toast.error("Masukkan alamat email");
+			toast.error("Please enter your email address");
 			return;
 		}
 
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 		if (!emailRegex.test(email)) {
-			toast.error("Format email tidak valid");
+			toast.error("Invalid email format");
 			return;
 		}
 
@@ -28,7 +28,7 @@ export function NewsletterCTA() {
 		await new Promise((resolve) => setTimeout(resolve, 1000));
 
 		toast.success(
-			"Berhasil berlangganan! Kami akan kirim info lomba terbaru ke email kamu."
+			"Successfully subscribed! We'll send the latest competition info to your email."
 		);
 		setEmail("");
 		setIsLoading(false);
@@ -44,7 +44,7 @@ export function NewsletterCTA() {
 					className="h-11 flex-1 border-0 bg-transparent text-sm shadow-none focus-visible:ring-0"
 					disabled={isLoading}
 					onChange={(e) => setEmail(e.target.value)}
-					placeholder="Masukkan email kamu"
+					placeholder="Enter your email"
 					type="email"
 					value={email}
 				/>
@@ -53,7 +53,7 @@ export function NewsletterCTA() {
 					disabled={isLoading}
 					type="submit"
 				>
-					{isLoading ? "Loading..." : "Berlangganan"}
+					{isLoading ? "Loading..." : "Subscribe"}
 				</Button>
 			</form>
 
@@ -69,7 +69,7 @@ export function NewsletterCTA() {
 							<Star className="h-3 w-3 fill-current" key={i} />
 						))}
 					</div>
-					<span className="text-xs">10K+ pelajar bergabung</span>
+					<span className="text-xs">10K+ students joined</span>
 				</div>
 			</div>
 		</div>

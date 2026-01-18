@@ -14,11 +14,11 @@ export default function RandomizePage() {
 						<Shuffle className="h-8 w-8 text-primary" />
 					</div>
 					<h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-						Randomize Kompetisi
+						Randomize Competition
 					</h1>
 					<p className="text-muted-foreground max-w-md mx-auto">
-						Bingung mau ikut kompetisi apa? Biarkan kami memilihkan secara acak
-						untuk kamu!
+						Not sure which competition to join? Let us pick one
+						at random for you!
 					</p>
 				</div>
 

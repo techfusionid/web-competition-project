@@ -2,12 +2,9 @@
 
 import {
 	BookOpen,
-	Building2,
-	Grid,
-	Home,
 	Info,
 	Menu,
-	Shuffle,
+	ArrowUpRight,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -23,10 +20,7 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-	{ path: "/category", label: "Kategori", icon: Grid },
-	{ path: "/institution", label: "Institusi", icon: Building2 },
 	{ path: "/resources", label: "Resources", icon: BookOpen },
-	{ path: "/randomize", label: "Random", icon: Shuffle },
 	{ path: "/about-us", label: "About", icon: Info },
 ];
 
@@ -49,7 +43,7 @@ export function Header({ onHomeClick }: HeaderProps = {}) {
 	const isActive = (path: string) => pathname === path;
 
 	return (
-		<header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
+		<header className="sticky top-0 z-50 w-full bg-background">
 			<div className="container flex h-14 items-center">
 				<Link
 					className="mr-8 flex items-center gap-2"
@@ -88,9 +82,10 @@ export function Header({ onHomeClick }: HeaderProps = {}) {
 						<ThemeToggle />
 					</div>
 
-					<Link className="hidden md:block" href="/submit">
-						<Button className="h-8 text-sm" size="sm" variant="outline">
-							Submit
+					<Link href="/discover" className="hidden md:block">
+						<Button className="h-8 text-sm gap-1.5" size="sm" variant="ghost">
+							Discover
+							<ArrowUpRight className="h-3.5 w-3.5" />
 						</Button>
 					</Link>
 
@@ -100,25 +95,25 @@ export function Header({ onHomeClick }: HeaderProps = {}) {
 								<Menu className="h-4 w-4" />
 							</Button>
 						</SheetTrigger>
-						<SheetContent className="w-[280px] px-6" side="right">
+						<SheetContent className="w-70 px-6" side="right">
 							<div className="flex items-center justify-between pt-4 pb-4 pr-8 border-b border-border">
 								<span className="text-sm font-medium text-foreground">
-									Tema
+									Theme
 								</span>
 								<ThemeToggle />
 							</div>
 							<nav className="flex flex-col gap-3 pt-6 pr-2">
 								<Link
-									className={`flex items-center gap-2 text-base font-medium ${isActive("/") ? "text-foreground" : "text-muted-foreground"}`}
-									href="/"
-									onClick={(e) => {
-										setIsOpen(false);
-										handleHomeClick(e);
-									}}
+									className={`flex items-center gap-2 text-base font-medium ${isActive("/discover") ? "text-foreground" : "text-muted-foreground"}`}
+									href="/discover"
+									onClick={() => setIsOpen(false)}
 								>
-									{isActive("/") && <Home className="h-4 w-4" />}
-									Beranda
+									Discover
 								</Link>
+								<div className="flex flex-col gap-1">
+									<span className="text-xs font-medium text-muted-foreground px-2">
+										MENU
+									</span>
 								{navItems.map((item) => {
 									const Icon = item.icon;
 									const active = isActive(item.path);
@@ -134,13 +129,7 @@ export function Header({ onHomeClick }: HeaderProps = {}) {
 										</Link>
 									);
 								})}
-								<Link
-									className={`flex items-center gap-2 text-base font-medium ${isActive("/submit") ? "text-foreground" : "text-muted-foreground"}`}
-									href="/submit"
-									onClick={() => setIsOpen(false)}
-								>
-									Submit Kompetisi
-								</Link>
+								</div>
 							</nav>
 						</SheetContent>
 					</Sheet>

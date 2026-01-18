@@ -19,15 +19,15 @@ import { CATEGORIES } from "@/types/competition";
 
 // Map categories to icons and colors
 const categoryConfig: Record<string, { icon: LucideIcon; color: string }> = {
-	Teknologi: { icon: Monitor, color: "text-blue-500" },
-	Bisnis: { icon: Briefcase, color: "text-emerald-500" },
-	Sains: { icon: Microscope, color: "text-purple-500" },
-	Desain: { icon: Palette, color: "text-pink-500" },
-	Penulisan: { icon: PenTool, color: "text-orange-500" },
-	Debat: { icon: MessageSquare, color: "text-yellow-500" },
-	Olahraga: { icon: TrophyIcon, color: "text-red-500" },
-	Seni: { icon: Music, color: "text-indigo-500" },
-	Sosial: { icon: Heart, color: "text-rose-500" },
+	Technology: { icon: Monitor, color: "text-blue-500" },
+	Business: { icon: Briefcase, color: "text-emerald-500" },
+	Science: { icon: Microscope, color: "text-purple-500" },
+	Design: { icon: Palette, color: "text-pink-500" },
+	Writing: { icon: PenTool, color: "text-orange-500" },
+	Debate: { icon: MessageSquare, color: "text-yellow-500" },
+	Sports: { icon: TrophyIcon, color: "text-red-500" },
+	Art: { icon: Music, color: "text-indigo-500" },
+	Social: { icon: Heart, color: "text-rose-500" },
 };
 
 function getCategoryStats() {
@@ -58,9 +58,9 @@ export default function CategoriesPage() {
 
 			<main className="flex-1 container py-8">
 				<div className="mb-8">
-					<h1 className="text-3xl font-bold text-foreground mb-2">Kategori</h1>
+					<h1 className="text-3xl font-bold text-foreground mb-2">Categories</h1>
 					<p className="text-muted-foreground">
-						Jelajahi kompetisi berdasarkan kategori yang kamu minati
+						Explore competitions by categories you're interested in
 					</p>
 				</div>
 
@@ -85,7 +85,7 @@ export default function CategoriesPage() {
 													{category.name}
 												</h3>
 												<p className="text-sm text-muted-foreground">
-													{category.count} kompetisi
+													{category.count} competition{category.count !== 1 ? "s" : ""}
 												</p>
 											</div>
 										</div>

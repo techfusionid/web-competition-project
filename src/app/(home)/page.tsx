@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { AdsBanner } from "@/components/AdsBanner";
 import { CompetitionList } from "@/components/CompetitionList";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
@@ -13,12 +12,6 @@ export default function Home() {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [resetTrigger, setResetTrigger] = useState(0);
 	const { bookmarks, toggleBookmark } = useBookmarks();
-
-	const handleTagClick = useCallback((tag: string) => {
-		setSearchQuery(tag);
-		const element = document.getElementById("competitions");
-		element?.scrollIntoView({ behavior: "smooth" });
-	}, []);
 
 	const handleOrganizerClick = useCallback((organizer: string) => {
 		setSearchQuery(organizer);
@@ -33,8 +26,7 @@ export default function Home() {
 		<div className="flex min-h-screen flex-col bg-background">
 			<Header onHomeClick={handleHomeClick} />
 			<main className="flex-1">
-				<Hero onTagClick={handleTagClick} />
-				<AdsBanner />
+				<Hero />
 				<div id="competitions">
 					<CompetitionList
 						bookmarks={bookmarks}

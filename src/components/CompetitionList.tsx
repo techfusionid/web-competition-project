@@ -228,7 +228,7 @@ export function CompetitionList({
 						</div>
 						<div className="flex items-center justify-between">
 							<p className="text-xs text-muted-foreground">
-								{filteredCompetitions.length} kompetisi
+								{filteredCompetitions.length} competition{filteredCompetitions.length !== 1 ? "s" : ""}
 							</p>
 							<ViewToggle
 								onViewModeChange={handleViewModeChange}
@@ -240,7 +240,7 @@ export function CompetitionList({
 					{filteredCompetitions.length === 0 ? (
 						<div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-border py-16">
 							<p className="text-sm font-medium text-muted-foreground">
-								Tidak ada kompetisi yang cocok
+								No competitions match
 							</p>
 							<Button
 								className="mt-4 text-xs"
@@ -248,7 +248,7 @@ export function CompetitionList({
 								size="sm"
 								variant="outline"
 							>
-								Reset Filter
+								Reset Filters
 							</Button>
 						</div>
 					) : (
@@ -295,7 +295,7 @@ export function CompetitionList({
 													size="sm"
 													variant="outline"
 												>
-													Muat {filteredCompetitions.length - visibleCount} lagi
+													Load {filteredCompetitions.length - visibleCount} more
 												</Button>
 											</div>
 										</CarouselItem>
@@ -354,7 +354,7 @@ export function CompetitionList({
 					</div>
 					<div className="flex items-center justify-between">
 						<p className="text-sm text-muted-foreground">
-							{filteredCompetitions.length} kompetisi ditemukan
+							{filteredCompetitions.length} competition{filteredCompetitions.length !== 1 ? "s" : ""} found
 						</p>
 						<ViewToggle
 							onViewModeChange={handleViewModeChange}
@@ -366,7 +366,7 @@ export function CompetitionList({
 				{filteredCompetitions.length === 0 ? (
 					<div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-border py-16">
 						<p className="text-sm font-medium text-muted-foreground">
-							Tidak ada kompetisi yang cocok
+							No competitions match
 						</p>
 						<Button
 							className="mt-4 text-xs"
@@ -374,7 +374,7 @@ export function CompetitionList({
 							size="sm"
 							variant="outline"
 						>
-							Reset Filter
+							Reset Filters
 						</Button>
 					</div>
 				) : selectedIndex !== null ? (
@@ -413,12 +413,12 @@ export function CompetitionList({
 												size="sm"
 												variant="outline"
 											>
-												Muat{" "}
+												Load{" "}
 												{Math.min(
 													ITEMS_PER_PAGE,
 													filteredCompetitions.length - visibleCount
 												)}{" "}
-												lagi
+												more
 											</Button>
 										</div>
 									)}
@@ -452,8 +452,8 @@ export function CompetitionList({
 						{hasMore && (
 							<div className="mt-6 flex justify-center">
 								<Button onClick={handleLoadMore} variant="outline">
-									Muat lebih banyak (
-									{filteredCompetitions.length - visibleCount} lagi)
+									Load more (
+									{filteredCompetitions.length - visibleCount} more)
 								</Button>
 							</div>
 						)}
@@ -483,8 +483,8 @@ export function CompetitionList({
 						{hasMore && (
 							<div className="mt-6 flex justify-center">
 								<Button onClick={handleLoadMore} variant="outline">
-									Muat lebih banyak (
-									{filteredCompetitions.length - visibleCount} lagi)
+									Load more (
+									{filteredCompetitions.length - visibleCount} more)
 								</Button>
 							</div>
 						)}

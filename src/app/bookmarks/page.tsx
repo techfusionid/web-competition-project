@@ -22,10 +22,10 @@ export default function BookmarksPage() {
 			<main className="container flex-1 py-8 md:py-12">
 				<div className="mb-6">
 					<h1 className="text-xl font-semibold text-foreground md:text-2xl">
-						Kompetisi Tersimpan
+						Saved Competitions
 					</h1>
 					<p className="mt-1 text-sm text-muted-foreground">
-						{bookmarkedCompetitions.length} kompetisi telah Anda simpan
+						{bookmarkedCompetitions.length} competition{bookmarkedCompetitions.length !== 1 ? "s" : ""} you've saved
 					</p>
 				</div>
 
@@ -35,14 +35,14 @@ export default function BookmarksPage() {
 							<Bookmark className="h-6 w-6 text-muted-foreground" />
 						</div>
 						<h2 className="mt-4 text-sm font-medium text-foreground">
-							Belum ada kompetisi tersimpan
+							No saved competitions yet
 						</h2>
 						<p className="mt-1 text-center text-xs text-muted-foreground">
-							Simpan kompetisi yang menarik untuk akses cepat
+							Save interesting competitions for quick access
 						</p>
 						<Link href="/">
 							<Button className="mt-4 text-xs" size="sm">
-								Jelajahi Kompetisi
+								Explore Competitions
 							</Button>
 						</Link>
 					</div>

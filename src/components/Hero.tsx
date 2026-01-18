@@ -1,34 +1,15 @@
-interface HeroProps {
-	onTagClick: (tag: string) => void;
-}
-
-export function Hero({ onTagClick }: HeroProps) {
+export function Hero() {
 	return (
-		<section className="relative overflow-hidden border-b border-border bg-gradient-to-b from-secondary/50 to-background py-20 md:py-32">
+		<section className="relative overflow-hidden border-b border-border bg-linear-to-b from-secondary/50 to-background py-20 md:py-32">
 			<div className="container relative z-10">
-				<div className="mx-auto flex max-w-[800px] flex-col items-center text-center">
+				<div className="mx-auto flex max-w-200 flex-col items-center text-center">
 					<h1 className="text-balance text-4xl font-bold tracking-tight text-foreground md:text-5xl lg:text-6xl">
-						Temukan Kompetisi Terbaik untuk Mahasiswa & Pelajar Indonesia
+						Find the Best Competitions for Indonesian Students
 					</h1>
 					<p className="mt-6 text-balance text-lg text-muted-foreground md:text-xl">
-						Lebih dari 500+ kompetisi dari berbagai kategori. Bangun portofolio,
-						asah skill, dan raih prestasi bersama LombaHub.
+						Over 500+ competitions from various categories. Build your portfolio,
+						sharpen your skills, and achieve excellence with LombaHub.
 					</p>
-
-					<div className="mt-8 flex flex-wrap items-center justify-center gap-2 text-sm">
-						<span className="text-muted-foreground">Populer:</span>
-						{["Hackathon", "Business Case", "UI/UX", "Data Science"].map(
-							(tag) => (
-								<button
-									className="rounded-md border border-border bg-card px-3 py-1 text-foreground transition-colors hover:bg-secondary"
-									key={tag}
-									onClick={() => onTagClick(tag)}
-								>
-									{tag}
-								</button>
-							)
-						)}
-					</div>
 				</div>
 			</div>
 		</section>

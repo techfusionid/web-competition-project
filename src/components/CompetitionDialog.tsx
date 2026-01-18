@@ -1,6 +1,5 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { format } from "date-fns";
-import { id } from "date-fns/locale";
 import {
 	Calendar,
 	ChevronLeft,
@@ -108,7 +107,7 @@ export function CompetitionDialog({
 
 		const shareData = {
 			title: competition.title,
-			text: `Lihat kompetisi "${competition.title}" di LombaHub!`,
+			text: `View competition "${competition.title}" on LombaHub!`,
 			url: competition.registrationUrl,
 		};
 
@@ -117,7 +116,7 @@ export function CompetitionDialog({
 				await navigator.share(shareData);
 			} else {
 				await navigator.clipboard.writeText(competition.registrationUrl);
-				toast.success("Link berhasil disalin!");
+				toast.success("Link copied successfully!");
 			}
 		} catch (err) {
 			// User cancelled sharing
@@ -175,7 +174,7 @@ export function CompetitionDialog({
 
 					<DialogPrimitive.Close className="absolute left-2 top-2 z-10 inline-flex h-8 w-8 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm hover:bg-background focus:outline-none focus:ring-2 focus:ring-ring">
 						<X className="h-4 w-4" />
-						<span className="sr-only">Tutup</span>
+						<span className="sr-only">Close</span>
 					</DialogPrimitive.Close>
 
 					{/* Scroll container (fix iOS/Android scroll) */}
@@ -214,7 +213,7 @@ export function CompetitionDialog({
 							{/* Swipe Indicator for Mobile */}
 							<div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-[10px] text-white/70 bg-black/40 px-2 py-1 rounded-full md:hidden">
 								<ChevronLeft className="h-3 w-3" />
-								<span>Geser untuk navigasi</span>
+								<span>Swipe to navigate</span>
 								<ChevronRight className="h-3 w-3" />
 							</div>
 						</div>
@@ -258,15 +257,15 @@ export function CompetitionDialog({
 									<Calendar className="h-3 w-3 md:h-4 md:w-4" />
 									<span>
 										{competition.startDate
-											? `${format(competition.startDate, "d MMM", { locale: id })} - ${format(competition.deadline, "d MMM yyyy", { locale: id })}`
-											: `Deadline: ${format(competition.deadline, "d MMM yyyy", { locale: id })}`}
+											? `${format(competition.startDate, "d MMM")} - ${format(competition.deadline, "d MMM yyyy")}`
+											: `Deadline: ${format(competition.deadline, "d MMM yyyy")}`}
 									</span>
 								</div>
 								<div className="flex items-center gap-1.5 text-muted-foreground">
 									<Users className="h-3 w-3 md:h-4 md:w-4" />
 									<span className="capitalize">
 										{competition.participationType === "team"
-											? "Tim"
+											? "Team"
 											: "Individual"}
 									</span>
 								</div>
@@ -282,7 +281,7 @@ export function CompetitionDialog({
 							{competition.prize && (
 								<div className="rounded-lg bg-primary/5 p-2.5 md:p-3">
 									<p className="text-[10px] md:text-xs text-muted-foreground">
-										Hadiah
+										Prize
 									</p>
 									<p className="text-[11px] md:text-sm font-medium text-foreground">
 										{competition.prize}
@@ -293,7 +292,7 @@ export function CompetitionDialog({
 							{/* Description */}
 							<div>
 								<p className="text-[10px] md:text-xs font-medium text-muted-foreground mb-1">
-									Deskripsi
+									Description
 								</p>
 								<p className="text-[11px] md:text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
 									{competition.description}
@@ -307,7 +306,7 @@ export function CompetitionDialog({
 								rel="noopener noreferrer"
 								target="_blank"
 							>
-								Daftar Sekarang
+								Register Now
 								<ExternalLink className="h-3 w-3 md:h-4 md:w-4" />
 							</a>
 						</div>

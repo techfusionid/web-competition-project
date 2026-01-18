@@ -43,7 +43,7 @@ export function Filters({
 		filters.status !== "all";
 
 	const formatOptions: { value: CompetitionFormat | "all"; label: string }[] = [
-		{ value: "all", label: "Semua" },
+		{ value: "all", label: "All" },
 		{ value: "online", label: "Online" },
 		{ value: "offline", label: "Offline" },
 		{ value: "hybrid", label: "Hybrid" },
@@ -53,9 +53,9 @@ export function Filters({
 		value: ParticipationType | "all";
 		label: string;
 	}[] = [
-		{ value: "all", label: "Semua" },
+		{ value: "all", label: "All" },
 		{ value: "individual", label: "Individual" },
-		{ value: "team", label: "Tim" },
+		{ value: "team", label: "Team" },
 	];
 
 	return (
@@ -73,11 +73,11 @@ export function Filters({
 			</div>
 
 			<div className="flex flex-wrap gap-2">
-				{/* Kategori Filter */}
+				{/* Category Filter */}
 				<Popover>
 					<PopoverTrigger asChild>
 						<Button className="h-8 gap-1.5" size="sm" variant="outline">
-							Kategori
+							Category
 							{filters.categories.length > 0 && (
 								<span className="ml-1 rounded-full bg-primary px-1.5 py-0.5 text-[10px] text-primary-foreground">
 									{filters.categories.length}
@@ -121,11 +121,11 @@ export function Filters({
 					</PopoverContent>
 				</Popover>
 
-				{/* Tingkat Filter */}
+				{/* Level Filter */}
 				<Popover>
 					<PopoverTrigger asChild>
 						<Button className="h-8 gap-1.5" size="sm" variant="outline">
-							Tingkat
+							Level
 							{filters.levels.length > 0 && (
 								<span className="ml-1 rounded-full bg-primary px-1.5 py-0.5 text-[10px] text-primary-foreground">
 									{filters.levels.length}
@@ -205,11 +205,11 @@ export function Filters({
 					</PopoverContent>
 				</Popover>
 
-				{/* Partisipasi Filter */}
+				{/* Participation Filter */}
 				<Popover>
 					<PopoverTrigger asChild>
 						<Button className="h-8 gap-1.5" size="sm" variant="outline">
-							Partisipasi
+							Participation
 							{filters.participationType !== "all" && (
 								<span className="ml-1 rounded-full bg-primary px-1.5 py-0.5 text-[10px] text-primary-foreground">
 									1

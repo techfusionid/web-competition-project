@@ -9,7 +9,6 @@
 
 ### Aesthetic Direction
 - boleh tambahkan sedikit microinteraction tapi jangan mebuat website nya menjadi berat
-- 
 
 ## 🎨 Desain system
 
@@ -19,7 +18,7 @@ https://ui.shadcn.com/create
 pnpm dlx shadcn@latest create --preset "https://ui.shadcn.com/init?base=radix&style=nova&baseColor=neutral&theme=neutral&iconLibrary=hugeicons&font=inter&menuAccent=subtle&menuColor=default&radius=default&template=next" --template next
 ```
 
-https://tweakcn.com/
+https://tweakcn.com/editor/theme?theme=amethyst-haze
 
 ## Colors
 "primary": "violet",

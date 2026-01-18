@@ -105,7 +105,7 @@ function CardContent({
 						size="sm"
 						variant="ghost"
 					>
-						Lihat
+						View
 						<ArrowRight className="h-4 w-4" />
 					</Button>
 				</div>
@@ -241,16 +241,16 @@ export default function AnimatedCardStack() {
 					{isSpinning ? (
 						<>
 							<Loader2 className="h-4 w-4 animate-spin" />
-							Mengacak...
+							Shuffling...
 						</>
 					) : (
-						<>🎲 Acak Kompetisi</>
+						<>🎲 Randomize Competition</>
 					)}
 				</Button>
 				<p className="text-sm text-muted-foreground">
 					{isSpinning
-						? "Sedang mencari kompetisi untukmu..."
-						: "Klik untuk menemukan kompetisi secara acak"}
+						? "Searching for competitions for you..."
+						: "Click to find competitions randomly"}
 				</p>
 			</div>
 

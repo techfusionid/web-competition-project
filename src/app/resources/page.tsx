@@ -46,7 +46,7 @@ const instagramAccounts: InstagramAccount[] = [
 		username: "@infolombaid",
 		followers: "125K",
 		description:
-			"Menyediakan informasi lomba terbaru untuk mahasiswa dan pelajar se-Indonesia.",
+			"Provides the latest competition information for students and learners across Indonesia.",
 		imageUrl:
 			"https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=100&h=100&fit=crop",
 	},
@@ -56,7 +56,7 @@ const instagramAccounts: InstagramAccount[] = [
 		username: "@lombamahasiswa",
 		followers: "89K",
 		description:
-			"Update kompetisi tingkat nasional dan internasional untuk mahasiswa.",
+			"Updates on national and international competitions for university students.",
 		imageUrl:
 			"https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?w=100&h=100&fit=crop",
 	},
@@ -66,7 +66,7 @@ const instagramAccounts: InstagramAccount[] = [
 		username: "@eventkampus",
 		followers: "67K",
 		description:
-			"Info event, seminar, dan kompetisi dari berbagai kampus di Indonesia.",
+			"Information on events, seminars, and competitions from various campuses in Indonesia.",
 		imageUrl:
 			"https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=100&h=100&fit=crop",
 	},
@@ -76,7 +76,7 @@ const instagramAccounts: InstagramAccount[] = [
 		username: "@kompetisipelajar",
 		followers: "45K",
 		description:
-			"Khusus untuk pelajar SMA/SMK yang ingin ikut berbagai kompetisi.",
+			"Specifically for high school/SMK students who want to participate in various competitions.",
 		imageUrl:
 			"https://images.unsplash.com/photo-1611605698335-8b1569810432?w=100&h=100&fit=crop",
 	},
@@ -86,7 +86,7 @@ const instagramAccounts: InstagramAccount[] = [
 		username: "@lombastartup",
 		followers: "32K",
 		description:
-			"Info kompetisi bisnis, startup, dan entrepreneurship untuk anak muda.",
+			"Information on business, startup, and entrepreneurship competitions for young people.",
 		imageUrl:
 			"https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=100&h=100&fit=crop",
 	},
@@ -98,7 +98,7 @@ const whatsAppChannels: WhatsAppChannel[] = [
 		name: "LombaHub Community",
 		members: "5.2K",
 		description:
-			"Channel resmi LombaHub untuk update kompetisi terbaru dan diskusi seputar lomba.",
+			"Official LombaHub channel for the latest competition updates and discussions about competitions.",
 		link: "https://whatsapp.com/channel/example",
 	},
 ];
@@ -107,9 +107,9 @@ const tools: Tool[] = [
 	{
 		id: "1",
 		name: "Canva",
-		category: "Desain",
+		category: "Design",
 		description:
-			"Buat poster, banner, dan materi promosi lomba dengan mudah tanpa skill desain.",
+			"Create posters, banners, and competition promotion materials easily without design skills.",
 		iconUrl:
 			"https://upload.wikimedia.org/wikipedia/commons/0/08/Canva_icon_2021.svg",
 		link: "https://canva.com",
@@ -118,9 +118,9 @@ const tools: Tool[] = [
 	{
 		id: "2",
 		name: "Google Forms",
-		category: "Pendaftaran",
+		category: "Registration",
 		description:
-			"Form pendaftaran gratis dengan integrasi Google Sheets untuk manajemen data peserta.",
+			"Free registration forms with Google Sheets integration for participant data management.",
 		iconUrl:
 			"https://upload.wikimedia.org/wikipedia/commons/5/5b/Google_Forms_2020_Logo.svg",
 		link: "https://forms.google.com",
@@ -129,9 +129,9 @@ const tools: Tool[] = [
 	{
 		id: "3",
 		name: "Notion",
-		category: "Manajemen",
+		category: "Management",
 		description:
-			"All-in-one workspace untuk timeline, task management, dan dokumentasi lomba.",
+			"All-in-one workspace for timelines, task management, and competition documentation.",
 		iconUrl:
 			"https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png",
 		link: "https://notion.so",
@@ -140,9 +140,9 @@ const tools: Tool[] = [
 	{
 		id: "4",
 		name: "Discord",
-		category: "Komunitas",
+		category: "Community",
 		description:
-			"Platform komunitas untuk peserta, panitia, dan juri dengan fitur voice & text chat.",
+			"Community platform for participants, committees, and judges with voice & text chat features.",
 		iconUrl:
 			"https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a69f118df70ad7828d4_icon_clyde_blurple_RGB.svg",
 		link: "https://discord.com",
@@ -153,7 +153,7 @@ const tools: Tool[] = [
 		name: "Zoom",
 		category: "Meeting",
 		description:
-			"Platform video conference untuk presentasi, webinar, dan penjurian online.",
+			"Video conferencing platform for presentations, webinars, and online judging.",
 		iconUrl:
 			"https://upload.wikimedia.org/wikipedia/commons/7/7b/Zoom_Communications_Logo.svg",
 		link: "https://zoom.us",
@@ -162,9 +162,9 @@ const tools: Tool[] = [
 	{
 		id: "6",
 		name: "Trello",
-		category: "Manajemen",
+		category: "Management",
 		description:
-			"Kanban board untuk tracking progress panitia dan tahapan lomba.",
+			"Kanban board for tracking committee progress and competition stages.",
 		iconUrl: "https://upload.wikimedia.org/wikipedia/en/8/8c/Trello_logo.svg",
 		link: "https://trello.com",
 		isFree: true,
@@ -172,9 +172,9 @@ const tools: Tool[] = [
 	{
 		id: "7",
 		name: "Typeform",
-		category: "Pendaftaran",
+		category: "Registration",
 		description:
-			"Form interaktif dengan UI modern untuk pendaftaran dan survei peserta.",
+			"Interactive forms with modern UI for registration and participant surveys.",
 		iconUrl:
 			"https://images.ctfassets.net/co0pvta7hzrh/4RtOAqTkTZLLJZXxJLjB58/ac0b976d4f83f92a4fb94fec11f5d5dd/typeform-logo.png",
 		link: "https://typeform.com",
@@ -183,9 +183,9 @@ const tools: Tool[] = [
 	{
 		id: "8",
 		name: "Figma",
-		category: "Desain",
+		category: "Design",
 		description:
-			"Tool desain kolaboratif untuk membuat mockup dan prototype bersama tim.",
+			"Collaborative design tool for creating mockups and prototypes with your team.",
 		iconUrl:
 			"https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg",
 		link: "https://figma.com",
@@ -196,7 +196,7 @@ const tools: Tool[] = [
 		name: "Linktree",
 		category: "Link",
 		description:
-			"Kumpulkan semua link penting lomba (pendaftaran, info, sosmed) dalam satu halaman.",
+			"Collect all important competition links (registration, info, social media) in one page.",
 		iconUrl:
 			"https://assets.production.linktr.ee/profiles/_next/static/images/logo-assets/logomark-green-3c3e59.svg",
 		link: "https://linktr.ee",
@@ -205,9 +205,9 @@ const tools: Tool[] = [
 	{
 		id: "10",
 		name: "Lark",
-		category: "Kolaborasi",
+		category: "Collaboration",
 		description:
-			"Suite kolaborasi lengkap with chat, docs, calendar, and video call for committees.",
+			"Complete collaboration suite with chat, docs, calendar, and video call for committees.",
 		iconUrl:
 			"https://sf16-scmcdn2-sg.ibytedtos.com/lark-open/file/resource/Lark_logo_blue_6bf2b4.png",
 		link: "https://larksuite.com",
@@ -218,7 +218,7 @@ const tools: Tool[] = [
 		name: "Eventbrite",
 		category: "Event",
 		description:
-			"Platform manajemen event dengan fitur ticketing dan check-in peserta.",
+			"Event management platform with ticketing and participant check-in features.",
 		iconUrl:
 			"https://upload.wikimedia.org/wikipedia/commons/6/6e/Eventbrite_Logo.svg",
 		link: "https://eventbrite.com",
@@ -229,7 +229,7 @@ const tools: Tool[] = [
 		name: "Airtable",
 		category: "Database",
 		description:
-			"Database visual untuk mengelola data peserta, penilaian, dan tracking submission.",
+			"Visual database for managing participant data, judging, and submission tracking.",
 		iconUrl:
 			"https://upload.wikimedia.org/wikipedia/commons/4/4b/Airtable_Logo.svg",
 		link: "https://airtable.com",
@@ -248,8 +248,8 @@ export default function ResourcesPage() {
 						Resources
 					</h1>
 					<p className="text-muted-foreground">
-						Kumpulan tools, akun, dan channel yang membantu kamu
-						menyelenggarakan lomba lebih optimal.
+						Collection of tools, accounts, and channels to help you
+						organize competitions more effectively.
 					</p>
 				</div>
 
@@ -258,7 +258,7 @@ export default function ResourcesPage() {
 					<div className="flex items-center gap-2 mb-4">
 						<Wrench className="h-5 w-5 text-foreground" />
 						<h2 className="text-lg font-semibold text-foreground">
-							Tools untuk Penyelenggara Lomba
+							Tools for Competition Organizers
 						</h2>
 					</div>
 
@@ -290,7 +290,7 @@ export default function ResourcesPage() {
 												</h3>
 												{tool.isFree && (
 													<span className="rounded-full bg-green-500/10 px-1.5 py-0.5 text-[10px] font-medium text-green-600">
-														Gratis
+														Free
 													</span>
 												)}
 											</div>
@@ -308,7 +308,7 @@ export default function ResourcesPage() {
 										size="sm"
 										variant="outline"
 									>
-										Kunjungi
+										Visit
 										<ExternalLink className="h-3 w-3 ml-auto" />
 									</Button>
 								</CardContent>
@@ -322,7 +322,7 @@ export default function ResourcesPage() {
 					<div className="flex items-center gap-2 mb-4">
 						<Instagram className="h-5 w-5 text-foreground" />
 						<h2 className="text-lg font-semibold text-foreground">
-							Akun Instagram Lomba
+							Competition Instagram Accounts
 						</h2>
 					</div>
 
@@ -367,7 +367,7 @@ export default function ResourcesPage() {
 										variant="outline"
 									>
 										<Instagram className="h-4 w-4 mr-2" />
-										Kunjungi
+										Visit
 										<ExternalLink className="h-3 w-3 ml-auto" />
 									</Button>
 								</CardContent>
@@ -381,7 +381,7 @@ export default function ResourcesPage() {
 					<div className="flex items-center gap-2 mb-4">
 						<MessageCircle className="h-5 w-5 text-foreground" />
 						<h2 className="text-lg font-semibold text-foreground">
-							Channel WhatsApp
+							WhatsApp Channels
 						</h2>
 					</div>
 
@@ -415,7 +415,7 @@ export default function ResourcesPage() {
 										variant="outline"
 									>
 										<MessageCircle className="h-4 w-4 mr-2" />
-										Gabung Channel
+										Join Channel
 										<ExternalLink className="h-3 w-3 ml-auto" />
 									</Button>
 								</CardContent>

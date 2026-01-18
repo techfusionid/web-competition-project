@@ -2,13 +2,12 @@
 
 ## phase 0
 
-- [ ] **sesuaikan lagi skema database nya supaya ringkas, tapi informasinya lengkap juga** ✅
-- [ ] perbaiki header di mobile, supaya di mobile pake drawer di samping kanan ✅
-- [ ] sesuaikan terms and privacy, untuk mengatur penggunaan website dan melindungi pemilik website
-- [ ] kategori cuman di teknologi aja dulu
-- [ ] hilangin pemilihan kategori di heroes, supaya mempermudah user buat mencari lomba
+- [x] **sesuaikan lagi skema database nya supaya ringkas, tapi informasinya lengkap juga** 
+- [x] perbaiki header di mobile, supaya di mobile pake drawer di samping kanan 
+- [x] sesuaikan terms and privacy, untuk mengatur penggunaan website dan melindungi pemilik website
+- [x] hilangin pemilihan kategori di heroes, supaya mempermudah user buat mencari lomba
 - [ ] **sesuaikan lagi skema database nya dengan data scrapping**
-- [ ] **tentuin konten wa dan threads**
+- [x] **tentuin konten wa dan threads**
 - [ ] **tentuin decision pop up poster untuk experience yang paling nyaman**
 - [ ] perbaiki header di mobile, supaya di mobile pake drawer di samping kanan
 - [ ] *sesuaikan terms and privacy, untuk mengatur penggunaan website dan melindungi pemilik website
@@ -16,20 +15,20 @@
 - [ ] *kategori cuman di teknologi aja dulu
 - [ ] *hilangin pemilihan kategori di heroes, supaya mempermudah user buat mencari lomba
 - [ ] di kategori/competition disesuaikan supaya mirip dgn luma, terdapat banner gambar yang bisa dicustom, pakai gambar gratisan dari unsplash aja
-- [ ] **sesuaikan component poster di mobile supaya experience nya dapet: cepat, lengkap dan informatif** ✅
-- [x] di mobile poster bisa di tahan untuk muncul pop up seperti di instagram ✅
+- [x] **sesuaikan component poster di mobile supaya experience nya dapet: cepat, lengkap dan informatif** 
+- [x] di mobile poster bisa di tahan untuk muncul pop up seperti di instagram 
 - [ ] penyesuaian teks di section heroes yang pas secara marketing, berapa tambahan lomba per minggu
 - [ ] tambahkan report page per component, untuk orang lain dapat memberikan kritik (card poster)
 - [ ] tombol share dan tombol claim this competition dan logo report (card poster)
 - [ ] integrasi posthog/umami di beberapa interaksi penting
 - [ ] implementasi featurebase untuk customer feedback
-- [ ] randomize perbaikin supaya ngambil data dari lomba ✅
-- [ ] footernya ✅
+- [x] randomize perbaikin supaya ngambil data dari lomba 
+- [x] footernya 
 - [ ] sorting nya yang terbaru dan by nama
-- [ ] terapin sistem toggle theme nya ✅
-- [ ] **tentuin decision pop up poster untuk experience yang paling nyaman** ✅
-- [ ] tombol share nya pake component yg bagus ✅
-- [ ] siapin tempat/component buat ads ✅
+- [x] terapin sistem toggle theme nya 
+- [ ] **tentuin decision pop up poster untuk experience yang paling nyaman** 
+- [x] tombol share nya pake component yg bagus 
+- [x] siapin tempat/component buat ads 
 - [ ] nulis about me
 - [ ] randomize perbaikin supaya ngambil data dari lomba
 - [ ] sorting nya yang terbaru dan by nama

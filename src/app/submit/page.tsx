@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { id } from "date-fns/locale";
 import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -41,30 +40,26 @@ const formSchema = z.object({
 	title: z
 		.string()
 		.trim()
-		.min(5, "Judul minimal 5 karakter")
-		.max(100, "Judul maksimal 100 karakter"),
+		.min(5, "Title must be at least 5 characters")
+		.max(100, "Title must be at most 100 characters"),
 	organizer: z
 		.string()
 		.trim()
-		.min(3, "Penyelenggara minimal 3 karakter")
-		.max(100, "Penyelenggara maksimal 100 karakter"),
+		.min(3, "Organizer must be at least 3 characters")
+		.max(100, "Organizer must be at most 100 characters"),
 	description: z
 		.string()
 		.trim()
-		.min(20, "Deskripsi minimal 20 karakter")
-		.max(1000, "Deskripsi maksimal 1000 karakter"),
-	category: z.string().min(1, "Pilih kategori"),
-	level: z.string().min(1, "Pilih tingkat"),
+		.min(20, "Description must be at least 20 characters")
+		.max(1000, "Description must be at most 1000 characters"),
+	category: z.string().min(1, "Select category"),
+	level: z.string().min(1, "Select level"),
 	format: z.enum(["online", "offline", "hybrid"]),
 	participationType: z.enum(["individual", "team"]),
-	registrationStart: z.date({
-		required_error: "Pilih tanggal mulai pendaftaran",
-	}),
-	registrationEnd: z.date({
-		required_error: "Pilih tanggal akhir pendaftaran",
-	}),
-	registrationUrl: z.string().trim().url("URL tidak valid"),
-	prize: z.string().trim().min(1, "Masukkan hadiah"),
+	registrationStart: z.date(),
+	registrationEnd: z.date(),
+	registrationUrl: z.string().trim().url("URL is invalid"),
+	prize: z.string().trim().min(1, "Enter prize"),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -95,7 +90,7 @@ export default function SubmitPage() {
 
 		console.log("Submitted:", data);
 		toast.success(
-			"Kompetisi berhasil disubmit! Tim kami akan mereview dalam 1-2 hari kerja."
+			"Competition submitted successfully! Our team will review within 1-2 working days."
 		);
 		form.reset();
 		setIsSubmitting(false);
@@ -109,11 +104,10 @@ export default function SubmitPage() {
 					<div className="mx-auto max-w-2xl">
 						<div className="mb-8 text-center">
 							<h1 className="text-2xl font-semibold text-foreground md:text-3xl">
-								Submit Kompetisi
+								Submit Competition
 							</h1>
 							<p className="mt-2 text-sm text-muted-foreground">
-								Bantu mahasiswa dan pelajar Indonesia menemukan kompetisi
-								terbaru
+								Help students across Indonesia discover new competitions
 							</p>
 						</div>
 
@@ -127,9 +121,9 @@ export default function SubmitPage() {
 									name="title"
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Nama Kompetisi</FormLabel>
+											<FormLabel>Competition Name</FormLabel>
 											<FormControl>
-												<Input placeholder="Contoh: Gemastik XVII" {...field} />
+												<Input placeholder="e.g., Gemastik XVII" {...field} />
 											</FormControl>
 											<FormMessage />
 										</FormItem>
@@ -141,10 +135,10 @@ export default function SubmitPage() {
 									name="organizer"
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Penyelenggara</FormLabel>
+											<FormLabel>Organizer</FormLabel>
 											<FormControl>
 												<Input
-													placeholder="Contoh: Kemendikbudristek"
+													placeholder="e.g., Ministry of Education"
 													{...field}
 												/>
 											</FormControl>
@@ -158,11 +152,11 @@ export default function SubmitPage() {
 									name="description"
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Deskripsi</FormLabel>
+											<FormLabel>Description</FormLabel>
 											<FormControl>
 												<Textarea
 													className="min-h-[100px] resize-none"
-													placeholder="Jelaskan tentang kompetisi ini..."
+													placeholder="Describe this competition..."
 													{...field}
 												/>
 											</FormControl>
@@ -177,14 +171,14 @@ export default function SubmitPage() {
 										name="category"
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel>Kategori</FormLabel>
+												<FormLabel>Category</FormLabel>
 												<Select
 													onValueChange={field.onChange}
 													value={field.value}
 												>
 													<FormControl>
 														<SelectTrigger>
-															<SelectValue placeholder="Pilih kategori" />
+															<SelectValue placeholder="Select category" />
 														</SelectTrigger>
 													</FormControl>
 													<SelectContent>
@@ -205,14 +199,14 @@ export default function SubmitPage() {
 										name="level"
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel>Tingkat</FormLabel>
+												<FormLabel>Level</FormLabel>
 												<Select
 													onValueChange={field.onChange}
 													value={field.value}
 												>
 													<FormControl>
 														<SelectTrigger>
-															<SelectValue placeholder="Pilih tingkat" />
+															<SelectValue placeholder="Select level" />
 														</SelectTrigger>
 													</FormControl>
 													<SelectContent>
@@ -242,7 +236,7 @@ export default function SubmitPage() {
 												>
 													<FormControl>
 														<SelectTrigger>
-															<SelectValue placeholder="Pilih format" />
+															<SelectValue placeholder="Select format" />
 														</SelectTrigger>
 													</FormControl>
 													<SelectContent>
@@ -261,21 +255,21 @@ export default function SubmitPage() {
 										name="participationType"
 										render={({ field }) => (
 											<FormItem>
-												<FormLabel>Tipe Partisipasi</FormLabel>
+												<FormLabel>Participation Type</FormLabel>
 												<Select
 													onValueChange={field.onChange}
 													value={field.value}
 												>
 													<FormControl>
 														<SelectTrigger>
-															<SelectValue placeholder="Pilih tipe" />
+															<SelectValue placeholder="Select type" />
 														</SelectTrigger>
 													</FormControl>
 													<SelectContent>
 														<SelectItem value="individual">
 															Individual
 														</SelectItem>
-														<SelectItem value="team">Tim</SelectItem>
+														<SelectItem value="team">Team</SelectItem>
 													</SelectContent>
 												</Select>
 												<FormMessage />
@@ -290,7 +284,7 @@ export default function SubmitPage() {
 										name="registrationStart"
 										render={({ field }) => (
 											<FormItem className="flex flex-col">
-												<FormLabel>Mulai Pendaftaran</FormLabel>
+												<FormLabel>Registration Start</FormLabel>
 												<Popover>
 													<PopoverTrigger asChild>
 														<FormControl>
@@ -303,11 +297,9 @@ export default function SubmitPage() {
 															>
 																<CalendarIcon className="mr-2 h-4 w-4" />
 																{field.value ? (
-																	format(field.value, "d MMM yyyy", {
-																		locale: id,
-																	})
+																	format(field.value, "d MMM yyyy")
 																) : (
-																	<span>Pilih tanggal</span>
+																	<span>Pick a date</span>
 																)}
 															</Button>
 														</FormControl>
@@ -332,7 +324,7 @@ export default function SubmitPage() {
 										name="registrationEnd"
 										render={({ field }) => (
 											<FormItem className="flex flex-col">
-												<FormLabel>Akhir Pendaftaran</FormLabel>
+												<FormLabel>Registration End</FormLabel>
 												<Popover>
 													<PopoverTrigger asChild>
 														<FormControl>
@@ -345,11 +337,9 @@ export default function SubmitPage() {
 															>
 																<CalendarIcon className="mr-2 h-4 w-4" />
 																{field.value ? (
-																	format(field.value, "d MMM yyyy", {
-																		locale: id,
-																	})
+																	format(field.value, "d MMM yyyy")
 																) : (
-																	<span>Pilih tanggal</span>
+																	<span>Pick a date</span>
 																)}
 															</Button>
 														</FormControl>
@@ -380,7 +370,7 @@ export default function SubmitPage() {
 									name="registrationUrl"
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Link Pendaftaran</FormLabel>
+											<FormLabel>Registration Link</FormLabel>
 											<FormControl>
 												<Input placeholder="https://..." {...field} />
 											</FormControl>
@@ -394,10 +384,10 @@ export default function SubmitPage() {
 									name="prize"
 									render={({ field }) => (
 										<FormItem>
-											<FormLabel>Hadiah</FormLabel>
+											<FormLabel>Prize</FormLabel>
 											<FormControl>
 												<Input
-													placeholder="Contoh: Total Rp 50 Juta"
+													placeholder="e.g., Total Rp 50 Million"
 													{...field}
 												/>
 											</FormControl>
@@ -411,7 +401,7 @@ export default function SubmitPage() {
 									disabled={isSubmitting}
 									type="submit"
 								>
-									{isSubmitting ? "Mengirim..." : "Submit Kompetisi"}
+									{isSubmitting ? "Sending..." : "Submit Competition"}
 								</Button>
 							</form>
 						</Form>

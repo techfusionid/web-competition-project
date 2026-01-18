@@ -34,89 +34,80 @@ import { cn } from "@/lib/utils";
 
 type ViewMode = "card" | "list";
 
-const COMPETITION_TYPES = [
-	"UI/UX Design",
-	"Hackathon",
-	"Competitive Programming",
-	"CTF",
-	"Data Science",
-	"Mobile Development",
-	"Web Development",
-	"IoT",
-	"Game Development",
-	"AI/ML",
-	"Business Case",
-	"Startup Pitch",
-	"Essay",
-	"Poster",
-	"Video",
-	"Research",
-];
 
 const categoryConfig: Record<
 	string,
-	{ icon: LucideIcon; gradient: string; color: string }
+	{ icon: LucideIcon; gradient: string; color: string; image: string }
 > = {
-	Teknologi: {
+	Technology: {
 		icon: Monitor,
 		gradient: "from-blue-600/20 via-cyan-500/10 to-transparent",
 		color: "text-blue-500",
+		image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200&h=300&fit=crop",
 	},
-	Bisnis: {
+	Business: {
 		icon: Briefcase,
 		gradient: "from-emerald-600/20 via-green-500/10 to-transparent",
 		color: "text-emerald-500",
+		image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&h=300&fit=crop",
 	},
-	Sains: {
+	Science: {
 		icon: Microscope,
 		gradient: "from-purple-600/20 via-violet-500/10 to-transparent",
 		color: "text-purple-500",
+		image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=1200&h=300&fit=crop",
 	},
-	Desain: {
+	Design: {
 		icon: Palette,
 		gradient: "from-pink-600/20 via-rose-500/10 to-transparent",
 		color: "text-pink-500",
+		image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1200&h=300&fit=crop",
 	},
-	Penulisan: {
+	Writing: {
 		icon: PenTool,
 		gradient: "from-orange-600/20 via-amber-500/10 to-transparent",
 		color: "text-orange-500",
+		image: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1200&h=300&fit=crop",
 	},
-	Debat: {
+	Debate: {
 		icon: MessageSquare,
 		gradient: "from-yellow-600/20 via-amber-500/10 to-transparent",
 		color: "text-yellow-500",
+		image: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=1200&h=300&fit=crop",
 	},
-	Olahraga: {
+	Sports: {
 		icon: Trophy,
 		gradient: "from-red-600/20 via-orange-500/10 to-transparent",
 		color: "text-red-500",
+		image: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=1200&h=300&fit=crop",
 	},
-	Seni: {
+	Art: {
 		icon: Music,
 		gradient: "from-indigo-600/20 via-purple-500/10 to-transparent",
 		color: "text-indigo-500",
+		image: "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=1200&h=300&fit=crop",
 	},
-	Sosial: {
+	Social: {
 		icon: Heart,
 		gradient: "from-rose-600/20 via-pink-500/10 to-transparent",
 		color: "text-rose-500",
+		image: "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=1200&h=300&fit=crop",
 	},
 };
 
 const categoryDescriptions: Record<string, string> = {
-	Teknologi:
-		"Kompetisi teknologi, programming, dan inovasi digital untuk mengasah kemampuan teknis kamu.",
-	Bisnis:
-		"Kompetisi bisnis, entrepreneurship, dan case competition untuk calon pengusaha muda.",
-	Sains:
-		"Kompetisi sains, riset, dan olimpiade untuk pecinta ilmu pengetahuan.",
-	Desain: "Kompetisi desain grafis, UI/UX, dan kreativitas visual.",
-	Penulisan: "Kompetisi menulis, esai, dan karya tulis ilmiah.",
-	Debat: "Kompetisi debat, public speaking, dan argumentasi.",
-	Olahraga: "Kompetisi olahraga dan e-sports.",
-	Seni: "Kompetisi seni musik, tari, dan pertunjukan.",
-	Sosial: "Kompetisi sosial, volunteer, dan pengabdian masyarakat.",
+	Technology:
+		"Technology competitions, programming, and digital innovation to sharpen your technical skills.",
+	Business:
+		"Business competitions, entrepreneurship, and case competitions for young entrepreneurs.",
+	Science:
+		"Science competitions, research, and olympiads for knowledge lovers.",
+	Design: "Graphic design, UI/UX, and visual creativity competitions.",
+	Writing: "Writing, essay, and academic writing competitions.",
+	Debate: "Debate, public speaking, and argumentation competitions.",
+	Sports: "Sports and e-sports competitions.",
+	Art: "Music, dance, and performance art competitions.",
+	Social: "Social, volunteer, and community service competitions.",
 };
 
 export default function CategoryDetailPage() {
@@ -146,10 +137,21 @@ export default function CategoryDetailPage() {
 			);
 	}, [categoryName]);
 
-	const categoryCompetitions = useMemo(() => {
-		// Note: selectedType is for UI only since competitions don't have 'type' field yet
-		return allCategoryCompetitions;
+	// Get unique tags from competitions in this category
+	const categoryTags = useMemo(() => {
+		const tagsSet = new Set<string>();
+		allCategoryCompetitions.forEach((comp) => {
+			comp.tags?.forEach((tag) => tagsSet.add(tag));
+		});
+		return Array.from(tagsSet).sort();
 	}, [allCategoryCompetitions]);
+
+	const categoryCompetitions = useMemo(() => {
+		if (!selectedType) return allCategoryCompetitions;
+		return allCategoryCompetitions.filter((comp) =>
+			comp.tags?.includes(selectedType)
+		);
+	}, [allCategoryCompetitions, selectedType]);
 
 	const selectType = useCallback((type: string) => {
 		setSelectedType((prev) => (prev === type ? null : type));
@@ -188,75 +190,81 @@ export default function CategoryDetailPage() {
 		<div className="min-h-screen flex flex-col bg-background">
 			<Header />
 
-			{/* Hero Banner */}
-			<div
-				className={`relative h-48 md:h-64 bg-gradient-to-r ${config.gradient} bg-secondary overflow-hidden`}
-			>
-				<div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
-				<div className="absolute inset-0 flex items-center justify-center opacity-10">
-					<CategoryIcon className="h-64 w-64" />
-				</div>
+			{/* Hero Banner with Image */}
+			<div className="relative h-40 md:h-48 overflow-hidden">
+				<img
+					src={config.image || "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200&h=300&fit=crop"}
+					alt={categoryName}
+					className="absolute inset-0 h-full w-full object-cover"
+				/>
+				<div className="absolute inset-0 bg-linear-to-b from-black/50 via-black/30 to-background" />
 			</div>
 
 			<main className="flex-1 container relative">
 				{/* Category Info Section */}
-				<div className="relative -mt-16 mb-8">
+				<div className="relative -mt-12 mb-8">
 					<div className="flex flex-col md:flex-row md:items-end gap-4">
-						{/* Category Icon Badge */}
-						<div className="flex h-24 w-24 items-center justify-center rounded-xl bg-card border-4 border-background shadow-lg">
-							<CategoryIcon className={`h-12 w-12 ${config.color}`} />
+						<div className="flex items-start gap-4">
+							{/* Category Icon Badge */}
+							<div className="flex h-16 w-16 items-center justify-center rounded-xl bg-card border-4 border-background shadow-lg shrink-0">
+								<CategoryIcon className={`h-8 w-8 ${config.color}`} />
+							</div>
+
+							<div>
+								<h1 className="text-2xl md:text-3xl font-bold text-foreground mb-1">
+									{categoryName}
+								</h1>
+								<p className="text-sm text-muted-foreground max-w-2xl">
+									{categoryDescriptions[categoryName] ||
+										"Explore competitions in this category."}
+								</p>
+							</div>
 						</div>
 
-						<div className="flex-1">
-							<h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-								{categoryName}
-							</h1>
-							<p className="text-muted-foreground max-w-2xl">
-								{categoryDescriptions[categoryName] ||
-									"Jelajahi kompetisi dalam kategori ini."}
-							</p>
+						<div className="md:ml-auto">
+							<Link href="/submit">
+								<Button className="gap-2">
+									<Plus className="h-4 w-4" />
+									Submit Competition
+								</Button>
+							</Link>
 						</div>
-
-						<Link className="hidden md:block" href="/submit">
-							<Button className="gap-2">
-								<Plus className="h-4 w-4" />
-								Submit Kompetisi
-							</Button>
-						</Link>
 					</div>
 				</div>
 
 				{/* Competition Type Filter */}
-				<div className="mb-6">
-					<p className="text-sm font-medium text-muted-foreground mb-3">
-						Jenis Kompetisi
-					</p>
-					<div className="flex flex-wrap items-center gap-2">
-						{COMPETITION_TYPES.map((type) => (
-							<Badge
-								className={cn(
-									"cursor-pointer transition-colors hover:bg-primary hover:text-primary-foreground",
-									selectedType === type && "bg-primary text-primary-foreground"
-								)}
-								key={type}
-								onClick={() => selectType(type)}
-								variant={selectedType === type ? "default" : "outline"}
-							>
-								{type}
-							</Badge>
-						))}
-						{selectedType && (
-							<Badge
-								className="cursor-pointer gap-1"
-								onClick={clearType}
-								variant="secondary"
-							>
-								<X className="h-3 w-3" />
-								Clear
-							</Badge>
-						)}
+				{categoryTags.length > 0 && (
+					<div className="mb-6">
+						<p className="text-sm font-medium text-muted-foreground mb-3">
+							Filter by Tag
+						</p>
+						<div className="flex flex-wrap items-center gap-2">
+							{categoryTags.map((tag) => (
+								<Badge
+									className={cn(
+										"cursor-pointer transition-colors hover:bg-primary hover:text-primary-foreground py-1 text-sm",
+										selectedType === tag && "bg-primary text-primary-foreground"
+									)}
+									key={tag}
+									onClick={() => selectType(tag)}
+									variant={selectedType === tag ? "default" : "outline"}
+								>
+									{tag}
+								</Badge>
+							))}
+							{selectedType && (
+								<Badge
+									className="cursor-pointer gap-1"
+									onClick={clearType}
+									variant="secondary"
+								>
+									<X className="h-3 w-3" />
+									Clear
+								</Badge>
+							)}
+						</div>
 					</div>
-				</div>
+				)}
 
 				<div className="pb-8 grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6">
 					{/* Main Content */}
@@ -264,7 +272,7 @@ export default function CategoryDetailPage() {
 						{/* Header with View Toggle */}
 						<div className="flex items-center justify-between mb-6">
 							<h2 className="text-xl font-bold text-foreground">
-								Kompetisi ({categoryCompetitions.length})
+								Competitions ({categoryCompetitions.length})
 							</h2>
 							<div className="flex items-center gap-2">
 								<Link className="lg:hidden" href="/submit">
@@ -332,7 +340,7 @@ export default function CategoryDetailPage() {
 							<div className="text-center py-12">
 								<Trophy className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
 								<p className="text-muted-foreground">
-									Belum ada kompetisi dalam kategori ini
+									No competitions in this category yet
 								</p>
 							</div>
 						)}
@@ -342,7 +350,7 @@ export default function CategoryDetailPage() {
 					<div className="hidden lg:block">
 						<div className="sticky top-20 rounded-lg border border-border bg-card p-4">
 							<h3 className="text-sm font-semibold text-foreground mb-3">
-								Kalender Deadline
+								Deadline Calendar
 							</h3>
 							<Calendar
 								className="pointer-events-auto"
@@ -360,7 +368,7 @@ export default function CategoryDetailPage() {
 								selected={competitionDates}
 							/>
 							<p className="text-xs text-muted-foreground mt-3">
-								Tanggal yang ditandai menunjukkan deadline kompetisi
+								Marked dates show competition deadlines
 							</p>
 						</div>
 					</div>

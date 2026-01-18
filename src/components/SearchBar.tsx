@@ -35,7 +35,7 @@ export function SearchBar({
 				<Input
 					className="h-9 border-0 bg-transparent pl-9 text-sm shadow-none focus-visible:ring-0"
 					onChange={(e) => onChange(e.target.value)}
-					placeholder="Cari kompetisi..."
+					placeholder="Search competitions..."
 					type="text"
 					value={value}
 				/>
@@ -55,7 +55,7 @@ export function SearchBar({
 				</SelectTrigger>
 				<SelectContent>
 					<SelectItem value="deadline">Deadline</SelectItem>
-					<SelectItem value="name">Nama</SelectItem>
+					<SelectItem value="name">Name</SelectItem>
 				</SelectContent>
 			</Select>
 		</div>
