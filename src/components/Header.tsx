@@ -26,7 +26,7 @@ interface HeaderProps {
 	sticky?: boolean;
 }
 
-export function Header({ onHomeClick, sticky = true }: HeaderProps = {}) {
+export function Header({ onHomeClick, sticky = false }: HeaderProps = {}) {
 	const pathname = usePathname();
 
 	const handleHomeClick = (e: React.MouseEvent) => {
@@ -40,7 +40,7 @@ export function Header({ onHomeClick, sticky = true }: HeaderProps = {}) {
 	const isActive = (path: string) => pathname === path;
 
 	return (
-		<header className={`${sticky ? "sticky top-0" : "relative"} z-50 w-full bg-transparent`}>
+		<header className={`${sticky ? "sticky top-0" : "relative"} z-50 w-full`}>
 			<div className="container flex h-14 items-center">
 				<Link
 					className="flex items-center gap-2"
@@ -48,10 +48,10 @@ export function Header({ onHomeClick, sticky = true }: HeaderProps = {}) {
 					onClick={handleHomeClick}
 				>
 					<div className="flex h-7 w-7 items-center justify-center rounded-md bg-foreground">
-						<span className="text-xs font-bold text-background">LH</span>
+						<span className="text-xs font-bold text-background">C</span>
 					</div>
 					<span className="text-base font-semibold text-foreground">
-						LombaHub
+						Competitions
 					</span>
 				</Link>
 

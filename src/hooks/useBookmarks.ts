@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-const BOOKMARKS_KEY = "lombahub-bookmarks";
+const BOOKMARKS_KEY = "competitions-bookmarks";
 
 export function useBookmarks() {
 	const [bookmarks, setBookmarks] = useState<string[]>([]);

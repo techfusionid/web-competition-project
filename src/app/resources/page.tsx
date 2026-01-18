@@ -95,10 +95,10 @@ const instagramAccounts: InstagramAccount[] = [
 const whatsAppChannels: WhatsAppChannel[] = [
 	{
 		id: "1",
-		name: "LombaHub Community",
+		name: "Competitions Community",
 		members: "5.2K",
 		description:
-			"Official LombaHub channel for the latest competition updates and discussions about competitions.",
+			"Official Competitions channel for the latest competition updates and discussions about competitions.",
 		link: "https://whatsapp.com/channel/example",
 	},
 ];

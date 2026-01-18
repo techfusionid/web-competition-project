@@ -39,7 +39,7 @@ const defaultFilters: FilterState = {
 
 type SortOption = "deadline" | "name";
 
-const VIEW_MODE_KEY = "lombahub-view-mode";
+const VIEW_MODE_KEY = "competitions-view-mode";
 
 function getInitialViewMode(isMobile: boolean): ViewMode {
 	if (typeof window === "undefined") return isMobile ? "poster" : "card";

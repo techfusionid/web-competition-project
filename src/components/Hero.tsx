@@ -2,7 +2,7 @@ import { AuroraText } from "@/components/ui/aurora-text";
 
 export function Hero() {
    return (
-      <section className="relative overflow-hidden border-b border-border py-16 md:py-24">
+      <section className="relative overflow-hidden border-border py-16 md:py-24">
          <div className="container relative z-10">
             <div className="mx-auto flex max-w-200 flex-col items-center text-center space-y-4">
                   <a
@@ -13,13 +13,12 @@ export function Hero() {
                   >
                      Built by <span className="font-bold tracking-wide">#Techfusion</span>
                   </a>
-               <h1 className="text-balance text-4xl font-bold text-foreground md:text-4xl lg:text-7xl pb-6">
+               <h1 className="text-balance text-4xl font-bold text-foreground sm:text-4xl md:text-5xl lg:text-7xl pb-6">
                   One-stop platform to find best <AuroraText>competition</AuroraText> and team for you!
                </h1>
                <p className="text-balance text-lg text-muted-foreground md:text-xl">
                   Over 500+ competitions from various categories. Build your
-                  portfolio, sharpen your skills, and achieve excellence with
-                  LombaHub.
+                  portfolio, sharpen your skills, and achieve excellence !
                </p>
             </div>
          </div>

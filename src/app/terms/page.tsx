@@ -16,14 +16,14 @@ export default function TermsPage() {
 					<section className="mb-8">
 						<h2 className="text-xl font-semibold text-foreground mb-3">1. Introduction</h2>
 						<p className="text-muted-foreground leading-relaxed">
-							Welcome to LombaHub. By accessing or using our platform, you agree to be bound by these Terms of Service. Please read them carefully.
+							Welcome to Competitions. By accessing or using our platform, you agree to be bound by these Terms of Service. Please read them carefully.
 						</p>
 					</section>
 
 					<section className="mb-8">
 						<h2 className="text-xl font-semibold text-foreground mb-3">2. Use of Platform</h2>
 						<p className="text-muted-foreground leading-relaxed mb-3">
-							You agree to use LombaHub only for lawful purposes and in accordance with these Terms. You agree not to:
+							You agree to use Competitions only for lawful purposes and in accordance with these Terms. You agree not to:
 						</p>
 						<ul className="list-disc list-inside text-muted-foreground space-y-1 ml-4">
 							<li>Submit false or misleading information about competitions</li>
@@ -36,7 +36,7 @@ export default function TermsPage() {
 					<section className="mb-8">
 						<h2 className="text-xl font-semibold text-foreground mb-3">3. Competition Listings</h2>
 						<p className="text-muted-foreground leading-relaxed">
-							LombaHub serves as a platform to discover competitions. We do not organize, endorse, or guarantee the accuracy of competition listings. Users are encouraged to verify competition details directly with organizers.
+							Competitions serves as a platform to discover competitions. We do not organize, endorse, or guarantee the accuracy of competition listings. Users are encouraged to verify competition details directly with organizers.
 						</p>
 					</section>
 
@@ -50,14 +50,14 @@ export default function TermsPage() {
 					<section className="mb-8">
 						<h2 className="text-xl font-semibold text-foreground mb-3">5. Intellectual Property</h2>
 						<p className="text-muted-foreground leading-relaxed">
-							All content on LombaHub, including text, graphics, logos, and software, is owned by LombaHub or its licensors and is protected by intellectual property laws.
+							All content on Competitions, including text, graphics, logos, and software, is owned by Competitions or its licensors and is protected by intellectual property laws.
 						</p>
 					</section>
 
 					<section className="mb-8">
 						<h2 className="text-xl font-semibold text-foreground mb-3">6. Limitation of Liability</h2>
 						<p className="text-muted-foreground leading-relaxed">
-							LombaHub shall not be liable for any indirect, incidental, special, or consequential damages resulting from the use or inability to use our platform.
+							Competitions shall not be liable for any indirect, incidental, special, or consequential damages resulting from the use or inability to use our platform.
 						</p>
 					</section>
 
@@ -72,8 +72,8 @@ export default function TermsPage() {
 						<h2 className="text-xl font-semibold text-foreground mb-3">8. Contact Us</h2>
 						<p className="text-muted-foreground leading-relaxed">
 							If you have questions about these Terms, please contact us at{" "}
-							<a href="mailto:support@lombahub.id" className="text-primary hover:underline">
-								support@lombahub.id
+							<a href="mailto:support@competitions.id" className="text-primary hover:underline">
+								support@competitions.id
 							</a>
 						</p>
 					</section>

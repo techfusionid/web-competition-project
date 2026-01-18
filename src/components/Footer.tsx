@@ -6,26 +6,26 @@ import {
 
 export function Footer() {
 	return (
-		<footer className="border-t border-border bg-background">
-			<div className="container py-10">
+		<footer className="bg-background">
+			<div className="container py-10 px-4">
 				<div className="flex flex-col md:flex-row md:justify-between gap-8">
-					{/* Logo & Description */}
-					<div className="md:w-1/3">
-						<Link className="flex items-center gap-2" href="/">
+					{/* Logo & Description + Social Media */}
+					<div className="md:w-1/3 text-center md:text-left">
+						<Link className="inline-flex items-center gap-2" href="/">
 							<div className="flex h-8 w-8 items-center justify-center rounded-md bg-foreground">
-								<span className="text-xs font-bold text-background">LH</span>
+								<span className="text-xs font-bold text-background">C</span>
 							</div>
 							<span className="text-base font-semibold text-foreground">
-								LombaHub
+								Competitions
 							</span>
 						</Link>
-						<p className="mt-3 text-sm text-muted-foreground max-w-xs">
+						<p className="mt-3 text-sm text-muted-foreground mx-auto md:mx-0 max-w-sm">
 							One-stop platform to find the best competition and team for you.
 						</p>
 						{/* Social Media */}
-						<div className="mt-4 flex gap-3">
+						<div className="mt-4 flex justify-center md:justify-start gap-3">
 							<a
-								className="flex h-8 w-8 items-center justify-center rounded-md border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+								className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
 								href="https://instagram.com"
 								rel="noopener noreferrer"
 								target="_blank"
@@ -33,7 +33,7 @@ export function Footer() {
 								<Instagram className="h-4 w-4" />
 							</a>
 							<a
-								className="flex h-8 w-8 items-center justify-center rounded-md border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+								className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
 								href="https://linkedin.com"
 								rel="noopener noreferrer"
 								target="_blank"
@@ -41,7 +41,7 @@ export function Footer() {
 								<Linkedin className="h-4 w-4" />
 							</a>
 							<a
-								className="flex h-8 w-8 items-center justify-center rounded-md border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+								className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
 								href="https://wa.me/6281234567890"
 								rel="noopener noreferrer"
 								target="_blank"
@@ -53,8 +53,8 @@ export function Footer() {
 						</div>
 					</div>
 
-					{/* Links Section - Resources, Company, Legal - Aligned Right */}
-					<div className="grid grid-cols-3 gap-12 text-right">
+					{/* Links Section - Responsive Grid */}
+					<div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-12 text-right md:text-right">
 						{/* Resources */}
 						<div>
 							<h3 className="mb-3 text-sm font-semibold text-foreground">Resources</h3>
@@ -100,12 +100,12 @@ export function Footer() {
 							<ul className="space-y-2">
 								<li>
 									<Link className="text-sm text-muted-foreground transition-colors hover:text-foreground" href="/terms">
-										Terms of Service
+										Terms
 									</Link>
 								</li>
 								<li>
 									<Link className="text-sm text-muted-foreground transition-colors hover:text-foreground" href="/privacy">
-										Privacy Policy
+										Privacy
 									</Link>
 								</li>
 							</ul>
@@ -115,8 +115,8 @@ export function Footer() {
 			</div>
 
 			{/* Bottom Bar */}
-			<div className="border-t border-border bg-muted/30 py-3">
-				<div className="container flex items-center justify-between gap-4 text-xs text-muted-foreground">
+			<div className="bg-muted/30 py-4">
+				<div className="container flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-3 text-xs text-muted-foreground px-4">
 					<div className="flex items-center gap-2">
 						<span>Built by</span>
 						<a
@@ -128,7 +128,7 @@ export function Footer() {
 							<span>Techfusion</span>
 						</a>
 					</div>
-					<div className="text-right">
+					<div>
 						<span>Made with ❤️ for competition seekers</span>
 					</div>
 				</div>

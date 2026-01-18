@@ -54,7 +54,7 @@ export default function DiscoverPage() {
 
 			<main className="flex-1">
 				{/* Header Section */}
-				<section className="border-b border-border py-12 md:py-20">
+				<section className="py-12 md:py-20">
 					<div className="container">
 						<div className="mx-auto max-w-2xl">
 							<h1 className="text-balance text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-5xl">
@@ -71,7 +71,7 @@ export default function DiscoverPage() {
 				<section className="py-12 md:py-16">
 					<div className="container">
 						<h2 className="text-xl font-semibold text-foreground mb-6">Browse by Category</h2>
-						<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+						<div className="grid grid-cols-1lalu  md:grid-cols-3 lg:grid-cols-5 gap-4">
 							{categories.map((category) => (
 								<CategoryCard
 									key={category.title}
@@ -87,7 +87,7 @@ export default function DiscoverPage() {
 				</section>
 
 				{/* Browse by Organizer Section */}
-				<section className="border-t border-border py-12 md:py-16">
+				<section className="py-12 md:py-16">
 					<div className="container">
 						<h2 className="text-xl font-semibold text-foreground mb-6">Browse by Organizer</h2>
 						<div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4">

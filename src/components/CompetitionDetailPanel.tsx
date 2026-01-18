@@ -21,7 +21,7 @@ export function CompetitionDetailPanel({
 
 		const shareData = {
 			title: competition.title,
-			text: `Lihat kompetisi "${competition.title}" di LombaHub!`,
+			text: `Lihat kompetisi "${competition.title}" di Competitions!`,
 			url: competition.registrationUrl,
 		};
 

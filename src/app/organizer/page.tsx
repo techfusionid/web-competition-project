@@ -1,6 +1,33 @@
-import { OrganizerSection } from "@/components/sections/OrganizerSection";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { OrganizerCard } from "@/components/OrganizerCard";
+
+const organizers = [
+	{
+		title: "ITB",
+		image: "https://upload.wikimedia.org/wikipedia/id/9/95/Logo_Institut_Teknologi_Bandung.png",
+		description: "Institut Teknologi Bandung - Innovation and technology competitions",
+		href: "/organizer/itb",
+	},
+	{
+		title: "UI",
+		image: "https://upload.wikimedia.org/wikipedia/id/thumb/0/0f/Makara_of_Universitas_Indonesia.svg/250px-Makara_of_Universitas_Indonesia.svg.png",
+		description: "Universitas Indonesia - Leading academic and research competitions",
+		href: "/organizer/ui",
+	},
+	{
+		title: "Google",
+		image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN1HgAOQZBf48TI55AvzbnfV0IFrCCrX6ldg&s",
+		description: "Google developer challenges and tech competitions",
+		href: "/organizer/google",
+	},
+	{
+		title: "UGM",
+		image: "https://innopa.org/wp-content/uploads/logo-ugm.png",
+		description: "Universitas Gadjah Mada - Prestigious national competitions",
+		href: "/organizer/ugm",
+	},
+];
 
 export const metadata = {
 	title: "Organizers",
@@ -20,7 +47,17 @@ export default function OrganizersPage() {
 					</p>
 				</div>
 
-				<OrganizerSection variant="default" className="mb-0" />
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+					{organizers.map((organizer) => (
+						<OrganizerCard
+							key={organizer.title}
+							title={organizer.title}
+							image={organizer.image}
+							description={organizer.description}
+							href={organizer.href}
+						/>
+					))}
+				</div>
 			</main>
 
 			<Footer />

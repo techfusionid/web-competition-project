@@ -107,7 +107,7 @@ export function CompetitionDialog({
 
 		const shareData = {
 			title: competition.title,
-			text: `View competition "${competition.title}" on LombaHub!`,
+			text: `View competition "${competition.title}" on Competitions!`,
 			url: competition.registrationUrl,
 		};
 
