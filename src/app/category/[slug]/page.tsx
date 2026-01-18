@@ -191,16 +191,20 @@ export default function CategoryDetailPage() {
 			<Header />
 
 			{/* Hero Banner with Image */}
-			<div className="relative h-40 md:h-48 overflow-hidden">
-				<img
-					src={config.image || "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200&h=300&fit=crop"}
-					alt={categoryName}
-					className="absolute inset-0 h-full w-full object-cover"
-				/>
-				<div className="absolute inset-0 bg-linear-to-b from-black/50 via-black/30 to-background" />
+			<div className="w-full bg-background pb-12 pt-8">
+				<div className="container">
+					<div className="relative h-48 md:h-56 overflow-hidden rounded-2xl">
+						<img
+							src={config.image || "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200&h=300&fit=crop"}
+							alt={categoryName}
+							className="absolute inset-0 h-full w-full object-cover"
+						/>
+						<div className="absolute inset-0 bg-linear-to-b from-black/50 via-black/30 to-black/60" />
+					</div>
+				</div>
 			</div>
 
-			<main className="flex-1 container relative">
+			<main className="flex-1 container relative -mt-8">
 				{/* Category Info Section */}
 				<div className="relative -mt-12 mb-8">
 					<div className="flex flex-col md:flex-row md:items-end gap-4">
@@ -328,10 +332,8 @@ export default function CategoryDetailPage() {
 									{categoryCompetitions.map((competition, index) => (
 										<CompetitionCard
 											competition={competition}
-											isBookmarked={bookmarks.includes(competition.id)}
 											key={competition.id}
 											onClick={() => handleItemClick(index)}
-											onToggleBookmark={toggleBookmark}
 										/>
 									))}
 								</div>

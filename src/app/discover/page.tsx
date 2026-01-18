@@ -71,7 +71,7 @@ export default function DiscoverPage() {
 				<section className="py-12 md:py-16">
 					<div className="container">
 						<h2 className="text-xl font-semibold text-foreground mb-6">Browse by Category</h2>
-						<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+						<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
 							{categories.map((category) => (
 								<CategoryCard
 									key={category.title}

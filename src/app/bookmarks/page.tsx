@@ -51,9 +51,7 @@ export default function BookmarksPage() {
 						{bookmarkedCompetitions.map((competition) => (
 							<CompetitionCard
 								competition={competition}
-								isBookmarked={true}
 								key={competition.id}
-								onToggleBookmark={toggleBookmark}
 							/>
 						))}
 					</div>

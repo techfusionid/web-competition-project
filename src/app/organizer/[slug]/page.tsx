@@ -52,9 +52,7 @@ export default function InstitutionDetailPage() {
 						{institutionCompetitions.map((competition) => (
 							<CompetitionCard
 								competition={competition}
-								isBookmarked={isBookmarked(competition.id)}
 								key={competition.id}
-								onToggleBookmark={toggleBookmark}
 							/>
 						))}
 					</div>

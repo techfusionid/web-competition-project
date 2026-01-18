@@ -208,11 +208,9 @@ export function CompetitionList({
 					<div className="mb-6 flex flex-col gap-3">
 						<SearchBar
 							onChange={onSearchChange}
-							onSortChange={(v) => setSortBy(v as SortOption)}
 							onToggleFilters={() => setShowFilters(!showFilters)}
 							resultCount={filteredCompetitions.length}
 							showFilters={showFilters}
-							sortBy={sortBy}
 							value={searchQuery}
 						/>
 						<div
@@ -271,10 +269,8 @@ export function CompetitionList({
 											{viewMode === "grid" ? (
 												<CompetitionCard
 													competition={competition}
-													isBookmarked={bookmarks.includes(competition.id)}
 													onClick={() => handleItemClick(index)}
 													onOrganizerClick={onOrganizerClick}
-													onToggleBookmark={onToggleBookmark}
 												/>
 											) : (
 												<CompetitionCardPoster
@@ -334,11 +330,9 @@ export function CompetitionList({
 				<div className="mb-6 flex flex-col gap-3">
 					<SearchBar
 						onChange={onSearchChange}
-						onSortChange={(v) => setSortBy(v as SortOption)}
 						onToggleFilters={() => setShowFilters(!showFilters)}
 						resultCount={filteredCompetitions.length}
 						showFilters={showFilters}
-						sortBy={sortBy}
 						value={searchQuery}
 					/>
 					<div
@@ -441,11 +435,9 @@ export function CompetitionList({
 							{visibleCompetitions.map((competition, index) => (
 								<CompetitionCard
 									competition={competition}
-									isBookmarked={bookmarks.includes(competition.id)}
 									key={competition.id}
 									onClick={() => handleItemClick(index)}
 									onOrganizerClick={onOrganizerClick}
-									onToggleBookmark={onToggleBookmark}
 								/>
 							))}
 						</div>

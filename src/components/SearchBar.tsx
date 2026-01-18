@@ -1,19 +1,10 @@
 import { Search, SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
 
 interface SearchBarProps {
 	value: string;
 	onChange: (value: string) => void;
-	sortBy: string;
-	onSortChange: (value: string) => void;
 	resultCount: number;
 	onToggleFilters: () => void;
 	showFilters: boolean;
@@ -22,8 +13,6 @@ interface SearchBarProps {
 export function SearchBar({
 	value,
 	onChange,
-	sortBy,
-	onSortChange,
 	resultCount,
 	onToggleFilters,
 	showFilters,
@@ -49,15 +38,6 @@ export function SearchBar({
 				<SlidersHorizontal className="h-3.5 w-3.5" />
 				Filters
 			</Button>
-			<Select onValueChange={onSortChange} value={sortBy}>
-				<SelectTrigger className="h-9 w-[120px] gap-1 border-0 bg-secondary text-xs">
-					<SelectValue placeholder="Order by" />
-				</SelectTrigger>
-				<SelectContent>
-					<SelectItem value="deadline">Deadline</SelectItem>
-					<SelectItem value="name">Name</SelectItem>
-				</SelectContent>
-			</Select>
 		</div>
 	);
 }

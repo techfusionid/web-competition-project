@@ -3,14 +3,11 @@
 import {
 	BookOpen,
 	Info,
-	Menu,
 	ArrowUpRight,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ThemeToggle } from "./ThemeToggle";
 
 interface NavItem {
@@ -29,7 +26,6 @@ interface HeaderProps {
 }
 
 export function Header({ onHomeClick }: HeaderProps = {}) {
-	const [isOpen, setIsOpen] = useState(false);
 	const pathname = usePathname();
 
 	const handleHomeClick = (e: React.MouseEvent) => {
@@ -43,10 +39,10 @@ export function Header({ onHomeClick }: HeaderProps = {}) {
 	const isActive = (path: string) => pathname === path;
 
 	return (
-		<header className="sticky top-0 z-50 w-full bg-background">
+		<header className="sticky top-0 z-50 w-full bg-transparent">
 			<div className="container flex h-14 items-center">
 				<Link
-					className="mr-8 flex items-center gap-2"
+					className="flex items-center gap-2"
 					href="/"
 					onClick={handleHomeClick}
 				>
@@ -58,7 +54,7 @@ export function Header({ onHomeClick }: HeaderProps = {}) {
 					</span>
 				</Link>
 
-				<nav className="hidden items-center gap-1 md:flex">
+				<nav className="hidden items-center gap-1 md:flex md:ml-8">
 					{navItems.map((item) => {
 						const Icon = item.icon;
 						const active = isActive(item.path);
@@ -82,57 +78,12 @@ export function Header({ onHomeClick }: HeaderProps = {}) {
 						<ThemeToggle />
 					</div>
 
-					<Link href="/discover" className="hidden md:block">
+					<Link href="/discover">
 						<Button className="h-8 text-sm gap-1.5" size="sm" variant="ghost">
 							Discover
 							<ArrowUpRight className="h-3.5 w-3.5" />
 						</Button>
 					</Link>
-
-					<Sheet onOpenChange={setIsOpen} open={isOpen}>
-						<SheetTrigger asChild>
-							<Button className="h-8 w-8 md:hidden" size="icon" variant="ghost">
-								<Menu className="h-4 w-4" />
-							</Button>
-						</SheetTrigger>
-						<SheetContent className="w-70 px-6" side="right">
-							<div className="flex items-center justify-between pt-4 pb-4 pr-8 border-b border-border">
-								<span className="text-sm font-medium text-foreground">
-									Theme
-								</span>
-								<ThemeToggle />
-							</div>
-							<nav className="flex flex-col gap-3 pt-6 pr-2">
-								<Link
-									className={`flex items-center gap-2 text-base font-medium ${isActive("/discover") ? "text-foreground" : "text-muted-foreground"}`}
-									href="/discover"
-									onClick={() => setIsOpen(false)}
-								>
-									Discover
-								</Link>
-								<div className="flex flex-col gap-1">
-									<span className="text-xs font-medium text-muted-foreground px-2">
-										MENU
-									</span>
-								{navItems.map((item) => {
-									const Icon = item.icon;
-									const active = isActive(item.path);
-									return (
-										<Link
-											className={`flex items-center gap-2 text-base font-medium ${active ? "text-foreground" : "text-muted-foreground"}`}
-											href={item.path}
-											key={item.path}
-											onClick={() => setIsOpen(false)}
-										>
-											{active && <Icon className="h-4 w-4" />}
-											{item.label}
-										</Link>
-									);
-								})}
-								</div>
-							</nav>
-						</SheetContent>
-					</Sheet>
 				</div>
 			</div>
 		</header>
