@@ -1,5 +1,6 @@
 import localFont from "next/font/local";
 import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
@@ -15,15 +16,31 @@ const geistMono = Geist_Mono({
    variable: "--font-geist-mono",
 });
 
-type Metadata = {
-   title?: string;
-   description?: string;
-   [key: string]: any;
-};
-
 export const metadata: Metadata = {
-   title: "Web Competition",
-   description: "Web Competition",
+   title: {
+      default: "Competitions - Discover & Join Exciting Competitions",
+      template: "%s | Competitions",
+   } as const,
+   description: "Discover and join competitions across various categories including Technology, Business, Science, Design, Arts, and more. Find your next competition and showcase your skills.",
+   keywords: ["competitions", "contests", "awards", "challenges", "technology competitions", "business competitions", "design competitions"],
+   authors: [{ name: "Competitions" }],
+   openGraph: {
+      type: "website",
+      locale: "en_US",
+      url: "https://competitions.com",
+      siteName: "Competitions",
+      title: "Competitions - Discover & Join Exciting Competitions",
+      description: "Discover and join competitions across various categories including Technology, Business, Science, Design, Arts, and more.",
+   },
+   twitter: {
+      card: "summary_large_image",
+      title: "Competitions - Discover & Join Exciting Competitions",
+      description: "Discover and join competitions across various categories including Technology, Business, Science, Design, Arts, and more.",
+   },
+   robots: {
+      index: true,
+      follow: true,
+   },
 };
 
 export default function RootLayout({

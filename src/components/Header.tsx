@@ -23,9 +23,10 @@ const navItems: NavItem[] = [
 
 interface HeaderProps {
 	onHomeClick?: () => void;
+	sticky?: boolean;
 }
 
-export function Header({ onHomeClick }: HeaderProps = {}) {
+export function Header({ onHomeClick, sticky = true }: HeaderProps = {}) {
 	const pathname = usePathname();
 
 	const handleHomeClick = (e: React.MouseEvent) => {
@@ -39,7 +40,7 @@ export function Header({ onHomeClick }: HeaderProps = {}) {
 	const isActive = (path: string) => pathname === path;
 
 	return (
-		<header className="sticky top-0 z-50 w-full bg-transparent">
+		<header className={`${sticky ? "sticky top-0" : "relative"} z-50 w-full bg-transparent`}>
 			<div className="container flex h-14 items-center">
 				<Link
 					className="flex items-center gap-2"

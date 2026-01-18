@@ -9,7 +9,7 @@ export function Hero() {
                      href="https://techfusion.id"
                      target="_blank"
                      rel="noopener noreferrer"
-                     className="inline-block rounded bg-neutral-200 dark:bg-purple-950 dark:text-white px-2 py-1 text-xs font-light cursor-pointer transition-colors hover:bg-muted"
+                     className="inline-block rounded bg-neutral-200 dark:bg-[#120C24] dark:text-white px-2 py-1 text-xs font-light cursor-pointer transition-colors hover:bg-muted"
                   >
                      Built by <span className="font-bold tracking-wide">#Techfusion</span>
                   </a>

@@ -2,7 +2,7 @@ import { Image, LayoutGrid } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export type ViewMode = "grid" | "poster";
+export type ViewMode = "card" | "poster";
 
 interface ViewToggleProps {
 	viewMode: ViewMode;
@@ -15,9 +15,9 @@ export function ViewToggle({ viewMode, onViewModeChange }: ViewToggleProps) {
 			<Button
 				className={cn(
 					"h-8 rounded-r-none px-3",
-					viewMode === "grid" && "bg-secondary"
+					viewMode === "card" && "bg-secondary"
 				)}
-				onClick={() => onViewModeChange("grid")}
+				onClick={() => onViewModeChange("card")}
 				size="sm"
 				variant="ghost"
 			>

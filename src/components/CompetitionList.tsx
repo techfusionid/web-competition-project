@@ -42,12 +42,12 @@ type SortOption = "deadline" | "name";
 const VIEW_MODE_KEY = "lombahub-view-mode";
 
 function getInitialViewMode(isMobile: boolean): ViewMode {
-	if (typeof window === "undefined") return isMobile ? "poster" : "grid";
+	if (typeof window === "undefined") return isMobile ? "poster" : "card";
 	const stored = localStorage.getItem(VIEW_MODE_KEY);
-	if (stored === "grid" || stored === "poster") {
+	if (stored === "card" || stored === "poster") {
 		return stored;
 	}
-	return isMobile ? "poster" : "grid";
+	return isMobile ? "poster" : "card";
 }
 
 export function CompetitionList({
@@ -63,7 +63,7 @@ export function CompetitionList({
 	const [filters, setFilters] = useState<FilterState>(defaultFilters);
 	const [sortBy, setSortBy] = useState<SortOption>("deadline");
 	const [showFilters, setShowFilters] = useState(false);
-	const [viewMode, setViewMode] = useState<ViewMode>("grid");
+	const [viewMode, setViewMode] = useState<ViewMode>("card");
 	const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 	const [dialogIndex, setDialogIndex] = useState<number | null>(null);
 	const [posterPopupIndex, setPosterPopupIndex] = useState<number | null>(null);
@@ -266,7 +266,7 @@ export function CompetitionList({
 											className="pl-3 basis-[80%] sm:basis-[65%]"
 											key={competition.id}
 										>
-											{viewMode === "grid" ? (
+											{viewMode === "card" ? (
 												<CompetitionCard
 													competition={competition}
 													onClick={() => handleItemClick(index)}
@@ -428,10 +428,10 @@ export function CompetitionList({
 							/>
 						</div>
 					</div>
-				) : viewMode === "grid" ? (
+				) : viewMode === "card" ? (
 					/* Normal Card Grid View */
 					<>
-						<div className="grid gap-4 grid-cols-2 lg:grid-cols-3">
+						<div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 							{visibleCompetitions.map((competition, index) => (
 								<CompetitionCard
 									competition={competition}
