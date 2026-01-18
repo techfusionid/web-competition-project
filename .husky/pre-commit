@@ -1,14 +1,5 @@
 #!/bin/sh
 set -e
 
-# hanya jalan kalau ada staged file
-STAGED_FILES=$(git diff --cached --name-only)
-[ -z "$STAGED_FILES" ] && exit 0
-
 # format hanya file relevan
-# pnpm dlx ultracite fix
-
-# re-stage hanya file yang tadinya staged
-echo "$STAGED_FILES" | while read -r file; do
-  [ -f "$file" ] && git add "$file"
-done
+pnpm dlx ultracite fix
