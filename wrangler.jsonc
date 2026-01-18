@@ -36,6 +36,10 @@
 		{
 			"pattern": "competition.techfusion.id",
 			"custom_domain": true
+		},
+		{
+			"pattern": "www.competition.techfusion.id",
+			"zone_name": "techfusion.id"
 		}
 	],
 	/**
