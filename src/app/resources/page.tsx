@@ -7,8 +7,6 @@ import {
 	Users,
 	Wrench,
 } from "lucide-react";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -239,9 +237,7 @@ const tools: Tool[] = [
 
 export default function ResourcesPage() {
 	return (
-		<div className="min-h-screen bg-background">
-			<Header />
-
+		<>
 			<main className="container py-8">
 				<div className="space-y-2 mb-8">
 					<h1 className="text-2xl font-bold text-foreground md:text-3xl">
@@ -424,8 +420,6 @@ export default function ResourcesPage() {
 					</div>
 				</section>
 			</main>
-
-			<Footer />
-		</div>
+		</>
 	);
 }

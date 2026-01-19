@@ -6,8 +6,6 @@ import {
 	Music,
 	Video,
 } from "lucide-react";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
 import { CategoryCard } from "@/components/CategoryCard";
 import { OrganizerCard } from "@/components/OrganizerCard";
 
@@ -49,29 +47,98 @@ const organizers = [
 
 export default function DiscoverPage() {
 	return (
-		<div className="min-h-screen flex flex-col bg-background">
-			<Header />
-
-			<main className="flex-1">
-				{/* Header Section */}
-				<section className="py-12 md:py-20">
-					<div className="container">
-						<div className="mx-auto max-w-2xl">
-							<h1 className="text-balance text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-5xl">
-								Discover Competitions
-							</h1>
-							<p className="mt-4 text-balance text-base text-muted-foreground md:text-lg">
-								Explore the best competitions across Indonesia and browse by category.
-							</p>
-						</div>
+		<>
+			{/* Header Section - Desktop */}
+			<section className="hidden md:block py-12 md:py-20">
+				<div className="container">
+					<div className="mx-auto max-w-2xl">
+						<h1 className="text-balance text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-5xl">
+							Discover Competitions
+						</h1>
+						<p className="mt-4 text-balance text-base text-muted-foreground md:text-lg">
+							Explore the best competitions across Indonesia and browse by category.
+						</p>
 					</div>
-				</section>
+				</div>
+			</section>
 
+			{/* Mobile Content with Sidebar Layout */}
+			<div className="md:hidden container py-8">
+				<div className="flex flex-col gap-8">
+					{/* Left - Header */}
+					<div>
+						<h1 className="text-3xl font-bold tracking-tight text-foreground">
+							Discover Competitions
+						</h1>
+						<p className="mt-3 text-base text-muted-foreground">
+							Explore the best competitions across Indonesia and browse by category or organizer.
+						</p>
+					</div>
+
+					{/* Right - Cards */}
+					<div className="space-y-8">
+						{/* Browse by Category Section */}
+						<section>
+							<h2 className="text-xl font-semibold text-foreground mb-4">Browse by Category</h2>
+							<div className="flex overflow-x-auto gap-3 pb-2 snap-x snap-mandatory scrollbar-hide">
+								<div className="flex flex-col gap-3 min-w-max">
+									<div className="flex gap-3">
+										{categories.slice(0, 3).map((category) => (
+											<CategoryCard
+												key={category.title}
+												title={category.title}
+												icon={category.icon}
+												color={category.color}
+												count={category.count}
+												href={category.href}
+											/>
+										))}
+									</div>
+									<div className="flex gap-3">
+										{categories.slice(3, 6).map((category) => (
+											<CategoryCard
+												key={category.title}
+												title={category.title}
+												icon={category.icon}
+												color={category.color}
+												count={category.count}
+												href={category.href}
+											/>
+										))}
+									</div>
+								</div>
+							</div>
+						</section>
+
+						{/* Separator Line */}
+						<div className="border-t border-border" />
+
+						{/* Browse by Organizer Section */}
+						<section>
+							<h2 className="text-xl font-semibold text-foreground mb-4">Browse by Organizer</h2>
+							<div className="grid grid-cols-1 gap-4">
+								{organizers.map((organizer) => (
+									<OrganizerCard
+										key={organizer.title}
+										title={organizer.title}
+										image={organizer.image}
+										description={organizer.description}
+										href={organizer.href}
+									/>
+								))}
+							</div>
+						</section>
+					</div>
+				</div>
+			</div>
+
+			{/* Desktop Content - Original Layout */}
+			<div className="hidden md:block">
 				{/* Browse by Category Section */}
 				<section className="py-12 md:py-16">
 					<div className="container">
 						<h2 className="text-xl font-semibold text-foreground mb-6">Browse by Category</h2>
-						<div className="grid grid-cols-1lalu  md:grid-cols-3 lg:grid-cols-5 gap-4">
+						<div className="grid md:grid-cols-3 lg:grid-cols-5 gap-4">
 							{categories.map((category) => (
 								<CategoryCard
 									key={category.title}
@@ -103,9 +170,7 @@ export default function DiscoverPage() {
 						</div>
 					</div>
 				</section>
-			</main>
-
-			<Footer />
-		</div>
+			</div>
+		</>
 	);
 }

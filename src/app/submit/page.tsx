@@ -7,8 +7,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -97,9 +95,8 @@ export default function SubmitPage() {
 	};
 
 	return (
-		<div className="flex min-h-screen flex-col bg-background">
-			<Header />
-			<main className="flex-1 py-8 md:py-12">
+		<>
+			<main className="py-8 md:py-12">
 				<div className="container">
 					<div className="mx-auto max-w-2xl">
 						<div className="mb-8 text-center">
@@ -408,7 +405,6 @@ export default function SubmitPage() {
 					</div>
 				</div>
 			</main>
-			<Footer />
-		</div>
+		</>
 	);
 }

@@ -1,14 +1,10 @@
 import { Briefcase, Building2, ExternalLink, Shield } from "lucide-react";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
 import { Card, CardContent } from "@/components/ui/card";
 
 export default function About() {
 	return (
-		<div className="min-h-screen flex flex-col bg-background">
-			<Header />
-
-			<main className="flex-1 container py-8 max-w-4xl">
+		<>
+			<main className="container py-8 max-w-4xl">
 				{/* Hero Section */}
 				<div className="mb-12">
 					<h1 className="text-4xl font-bold text-foreground mb-4">About Us</h1>
@@ -223,8 +219,6 @@ export default function About() {
 					</div>
 				</section>
 			</main>
-
-			<Footer />
-		</div>
+		</>
 	);
 }

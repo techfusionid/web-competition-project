@@ -4,8 +4,6 @@ import { ArrowLeft, Building2, Trophy } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { CompetitionCard } from "@/components/CompetitionCard";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { competitions } from "@/data/competitions";
 import { useBookmarks } from "@/hooks/useBookmarks";
@@ -21,10 +19,8 @@ export default function InstitutionDetailPage() {
 	);
 
 	return (
-		<div className="min-h-screen flex flex-col bg-background">
-			<Header />
-
-			<main className="flex-1 container py-8">
+		<>
+			<main className="container py-8">
 				<Link href="/institution">
 					<Button className="mb-6 -ml-2" size="sm" variant="ghost">
 						<ArrowLeft className="h-4 w-4 mr-2" />
@@ -65,8 +61,6 @@ export default function InstitutionDetailPage() {
 					</div>
 				)}
 			</main>
-
-			<Footer />
-		</div>
+		</>
 	);
 }

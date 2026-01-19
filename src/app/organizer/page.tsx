@@ -1,5 +1,3 @@
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
 import { OrganizerCard } from "@/components/OrganizerCard";
 
 const organizers = [
@@ -36,10 +34,8 @@ export const metadata = {
 
 export default function OrganizersPage() {
 	return (
-		<div className="min-h-screen flex flex-col bg-background">
-			<Header />
-
-			<main className="flex-1 container py-8">
+		<>
+			<main className="container py-8">
 				<div className="mb-8">
 					<h1 className="text-3xl font-bold text-foreground mb-2">Organizers</h1>
 					<p className="text-muted-foreground">
@@ -59,8 +55,6 @@ export default function OrganizersPage() {
 					))}
 				</div>
 			</main>
-
-			<Footer />
-		</div>
+		</>
 	);
 }

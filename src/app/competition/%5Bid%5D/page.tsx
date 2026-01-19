@@ -16,8 +16,6 @@ import {
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { toast } from "sonner"; // Changed from use-toast as sonner seems to be the preferred toast in this project
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
 import { StatusBadge } from "@/components/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { competitions } from "@/data/competitions";
@@ -33,8 +31,7 @@ export default function CompetitionDetailPage() {
 
 	if (!competition) {
 		return (
-			<div className="flex min-h-screen flex-col bg-background">
-				<Header />
+			<>
 				<main className="container flex flex-1 flex-col items-center justify-center py-16">
 					<h1 className="text-xl font-medium text-foreground">
 						Kompetisi tidak ditemukan
@@ -43,8 +40,7 @@ export default function CompetitionDetailPage() {
 						Kembali ke beranda
 					</Link>
 				</main>
-				<Footer />
-			</div>
+			</>
 		);
 	}
 
@@ -82,8 +78,7 @@ export default function CompetitionDetailPage() {
 	};
 
 	return (
-		<div className="flex min-h-screen flex-col bg-background">
-			<Header />
+		<>
 			<main className="flex-1">
 				<div className="border-b border-border bg-card">
 					<div className="container py-6">
@@ -263,7 +258,6 @@ export default function CompetitionDetailPage() {
 					</div>
 				</div>
 			</main>
-			<Footer />
-		</div>
+		</>
 	);
 }

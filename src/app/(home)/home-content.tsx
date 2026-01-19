@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Header } from "@/components/Header";
 import { CompetitionList } from "@/components/CompetitionList";
 import { Hero } from "@/components/Hero";
 import { competitions } from "@/data/competitions";
@@ -45,8 +44,7 @@ export function HomeContent() {
 
 	return (
 		<>
-			<div className="bg-linear-to-b from-secondary/50 to-background">
-				<Header onHomeClick={handleHomeClick} />
+			<div className="from-secondary/50 to-background">
 				<main className="flex-1">
 					<Hero />
 				</main>

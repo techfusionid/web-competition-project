@@ -1,12 +1,7 @@
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
-
 export default function TermsPage() {
 	return (
-		<div className="min-h-screen flex flex-col bg-background">
-			<Header />
-
-			<main className="flex-1 container py-8 max-w-4xl">
+		<>
+			<main className="container py-8 max-w-4xl">
 				<div className="mb-8">
 					<h1 className="text-3xl font-bold text-foreground mb-2">Terms of Service</h1>
 					<p className="text-muted-foreground">Last updated: January 2025</p>
@@ -79,8 +74,6 @@ export default function TermsPage() {
 					</section>
 				</div>
 			</main>
-
-			<Footer />
-		</div>
+		</>
 	);
 }

@@ -3,8 +3,6 @@
 import { Bookmark } from "lucide-react";
 import Link from "next/link";
 import { CompetitionCard } from "@/components/CompetitionCard";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { competitions } from "@/data/competitions";
 import { useBookmarks } from "@/hooks/useBookmarks";
@@ -17,9 +15,8 @@ export default function BookmarksPage() {
 	);
 
 	return (
-		<div className="flex min-h-screen flex-col bg-background">
-			<Header />
-			<main className="container flex-1 py-8 md:py-12">
+		<>
+			<main className="container py-8 md:py-12">
 				<div className="mb-6">
 					<h1 className="text-xl font-semibold text-foreground md:text-2xl">
 						Saved Competitions
@@ -57,7 +54,6 @@ export default function BookmarksPage() {
 					</div>
 				)}
 			</main>
-			<Footer />
-		</div>
+		</>
 	);
 }

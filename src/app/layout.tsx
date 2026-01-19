@@ -2,6 +2,8 @@ import localFont from "next/font/local";
 import { Geist, Geist_Mono } from "next/font/google";
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import "./globals.css";
 
 const greedStandard = localFont({
@@ -53,7 +55,11 @@ export default function RootLayout({
          </head>
          <body className={`${greedStandard.variable} ${geistMono.variable} font-sans antialiased`}>
             <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange enableSystem>
-               {children}
+               <Header />
+               <main className="min-h-[calc(100vh-140px)]">
+                  {children}
+               </main>
+               <Footer />
             </ThemeProvider>
          </body>
       </html>

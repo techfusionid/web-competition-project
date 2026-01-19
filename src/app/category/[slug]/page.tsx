@@ -23,8 +23,6 @@ import { useCallback, useMemo, useState } from "react";
 import { CompetitionCard } from "@/components/CompetitionCard";
 import { CompetitionCardPoster } from "@/components/CompetitionCardPoster";
 import { CompetitionDialog } from "@/components/CompetitionDialog";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -189,9 +187,7 @@ export default function CategoryDetailPage() {
       selectedIndex !== null ? categoryCompetitions[selectedIndex] : null;
 
    return (
-      <div className="min-h-screen flex flex-col bg-background">
-         <Header sticky={false} />
-
+      <>
          {/* Hero Section with Image */}
          <div className="relative w-full">
 
@@ -318,7 +314,7 @@ export default function CategoryDetailPage() {
                   {/* Competition Grid */}
                   {categoryCompetitions.length > 0 ? (
                      viewMode === "poster" ? (
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
                            {categoryCompetitions.map((competition, index) => (
                               <CompetitionCardPoster
                                  competition={competition}
@@ -330,7 +326,7 @@ export default function CategoryDetailPage() {
                            ))}
                         </div>
                      ) : (
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
                            {categoryCompetitions.map((competition, index) => (
                               <CompetitionCard
                                  competition={competition}
@@ -392,8 +388,6 @@ export default function CategoryDetailPage() {
             onNext={handleNext}
             onPrevious={handlePrevious}
          />
-
-         <Footer />
-      </div>
+      </>
    );
 }

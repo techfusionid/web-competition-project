@@ -21,7 +21,7 @@ export function CategoryCard({
 		<Link href={href} className="group">
 			<Card className="h-full transition-all hover:border-neutral-500 border-border/50 bg-card/50 backdrop-blur-sm">
 				<CardContent className="flex items-center gap-4">
-					<Icon className={`h-8 w-8 ${color} shrink-0`} />
+					<Icon className={`h-6 w-6 ${color} shrink-0`} />
 					<div className="flex flex-col">
 						<h3 className="font-semibold text-foreground text-base">
 							{title}

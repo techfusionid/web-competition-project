@@ -47,9 +47,11 @@ export function Header({ onHomeClick, sticky = false }: HeaderProps = {}) {
 					href="/"
 					onClick={handleHomeClick}
 				>
-					<div className="flex h-7 w-7 items-center justify-center rounded-md bg-foreground">
-						<span className="text-xs font-bold text-background">C</span>
-					</div>
+					<img
+						src="/techfusion.png"
+						alt="Competitions"
+						className="h-7 w-7 rounded-md object-cover"
+					/>
 					<span className="text-base font-semibold text-foreground">
 						Competitions
 					</span>
