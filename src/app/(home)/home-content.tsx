@@ -21,6 +21,21 @@ export function HomeContent() {
 		}
 	}, [searchParams]);
 
+	// Listen for reset event from Header
+	useEffect(() => {
+		const handleReset = () => {
+			setSearchQuery("");
+			setResetTrigger((prev) => prev + 1);
+			// Clear URL search params
+			const url = new URL(window.location.href);
+			url.searchParams.delete("q");
+			window.history.replaceState({}, "", url.toString());
+		};
+
+		window.addEventListener('reset-app', handleReset);
+		return () => window.removeEventListener('reset-app', handleReset);
+	}, []);
+
 	const handleSearchChange = useCallback((query: string) => {
 		setSearchQuery(query);
 		// Update URL without refreshing
@@ -35,11 +50,6 @@ export function HomeContent() {
 
 	const handleOrganizerClick = useCallback((organizer: string) => {
 		handleSearchChange(organizer);
-	}, [handleSearchChange]);
-
-	const handleHomeClick = useCallback(() => {
-		setResetTrigger((prev) => prev + 1);
-		handleSearchChange("");
 	}, [handleSearchChange]);
 
 	return (

@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import { Footer } from "@/components/Footer";
 import { HomeContent } from "./home-content";
 
 export default function Home() {
@@ -8,7 +7,6 @@ export default function Home() {
 			<Suspense fallback={<div className="container py-12">Loading...</div>}>
 				<HomeContent />
 			</Suspense>
-			<Footer />
 		</div>
 	);
 }

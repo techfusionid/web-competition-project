@@ -65,7 +65,7 @@ export function CompetitionDrawer({
 				<DrawerTitle className="sr-only">{competition.title}</DrawerTitle>
 
 				{/* Drag Handle - visual indicator */}
-				<div className="mx-auto mb-2 h-1.5 w-12 rounded-full bg-muted" />
+
 
 				<DrawerClose className="absolute right-3 top-3 z-10 inline-flex h-8 w-8 items-center justify-center rounded-full bg-muted/50 hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring">
 					<X className="h-4 w-4" />

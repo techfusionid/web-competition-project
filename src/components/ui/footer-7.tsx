@@ -81,7 +81,7 @@ export const Footer7 = ({
   legalLinks = defaultLegalLinks,
 }: Footer7Props) => {
   return (
-    <section className="py-12 md:py-16">
+    <section className="pt-12 pb-0 md:pt-16">
       <div className="container mx-auto">
         <div className="flex w-full flex-col justify-between gap-10 lg:flex-row lg:items-start lg:text-left">
           <div className="flex w-full flex-col justify-between gap-6 lg:items-start">
@@ -128,7 +128,7 @@ export const Footer7 = ({
             ))}
           </div>
         </div>
-        <div className="mt-8 flex flex-col justify-end gap-4 border-t py-8 text-xs font-medium text-muted-foreground md:flex-row md:items-center md:text-right">
+        <div className="mt-8 flex flex-col justify-end gap-4 border-t pt-4 pb-[50px] text-xs font-medium text-muted-foreground md:flex-row md:items-center md:text-right">
           <p>{copyright}</p>
           <ul className="flex flex-col gap-2 md:flex-row md:ml-4">
             {/*{legalLinks.map((link, idx) => (

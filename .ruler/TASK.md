@@ -9,10 +9,10 @@
 - [ ] **sesuaikan lagi skema database nya dengan data scrapping**
 - [x] **tentuin konten wa dan threads**
 - [ ] **tentuin decision pop up poster untuk experience yang paling nyaman**
-- [ ] perbaiki header di mobile, supaya di mobile pake drawer di samping kanan
+- [ ] ~~perbaiki header di mobile, supaya di mobile pake drawer di samping kanan~~
 - [ ] *sesuaikan terms and privacy, untuk mengatur penggunaan website dan melindungi pemilik website
 - [ ] *nulis about me
-- [ ] *kategori cuman di teknologi aja dulu
+- [ ] ~~*kategori cuman di teknologi aja dulu~~
 - [ ] *hilangin pemilihan kategori di heroes, supaya mempermudah user buat mencari lomba
 - [ ] di kategori/competition disesuaikan supaya mirip dgn luma, terdapat banner gambar yang bisa dicustom, pakai gambar gratisan dari unsplash aja
 - [x] **sesuaikan component poster di mobile supaya experience nya dapet: cepat, lengkap dan informatif** 
@@ -24,16 +24,12 @@
 - [ ] implementasi featurebase untuk customer feedback
 - [x] randomize perbaikin supaya ngambil data dari lomba 
 - [x] footernya 
-- [ ] sorting nya yang terbaru dan by nama
+- [x] sorting nya yang terbaru dan by nama
 - [x] terapin sistem toggle theme nya 
 - [ ] **tentuin decision pop up poster untuk experience yang paling nyaman** 
 - [x] tombol share nya pake component yg bagus 
-- [x] siapin tempat/component buat ads 
-- [ ] nulis about me
+- [ ![alt text](image.png)] siapin tempat/component buat ads 
 - [ ] randomize perbaikin supaya ngambil data dari lomba
-- [ ] sorting nya yang terbaru dan by nama
-- [ ] terapin sistem toggle theme nya
-- [ ] *tombol share nya pake component yg bagus
 
 card component lomba bakal ada 3 bentuk:
 - card + poster

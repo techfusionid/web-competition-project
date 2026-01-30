@@ -104,6 +104,16 @@ export function CompetitionList({
 	useEffect(() => {
 		if (resetTrigger !== undefined) {
 			setSelectedIndex(null);
+			setFilters(defaultFilters);
+			setVisibleCount(20);
+			setShowFilters(false);
+			setDialogIndex(null);
+			setPosterPopupIndex(null);
+			// Scroll to top of competitions section
+			const competitionsSection = document.getElementById('competitions');
+			if (competitionsSection) {
+				competitionsSection.scrollIntoView({ behavior: 'smooth' });
+			}
 		}
 	}, [resetTrigger]);
 
@@ -377,7 +387,7 @@ export function CompetitionList({
 						{/* Left - Scrollable gallery with 2 columns of posters */}
 						<div className="col-span-2 min-w-0 overflow-hidden">
 							<ScrollArea className="h-[calc(100vh-6rem)]">
-								<div className="grid grid-cols-2 gap-2 pr-3 pl-1 pt-1">
+								<div className={viewMode === "card" ? "flex flex-col gap-3 pr-3 pl-1 pt-1" : "grid grid-cols-2 gap-2 pr-3 pl-1 pt-1"}>
 									{visibleCompetitions.map((competition, index) => {
 										const isCurrentlySelected = selectedIndex === index;
 
@@ -385,17 +395,27 @@ export function CompetitionList({
 											<div
 												className={`transition-all duration-300 ${
 													isCurrentlySelected
-														? "opacity-100 scale-[1.02]"
-														: "opacity-60 hover:opacity-100"
+														? viewMode === "card" ? "ring-2 ring-primary rounded-lg" : "opacity-100 scale-[1.02]"
+														: viewMode === "card" ? "opacity-80 hover:opacity-100" : "opacity-60 hover:opacity-100"
 												}`}
 												key={competition.id}
 												ref={isCurrentlySelected ? selectedItemRef : null}
 											>
-												<CompetitionGalleryItem
-													competition={competition}
-													isSelected={isCurrentlySelected}
-													onClick={() => handleItemClick(index)}
-												/>
+												{viewMode === "card" ? (
+													<CompetitionCard
+														competition={competition}
+														onClick={() => handleItemClick(index)}
+														onOrganizerClick={onOrganizerClick}
+													/>
+												) : (
+													<CompetitionCardPoster
+														competition={competition}
+														isBookmarked={bookmarks.includes(competition.id)}
+														onClick={() => handleItemClick(index)}
+														onLongPress={() => setPosterPopupIndex(index)}
+														onToggleBookmark={onToggleBookmark}
+													/>
+												)}
 											</div>
 										);
 									})}
