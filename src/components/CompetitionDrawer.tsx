@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-import { Calendar, ExternalLink, MapPin, Share2, Users, X } from "lucide-react";
+import { BadgeCheck, Calendar, ExternalLink, Flag, MapPin, Share2, Users, X } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,6 +11,8 @@ import {
 	DrawerTitle,
 } from "@/components/ui/drawer";
 import { type Competition, LEVELS } from "@/types/competition";
+import { ClaimCompetitionDialog } from "./ClaimCompetitionDialog";
+import { ReportCompetitionDialog } from "./ReportCompetitionDialog";
 import { StatusBadge } from "./StatusBadge";
 
 interface CompetitionDrawerProps {
@@ -23,6 +26,9 @@ export function CompetitionDrawer({
 	isOpen,
 	onClose,
 }: CompetitionDrawerProps) {
+	const [showReport, setShowReport] = useState(false);
+	const [showClaim, setShowClaim] = useState(false);
+
 	const handleShare = async () => {
 		if (!competition) return;
 
@@ -173,9 +179,41 @@ export function CompetitionDrawer({
 							Daftar Sekarang
 							<ExternalLink className="h-4 w-4" />
 						</a>
+
+						{/* Report & Claim */}
+						<div className="flex gap-2 pt-1">
+							<Button
+								className="flex-1 gap-1.5 text-muted-foreground"
+								onClick={() => setShowReport(true)}
+								size="sm"
+								variant="outline"
+							>
+								<Flag className="h-3.5 w-3.5" />
+								Laporkan
+							</Button>
+							<Button
+								className="flex-1 gap-1.5 text-muted-foreground"
+								onClick={() => setShowClaim(true)}
+								size="sm"
+								variant="outline"
+							>
+								<BadgeCheck className="h-3.5 w-3.5" />
+								Klaim
+							</Button>
+						</div>
 					</div>
 				</div>
 			</DrawerContent>
+			<ReportCompetitionDialog
+				competition={competition}
+				isOpen={showReport}
+				onClose={() => setShowReport(false)}
+			/>
+			<ClaimCompetitionDialog
+				competition={competition}
+				isOpen={showClaim}
+				onClose={() => setShowClaim(false)}
+			/>
 		</Drawer>
 	);
 }

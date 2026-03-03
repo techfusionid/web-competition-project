@@ -1,10 +1,12 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { format } from "date-fns";
 import {
+	BadgeCheck,
 	Calendar,
 	ChevronLeft,
 	ChevronRight,
 	ExternalLink,
+	Flag,
 	MapPin,
 	Share2,
 	Users,
@@ -20,6 +22,8 @@ import {
 	DialogTitle,
 } from "@/components/ui/dialog";
 import { type Competition, LEVELS } from "@/types/competition";
+import { ClaimCompetitionDialog } from "./ClaimCompetitionDialog";
+import { ReportCompetitionDialog } from "./ReportCompetitionDialog";
 import { StatusBadge } from "./StatusBadge";
 
 interface CompetitionDialogProps {
@@ -42,6 +46,8 @@ export function CompetitionDialog({
 	hasNext,
 }: CompetitionDialogProps) {
 	const contentRef = useRef<HTMLDivElement>(null);
+	const [showReport, setShowReport] = useState(false);
+	const [showClaim, setShowClaim] = useState(false);
 	const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(
 		null
 	);
@@ -309,10 +315,42 @@ export function CompetitionDialog({
 								Register Now
 								<ExternalLink className="h-3 w-3 md:h-4 md:w-4" />
 							</a>
+
+							{/* Report & Claim */}
+							<div className="flex gap-2 pt-1">
+								<Button
+									className="flex-1 gap-1.5 text-muted-foreground text-[11px] md:text-sm"
+									onClick={() => setShowReport(true)}
+									size="sm"
+									variant="outline"
+								>
+									<Flag className="h-3 w-3 md:h-3.5 md:w-3.5" />
+									Report
+								</Button>
+								<Button
+									className="flex-1 gap-1.5 text-muted-foreground text-[11px] md:text-sm"
+									onClick={() => setShowClaim(true)}
+									size="sm"
+									variant="outline"
+								>
+									<BadgeCheck className="h-3 w-3 md:h-3.5 md:w-3.5" />
+									Claim
+								</Button>
+							</div>
 						</div>
 					</div>
 				</DialogPrimitive.Content>
 			</DialogPortal>
+			<ReportCompetitionDialog
+				competition={competition}
+				isOpen={showReport}
+				onClose={() => setShowReport(false)}
+			/>
+			<ClaimCompetitionDialog
+				competition={competition}
+				isOpen={showClaim}
+				onClose={() => setShowClaim(false)}
+			/>
 		</Dialog>
 	);
 }

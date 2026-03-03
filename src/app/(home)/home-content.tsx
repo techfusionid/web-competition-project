@@ -48,9 +48,10 @@ export function HomeContent() {
 		window.history.replaceState({}, "", url.toString());
 	}, []);
 
-	const handleOrganizerClick = useCallback((organizer: string) => {
-		handleSearchChange(organizer);
-	}, [handleSearchChange]);
+	// Klik organizer tidak lagi memasukkan keyword ke search bar
+	const handleOrganizerClick = useCallback((_organizer: string) => {
+		// No-op: mekanisme isi search bar dihilangkan
+	}, []);
 
 	return (
 		<>
