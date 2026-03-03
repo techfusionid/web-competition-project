@@ -1,7 +1,13 @@
 import { format } from "date-fns";
-import { Bookmark, Calendar, Share2 } from "lucide-react";
+import { BadgeCheck, Bookmark, Calendar, ChevronDown, Flag, Share2 } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import type { Competition } from "@/types/competition";
 import { SharePopup } from "./SharePopup";
@@ -13,6 +19,10 @@ interface CompetitionCardPosterProps {
 	onToggleBookmark: (id: string) => void;
 	onClick: () => void;
 	onLongPress?: () => void;
+	/** Dipanggil ketika penyelenggara memilih "Klaim" dari kartu */
+	onClaim?: (competition: Competition) => void;
+	/** Dipanggil ketika user memilih "Laporkan" dari kartu */
+	onReport?: (competition: Competition) => void;
 }
 
 const LONG_PRESS_DURATION = 500;
@@ -23,6 +33,8 @@ export function CompetitionCardPoster({
 	onToggleBookmark,
 	onClick,
 	onLongPress,
+	onClaim,
+	onReport,
 }: CompetitionCardPosterProps) {
 	const longPressTimer = useRef<NodeJS.Timeout | null>(null);
 	const isLongPress = useRef(false);
@@ -136,8 +148,42 @@ export function CompetitionCardPoster({
 								<StatusBadge status={competition.status} className="text-white" />
 							</div>
 
-							{/* Share Button */}
-							<div className="flex justify-end pt-2">
+							{/* Share + Klaim/Laporkan */}
+							<div className="flex justify-end items-center gap-1.5 pt-2">
+								{(onClaim ?? onReport) && (
+									<DropdownMenu>
+										<DropdownMenuTrigger asChild>
+											<Button
+												className="gap-1.5 text-xs bg-white/20 hover:bg-white/30 border-0 text-white"
+												onClick={(e) => e.stopPropagation()}
+												size="sm"
+											>
+												Klaim / Laporkan
+												<ChevronDown className="h-3 w-3" />
+											</Button>
+										</DropdownMenuTrigger>
+										<DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
+											{onClaim && (
+												<DropdownMenuItem
+													onClick={() => onClaim(competition)}
+													className="gap-2"
+												>
+													<BadgeCheck className="h-3.5 w-3.5" />
+													Klaim sebagai Penyelenggara
+												</DropdownMenuItem>
+											)}
+											{onReport && (
+												<DropdownMenuItem
+													onClick={() => onReport(competition)}
+													className="gap-2"
+												>
+													<Flag className="h-3.5 w-3.5" />
+													Laporkan
+												</DropdownMenuItem>
+											)}
+										</DropdownMenuContent>
+									</DropdownMenu>
+								)}
 								<Button
 									className="gap-1.5 text-xs bg-white/20 hover:bg-white/30 border-0 text-white"
 									onClick={(e) => {

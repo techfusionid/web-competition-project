@@ -1,5 +1,15 @@
-import { Briefcase, Building2, ExternalLink, Shield } from "lucide-react";
+import {
+	Filter,
+	Globe,
+	ExternalLink,
+	Target,
+	Mail,
+	Github,
+	Linkedin,
+} from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+
+const WA_CHANNEL_LINK = "https://wa.me/6281234567890";
 
 export default function About() {
 	return (
@@ -7,76 +17,71 @@ export default function About() {
 			<main className="container py-8 max-w-4xl">
 				{/* Hero Section */}
 				<div className="mb-12">
-					<h1 className="text-4xl font-bold text-foreground mb-4">About Us</h1>
+					<h1 className="text-4xl font-bold text-foreground mb-4">
+						Tentang TechFusion
+					</h1>
 					<p className="text-lg text-muted-foreground">
-						EuroAlternative is a community driven list of European alternatives
-						to big tech software companies.
+						TechFusion adalah direktori lomba yang membantu mahasiswa dan pemuda
+						menemukan kompetisi sesuai minat—dari Indonesia hingga internasional—dalam
+						satu tempat yang mudah diakses.
 					</p>
 				</div>
 
-				{/* What is EuroAlternative */}
+				{/* Kenapa platform ini dibuat */}
 				<section className="mb-12">
 					<h2 className="text-2xl font-bold text-foreground mb-4">
-						What is EuroAlternative?
+						Kenapa platform ini dibuat?
 					</h2>
 					<div className="space-y-4 text-muted-foreground">
 						<p>
-							EuroAlternative is my passion project to showcase European-made
-							alternatives to big tech services. I created this directory
-							because I believe in a digital landscape where European innovation
-							thrives alongside global tech giants. This site aims to be your
-							go-to resource when looking for digital services that support our
-							European economy.
+							Informasi lomba sering tersebar di banyak platform: grup WhatsApp,
+							media sosial, dan situs kampus. Sulit bagi mahasiswa untuk punya
+							satu sumber terpercaya yang terpusat. Kami membangun TechFusion
+							agar semua info lomba bisa diakses dari satu tempat.
 						</p>
 						<p>
-							This directory grows stronger with community involvement. Share
-							your discoveries, experiences, and suggestions as we build a more
-							diverse European digital ecosystem together. Let&apos;s show that
-							European tech can thrive when we support each other!
+							Selain itu, filter berdasarkan kategori, status aktif, dan
+							penyelenggara sering tidak tersedia—sehingga mencari lomba yang
+							masih buka pendaftaran dan sesuai minat jadi memakan waktu. Info
+							yang kadaluarsa juga kerap tidak ter-update. Di sisi lain, akses
+							ke lomba internasional masih terbatas. TechFusion hadir untuk
+							mengatasi masalah-masalah itu.
 						</p>
 					</div>
 				</section>
 
-				{/* Why did I start this project */}
+				{/* Misi */}
 				<section className="mb-12">
-					<h2 className="text-2xl font-bold text-foreground mb-4">
-						Why did I start this project?
-					</h2>
+					<h2 className="text-2xl font-bold text-foreground mb-4">Misi kami</h2>
 					<div className="space-y-4 text-muted-foreground">
 						<p>
-							The idea came to me when I was struggling to find European cloud
-							services for my own business. I realized how difficult it was to
-							discover these alternatives despite the amazing tech talent we
-							have in Europe. So I decided to build the resource I wished
-							existed.
-						</p>
-						<p>
-							I&apos;ve always been passionate about digital sovereignty and
-							supporting local businesses. Creating this directory felt like the
-							perfect way to connect European developers with users who want
-							alternatives that align with European values and regulations.
+							Kami ingin memudahkan mahasiswa dan pemuda menemukan lomba yang
+							tepat: satu platform terpusat, filter yang jelas (kategori,
+							status aktif, institusi), dan informasi yang ter-update. Dengan
+							itu, kamu bisa fokus mengembangkan diri lewat kompetisi—lokal
+							maupun global—tanpa harus mengumpulkan info dari banyak sumber.
 						</p>
 					</div>
 				</section>
 
-				{/* What makes European alternatives special */}
+				{/* Nilai / Keunggulan */}
 				<section className="mb-12">
 					<h2 className="text-2xl font-bold text-foreground mb-6">
-						What makes European alternatives special?
+						Apa yang kami tawarkan
 					</h2>
 					<div className="grid gap-4 md:grid-cols-3">
 						<Card>
 							<CardContent className="p-6">
 								<div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 mb-4">
-									<Building2 className="h-6 w-6 text-primary" />
+									<Target className="h-6 w-6 text-primary" />
 								</div>
 								<h3 className="font-semibold text-foreground mb-2">
-									They keep money in our economy
+									Satu tempat terpusat
 								</h3>
 								<p className="text-sm text-muted-foreground">
-									When we choose European services, we support local jobs and
-									innovation. Our spending circulates in Europe rather than
-									flowing overseas.
+									Semua info lomba dalam satu platform. Tidak perlu lagi
+									berburu dari grup ke grup atau situs ke situs—akses daftar
+									lomba dengan cepat dan rapi.
 								</p>
 							</CardContent>
 						</Card>
@@ -84,15 +89,15 @@ export default function About() {
 						<Card>
 							<CardContent className="p-6">
 								<div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 mb-4">
-									<Shield className="h-6 w-6 text-primary" />
+									<Filter className="h-6 w-6 text-primary" />
 								</div>
 								<h3 className="font-semibold text-foreground mb-2">
-									They respect our privacy values
+									Filter yang jelas
 								</h3>
 								<p className="text-sm text-muted-foreground">
-									European companies typically take GDPR seriously, keeping our
-									data under stronger protection frameworks that reflect
-									European privacy values.
+									Filter berdasarkan kategori, status aktif, dan
+									penyelenggara/institusi. Temukan lomba yang masih buka
+									pendaftaran dan sesuai minat kamu dengan lebih mudah.
 								</p>
 							</CardContent>
 						</Card>
@@ -100,123 +105,101 @@ export default function About() {
 						<Card>
 							<CardContent className="p-6">
 								<div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 mb-4">
-									<Briefcase className="h-6 w-6 text-primary" />
+									<Globe className="h-6 w-6 text-primary" />
 								</div>
 								<h3 className="font-semibold text-foreground mb-2">
-									They simplify business for European companies
+									Lokal & global
 								</h3>
 								<p className="text-sm text-muted-foreground">
-									From VAT refunds to familiar payment methods and consistent
-									regulations, working with other European businesses just makes
-									sense.
+									Lomba dari Indonesia maupun internasional. Satu direktori
+									untuk mengakses peluang kompetisi di dalam dan luar negeri.
 								</p>
 							</CardContent>
 						</Card>
 					</div>
-					<p className="mt-6 text-muted-foreground text-center">
-						Join me in supporting European alternatives and help us build a
-						stronger European digital ecosystem! Let&apos;s make Europe great
-						again!
-					</p>
 				</section>
 
-				{/* Conditions for listing */}
+				{/* Tech stack */}
 				<section className="mb-12">
 					<h2 className="text-2xl font-bold text-foreground mb-4">
-						Conditions for listing
+						Built with
 					</h2>
-					<p className="text-muted-foreground mb-4">
-						For a product or service to be featured on European Alternatives, it
-						must meet these criteria:
+					<p className="text-muted-foreground mb-2">
+						TechFusion dibangun dengan teknologi modern agar cepat dan nyaman
+						digunakan:
 					</p>
-					<ul className="space-y-3 text-muted-foreground">
-						<li className="flex gap-3">
-							<span className="font-semibold text-foreground">
-								European Headquarters
-							</span>
-							<span>
-								— The company must be based in an EU, EEA, EFTA, or DCFTA member
-								country.
-							</span>
+					<ul className="space-y-1 text-muted-foreground list-disc list-inside">
+						<li>Next.js — framework React full-stack</li>
+						<li>Tailwind CSS — styling yang konsisten dan responsif</li>
+						<li>shadcn/ui — komponen UI yang dapat diandalkan</li>
+						<li>Drizzle & PostgreSQL — data lomba dan kategori</li>
+						<li>TypeScript — keamanan tipe dan pengalaman develop yang lebih baik</li>
+					</ul>
+				</section>
+
+				{/* Contact */}
+				<section className="mb-12">
+					<h2 className="text-2xl font-bold text-foreground mb-4">Hubungi kami</h2>
+					<p className="text-muted-foreground mb-4">
+						Punya pertanyaan, saran, atau ingin kerja sama? Silakan hubungi kami
+						lewat channel berikut:
+					</p>
+					<ul className="space-y-3">
+						<li className="flex items-center gap-2">
+							<Github className="h-5 w-5 text-primary" />
+							<a
+								href="https://github.com"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="font-medium text-foreground hover:underline inline-flex items-center gap-1"
+							>
+								GitHub <ExternalLink className="h-4 w-4" />
+							</a>
 						</li>
-						<li className="flex gap-3">
-							<span className="font-semibold text-foreground">
-								European Ownership
-							</span>
-							<span>
-								— Any parent or holding company must also be based in an EU,
-								EEA, EFTA, or DCFTA member state.
-							</span>
+						<li className="flex items-center gap-2">
+							<Linkedin className="h-5 w-5 text-primary" />
+							<a
+								href="https://linkedin.com"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="font-medium text-foreground hover:underline inline-flex items-center gap-1"
+							>
+								LinkedIn <ExternalLink className="h-4 w-4" />
+							</a>
 						</li>
-						<li className="flex gap-3">
-							<span className="font-semibold text-foreground">
-								True European Hosting
-							</span>
-							<span>
-								— For hosting providers, we don&apos;t list services that are
-								simply resellers or sub-hosting providers of non-European
-								companies (for example, those just configuring AWS servers).
-							</span>
+						<li className="flex items-center gap-2">
+							<Mail className="h-5 w-5 text-primary" />
+							<a
+								href="mailto:hello@techfusion.id"
+								className="font-medium text-foreground hover:underline inline-flex items-center gap-1"
+							>
+								Email <ExternalLink className="h-4 w-4" />
+							</a>
 						</li>
 					</ul>
-					<p className="mt-4 text-muted-foreground">
-						If you notice any listing that doesn&apos;t meet these criteria,
-						please let me know!
-					</p>
 				</section>
 
-				{/* About the Author */}
+				{/* CTA Join WA Channel */}
 				<section className="mb-12">
-					<h2 className="text-2xl font-bold text-foreground mb-4">
-						About the Author
-					</h2>
-					<div className="space-y-4 text-muted-foreground">
-						<p>
-							I&apos;m a software developer and entrepreneur. I&apos;ve been
-							building web applications for over 15 years. I&apos;m passionate
-							about software development and I love to contribute to the
-							community in any way I can.
-						</p>
-						<p className="font-semibold text-foreground">
-							Some of my other projects:
-						</p>
-						<ul className="space-y-2">
-							<li className="flex items-center gap-2">
-								<ExternalLink className="h-4 w-4 text-primary" />
-								<span className="font-medium text-foreground">
-									OpenAlternative
-								</span>
-								<span>
-									– Discover open source alternatives to popular software
-								</span>
-							</li>
-							<li className="flex items-center gap-2">
-								<ExternalLink className="h-4 w-4 text-primary" />
-								<span className="font-medium text-foreground">DevSuite</span>
-								<span>
-									– Find the perfect developer tools for your next project
-								</span>
-							</li>
-							<li className="flex items-center gap-2">
-								<ExternalLink className="h-4 w-4 text-primary" />
-								<span className="font-medium text-foreground">OpenAds</span>
-								<span>
-									– Automate ad spot management and increase website revenue
-								</span>
-							</li>
-							<li className="flex items-center gap-2">
-								<ExternalLink className="h-4 w-4 text-primary" />
-								<span className="font-medium text-foreground">Dirstarter</span>
-								<span>– Next.js directory website boilerplate</span>
-							</li>
-						</ul>
-						<p>
-							I&apos;m always looking for new projects to work on and new people
-							to collaborate with. Feel free to reach out to me if you have any
-							questions or suggestions.
-						</p>
-						<p className="font-semibold text-foreground">– Piotr Kulpinski</p>
-					</div>
+					<Card className="border-primary/20 bg-primary/5">
+						<CardContent className="p-6">
+							<h2 className="text-xl font-bold text-foreground mb-2">
+								Ikuti update lomba lewat WhatsApp
+							</h2>
+							<p className="text-muted-foreground mb-4">
+								Gabung ke channel WhatsApp kami untuk info lomba terbaru, tips,
+								dan diskusi seputar kompetisi. Gratis dan tanpa spam.
+							</p>
+							<a
+								href={WA_CHANNEL_LINK}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+							>
+								Join WA Channel <ExternalLink className="h-4 w-4" />
+							</a>
+						</CardContent>
+					</Card>
 				</section>
 			</main>
 		</>

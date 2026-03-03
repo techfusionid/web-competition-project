@@ -229,3 +229,9 @@
       font-family: var(--font-greed-standard), ui-sans-serif, system-ui, sans-serif;
    }
 }
+
+/* Override Next.js dev overlay portal positioning (persisted from browser preview) */
+nextjs-portal {
+   left: unset;
+   top: unset;
+}

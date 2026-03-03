@@ -8,11 +8,13 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { Competition } from "@/types/competition";
+import { ClaimCompetitionDialog } from "./ClaimCompetitionDialog";
 import { CompetitionCard } from "./CompetitionCard";
 import { CompetitionCardPoster } from "./CompetitionCardPoster";
 import { CompetitionDetailPanel } from "./CompetitionDetailPanel";
 import { CompetitionDialog } from "./CompetitionDialog";
 import { CompetitionDrawer } from "./CompetitionDrawer";
+import { ReportCompetitionDialog } from "./ReportCompetitionDialog";
 import { CompetitionGalleryItem } from "./CompetitionGalleryItem";
 import { type DetailViewMode, DetailViewToggle } from "./DetailViewToggle";
 import { type FilterState, Filters } from "./Filters";
@@ -81,6 +83,8 @@ export function CompetitionList({
 	const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 	const [dialogIndex, setDialogIndex] = useState<number | null>(null);
 	const [posterPopupIndex, setPosterPopupIndex] = useState<number | null>(null);
+	const [claimReportCompetition, setClaimReportCompetition] = useState<Competition | null>(null);
+	const [claimReportMode, setClaimReportMode] = useState<"claim" | "report" | null>(null);
 	const [visibleCount, setVisibleCount] = useState(20);
 	const selectedItemRef = useRef<HTMLDivElement>(null);
 
