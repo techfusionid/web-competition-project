@@ -67,41 +67,63 @@ export function CompetitionDrawer({
 			open={isOpen}
 			snapPoints={[0.6, 0.9, 1]}
 		>
-			<DrawerContent className="max-h-[96vh] pb-0">
+			<DrawerContent className="max-h-[96vh] pb-0 flex flex-col">
 				<DrawerTitle className="sr-only">{competition.title}</DrawerTitle>
 
-				{/* Drag Handle - visual indicator */}
+				{/* Single scroll area: poster then caption (Instagram-style) */}
+				<div className="flex-1 min-h-0 overflow-y-auto overscroll-contain pb-safe">
+					{/* Poster at top */}
+					<div className="relative aspect-[4/5] w-full overflow-hidden bg-secondary shrink-0">
+						{competition.imageUrl ? (
+							<img
+								alt={competition.title}
+								className="h-full w-full object-cover"
+								src={competition.imageUrl}
+							/>
+						) : (
+							<div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5">
+								<span className="text-6xl font-bold text-primary/30">
+									{competition.title.charAt(0)}
+								</span>
+							</div>
+						)}
 
+						{/* Close button - overlay left */}
+						<DrawerClose className="absolute left-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm hover:bg-background focus:outline-none focus:ring-2 focus:ring-ring">
+							<X className="h-4 w-4" />
+							<span className="sr-only">Tutup</span>
+						</DrawerClose>
 
-				<DrawerClose className="absolute right-3 top-3 z-10 inline-flex h-8 w-8 items-center justify-center rounded-full bg-muted/50 hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring">
-					<X className="h-4 w-4" />
-					<span className="sr-only">Tutup</span>
-				</DrawerClose>
+						{/* Share button - overlay right */}
+						<Button
+							className="absolute right-3 top-3 z-10 h-9 w-9 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
+							onClick={handleShare}
+							size="icon"
+							variant="ghost"
+						>
+							<Share2 className="h-4 w-4" />
+						</Button>
+					</div>
 
-				{/* Scrollable content */}
-				<div className="overflow-y-auto overscroll-contain pb-safe">
-					{/* Content */}
-					<div className="space-y-3 p-4 pt-2">
-						{/* Header */}
+					{/* Caption & content below poster */}
+					<div className="space-y-3 p-4">
+						{/* Title + organizer (caption header) */}
 						<div className="space-y-1">
 							<div className="flex items-start justify-between gap-2">
 								<h2 className="text-base font-semibold text-foreground leading-tight pr-2">
 									{competition.title}
 								</h2>
-								<div className="flex items-center gap-1 shrink-0">
-									<StatusBadge status={competition.status} />
-									<Button
-										className="h-7 w-7 rounded-full"
-										onClick={handleShare}
-										size="icon"
-										variant="ghost"
-									>
-										<Share2 className="h-3.5 w-3.5" />
-									</Button>
-								</div>
+								<StatusBadge status={competition.status} />
 							</div>
 							<p className="text-sm text-muted-foreground">
 								{competition.organizer}
+							</p>
+						</div>
+
+						{/* Description as caption */}
+						<div>
+							<p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
+								{competition.description}
 							</p>
 						</div>
 
@@ -126,7 +148,7 @@ export function CompetitionDrawer({
 						{/* Details */}
 						<div className="grid gap-1.5 text-sm">
 							<div className="flex items-center gap-1.5 text-muted-foreground">
-								<Calendar className="h-4 w-4" />
+								<Calendar className="h-4 w-4 shrink-0" />
 								<span>
 									{competition.startDate
 										? `${format(competition.startDate, "d MMM", { locale: id })} - ${format(competition.deadline, "d MMM yyyy", { locale: id })}`
@@ -134,7 +156,7 @@ export function CompetitionDrawer({
 								</span>
 							</div>
 							<div className="flex items-center gap-1.5 text-muted-foreground">
-								<Users className="h-4 w-4" />
+								<Users className="h-4 w-4 shrink-0" />
 								<span className="capitalize">
 									{competition.participationType === "team"
 										? "Tim"
@@ -143,7 +165,7 @@ export function CompetitionDrawer({
 							</div>
 							{competition.location && (
 								<div className="flex items-center gap-1.5 text-muted-foreground">
-									<MapPin className="h-4 w-4" />
+									<MapPin className="h-4 w-4 shrink-0" />
 									<span>{competition.location}</span>
 								</div>
 							)}
@@ -158,16 +180,6 @@ export function CompetitionDrawer({
 								</p>
 							</div>
 						)}
-
-						{/* Description */}
-						<div>
-							<p className="text-xs font-medium text-muted-foreground mb-1">
-								Deskripsi
-							</p>
-							<p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
-								{competition.description}
-							</p>
-						</div>
 
 						{/* CTA Button */}
 						<a
