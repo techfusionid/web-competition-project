@@ -3,8 +3,10 @@ import { format } from "date-fns";
 import {
 	BadgeCheck,
 	Calendar,
+	ChevronDown,
 	ChevronLeft,
 	ChevronRight,
+	ChevronUp,
 	ExternalLink,
 	Flag,
 	MapPin,
@@ -58,12 +60,16 @@ export function CompetitionDialog({
 	// Minimum swipe distance (in px)
 	const minSwipeDistance = 50;
 
-	// Keyboard navigation
+	// Keyboard navigation (arrows: up/previous, down/next; left/right for swipe consistency)
 	useEffect(() => {
 		if (!isOpen) return;
 
 		const handleKeyDown = (e: KeyboardEvent) => {
-			if (e.key === "ArrowLeft" && hasPrevious) {
+			if (e.key === "ArrowUp" && hasPrevious) {
+				onPrevious();
+			} else if (e.key === "ArrowDown" && hasNext) {
+				onNext();
+			} else if (e.key === "ArrowLeft" && hasPrevious) {
 				onPrevious();
 			} else if (e.key === "ArrowRight" && hasNext) {
 				onNext();
@@ -144,32 +150,6 @@ export function CompetitionDialog({
 			<DialogPortal>
 				<DialogOverlay className="bg-transparent md:bg-black/80" />
 
-				{/* Navigation Arrows - Outside the dialog, hidden on mobile, only show if navigation is available */}
-				{hasPrevious || hasNext ? (
-					<>
-						{hasPrevious && (
-							<Button
-								className="fixed left-4 top-1/2 z-[60] h-10 w-10 -translate-y-1/2 rounded-full bg-background/90 shadow-lg hover:bg-accent disabled:opacity-30 hidden md:flex"
-								onClick={onPrevious}
-								size="icon"
-								variant="ghost"
-							>
-								<ChevronLeft className="h-5 w-5" />
-							</Button>
-						)}
-						{hasNext && (
-							<Button
-								className="fixed right-4 top-1/2 z-[60] h-10 w-10 -translate-y-1/2 rounded-full bg-background/90 shadow-lg hover:bg-accent disabled:opacity-30 hidden md:flex"
-								onClick={onNext}
-								size="icon"
-								variant="ghost"
-							>
-								<ChevronRight className="h-5 w-5" />
-							</Button>
-						)}
-					</>
-				) : null}
-
 				<DialogPrimitive.Content
 					className={
 						"fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-[340px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-xl border bg-background p-0 shadow-lg md:max-w-lg md:w-full"
@@ -178,10 +158,50 @@ export function CompetitionDialog({
 				>
 					<DialogTitle className="sr-only">{competition.title}</DialogTitle>
 
-					<DialogPrimitive.Close className="absolute left-2 top-2 z-10 inline-flex h-8 w-8 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm hover:bg-background focus:outline-none focus:ring-2 focus:ring-ring">
-						<X className="h-4 w-4" />
-						<span className="sr-only">Close</span>
-					</DialogPrimitive.Close>
+					{/* Top-left: small up/down arrows to switch competition */}
+					{hasPrevious || hasNext ? (
+						<div className="absolute left-2 top-2 z-10 flex flex-row items-center gap-0.5">
+							{hasPrevious && (
+								<Button
+									className="h-6 w-6 rounded-full bg-background/80 backdrop-blur-sm p-0 hover:bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+									onClick={onPrevious}
+									size="icon"
+									variant="ghost"
+									aria-label="Previous competition"
+								>
+									<ChevronUp className="h-3.5 w-3.5" />
+								</Button>
+							)}
+							{hasNext && (
+								<Button
+									className="h-6 w-6 rounded-full bg-background/80 backdrop-blur-sm p-0 hover:bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+									onClick={onNext}
+									size="icon"
+									variant="ghost"
+									aria-label="Next competition"
+								>
+									<ChevronDown className="h-3.5 w-3.5" />
+								</Button>
+							)}
+						</div>
+					) : null}
+
+					{/* Top-right: Share and Close side by side */}
+					<div className="absolute right-2 top-2 z-10 flex items-center gap-1.5">
+						<Button
+							className="h-8 w-8 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
+							onClick={handleShare}
+							size="icon"
+							variant="ghost"
+							aria-label="Share"
+						>
+							<Share2 className="h-4 w-4" />
+						</Button>
+						<DialogPrimitive.Close className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm hover:bg-background focus:outline-none focus:ring-2 focus:ring-ring">
+							<X className="h-4 w-4" />
+							<span className="sr-only">Close</span>
+						</DialogPrimitive.Close>
+					</div>
 
 					{/* Scroll container (fix iOS/Android scroll) */}
 					<div className="max-h-[90vh] overflow-y-auto overscroll-contain [webkit-overflow-scrolling:touch] md:max-h-[80vh]">
@@ -205,16 +225,6 @@ export function CompetitionDialog({
 									</span>
 								</div>
 							)}
-
-							{/* Share Button on Image */}
-							<Button
-								className="absolute right-2 top-2 h-8 w-8 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
-								onClick={handleShare}
-								size="icon"
-								variant="ghost"
-							>
-								<Share2 className="h-4 w-4" />
-							</Button>
 
 							{/* Swipe Indicator for Mobile */}
 							<div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-[10px] text-white/70 bg-black/40 px-2 py-1 rounded-full md:hidden">

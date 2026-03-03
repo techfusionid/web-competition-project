@@ -8,15 +8,6 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "./ThemeToggle";
 
 interface NavItem {
@@ -105,42 +96,6 @@ export function Header({ onHomeClick, sticky = false }: HeaderProps = {}) {
 							<ArrowUpRight className="h-3.5 w-3.5" />
 						</Button>
 					</Link>
-
-
-					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
-							<Button variant="ghost" className="relative h-8 w-8 rounded-full">
-								<Avatar className="h-8 w-8 hover:opacity-80 transition-opacity">
-									<AvatarImage src="https://github.com/shadcn.png" alt="@agnesdevita" />
-									<AvatarFallback>AD</AvatarFallback>
-								</Avatar>
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent className="w-56" align="end" forceMount>
-							<DropdownMenuLabel className="font-normal">
-								<div className="flex flex-col space-y-1">
-									<p className="text-sm font-medium leading-none">Agnes Devita Widjaja</p>
-									<p className="text-xs leading-none text-muted-foreground">
-										@agnesdevita
-									</p>
-								</div>
-							</DropdownMenuLabel>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem asChild>
-								<Link href="/profile" className="cursor-pointer">
-									View Profile
-								</Link>
-							</DropdownMenuItem>
-							<DropdownMenuItem asChild>
-								<Link href="/settings" className="cursor-pointer">
-									Settings
-								</Link>
-							</DropdownMenuItem>
-							<DropdownMenuItem className="text-red-500 focus:text-red-500 cursor-pointer">
-								Sign Out
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
 				</div>
 			</div>
 		</header>
