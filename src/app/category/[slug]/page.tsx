@@ -19,16 +19,18 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, useEffect } from "react";
 import { CompetitionCard } from "@/components/CompetitionCard";
 import { CompetitionCardPoster } from "@/components/CompetitionCardPoster";
 import { CompetitionDialog } from "@/components/CompetitionDialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { competitions } from "@/data/competitions";
+import { fetchCompetitionsByCategory } from "@/app/actions/competitions";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { cn } from "@/lib/utils";
+import { CATEGORY_MAPPING } from "@/types/competition";
+import type { Competition } from "@/types/competition";
 
 type ViewMode = "poster" | "cardList";
 
@@ -115,6 +117,8 @@ export default function CategoryDetailPage() {
    const [viewMode, setViewMode] = useState<ViewMode>("cardList");
    const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
    const [selectedType, setSelectedType] = useState<string | null>(null);
+   const [allCategoryCompetitions, setAllCategoryCompetitions] = useState<Competition[]>([]);
+   const [isLoading, setIsLoading] = useState(true);
 
    const config = categoryConfig[categoryName] || {
       icon: Monitor,
@@ -123,16 +127,28 @@ export default function CategoryDetailPage() {
    };
    const CategoryIcon = config.icon;
 
-   const allCategoryCompetitions = useMemo(() => {
-      return competitions
-         .filter(
-            (comp) =>
-               comp.category.toLowerCase() === categoryName.toLowerCase(),
-         )
-         .sort(
-            (a, b) =>
-               new Date(a.deadline).getTime() - new Date(b.deadline).getTime(),
-         );
+   // Fetch competitions from database on mount
+   useEffect(() => {
+      async function loadCategoryCompetitions() {
+         setIsLoading(true);
+         try {
+            const dbCategory = CATEGORY_MAPPING[categoryName] || categoryName;
+            const data = await fetchCompetitionsByCategory(dbCategory);
+
+            // Sort by deadline
+            const sorted = data.sort(
+               (a, b) =>
+                  new Date(a.deadline).getTime() - new Date(b.deadline).getTime(),
+            );
+            setAllCategoryCompetitions(sorted);
+         } catch (error) {
+            console.error("Failed to fetch category competitions:", error);
+            setAllCategoryCompetitions([]);
+         } finally {
+            setIsLoading(false);
+         }
+      }
+      loadCategoryCompetitions();
    }, [categoryName]);
 
    // Get unique tags from competitions in this category
@@ -274,7 +290,7 @@ export default function CategoryDetailPage() {
                   {/* Header with View Toggle */}
                   <div className="flex items-center justify-between mb-6">
                      <h2 className="text-xl font-bold text-foreground">
-                        Competitions ({categoryCompetitions.length})
+                        Competitions ({isLoading ? "..." : categoryCompetitions.length})
                      </h2>
                      <div className="flex items-center gap-2">
                         <Button
@@ -312,7 +328,11 @@ export default function CategoryDetailPage() {
                   </div>
 
                   {/* Competition Grid */}
-                  {categoryCompetitions.length > 0 ? (
+                  {isLoading ? (
+                     <div className="text-center py-12">
+                        <p className="text-muted-foreground">Loading competitions...</p>
+                     </div>
+                  ) : categoryCompetitions.length > 0 ? (
                      viewMode === "poster" ? (
                         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
                            {categoryCompetitions.map((competition, index) => (

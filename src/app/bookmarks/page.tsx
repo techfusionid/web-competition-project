@@ -4,15 +4,35 @@ import { Bookmark } from "lucide-react";
 import Link from "next/link";
 import { CompetitionCard } from "@/components/CompetitionCard";
 import { Button } from "@/components/ui/button";
-import { competitions } from "@/data/competitions";
+import { fetchCompetitionsByIds } from "@/app/actions/competitions";
 import { useBookmarks } from "@/hooks/useBookmarks";
+import { useEffect, useState } from "react";
+import type { Competition } from "@/types/competition";
 
 export default function BookmarksPage() {
 	const { bookmarks, toggleBookmark } = useBookmarks();
+	const [bookmarkedCompetitions, setBookmarkedCompetitions] = useState<Competition[]>([]);
+	const [isLoading, setIsLoading] = useState(true);
 
-	const bookmarkedCompetitions = competitions.filter((c) =>
-		bookmarks.includes(c.id)
-	);
+	useEffect(() => {
+		async function loadBookmarkedCompetitions() {
+			setIsLoading(true);
+			try {
+				if (bookmarks.length > 0) {
+					const data = await fetchCompetitionsByIds(bookmarks);
+					setBookmarkedCompetitions(data);
+				} else {
+					setBookmarkedCompetitions([]);
+				}
+			} catch (error) {
+				console.error("Failed to fetch bookmarked competitions:", error);
+				setBookmarkedCompetitions([]);
+			} finally {
+				setIsLoading(false);
+			}
+		}
+		loadBookmarkedCompetitions();
+	}, [bookmarks]);
 
 	return (
 		<>
@@ -22,11 +42,15 @@ export default function BookmarksPage() {
 						Saved Competitions
 					</h1>
 					<p className="mt-1 text-sm text-muted-foreground">
-						{bookmarkedCompetitions.length} competition{bookmarkedCompetitions.length !== 1 ? "s" : ""} you've saved
+						{isLoading ? "Loading..." : `${bookmarkedCompetitions.length} competition${bookmarkedCompetitions.length !== 1 ? "s" : ""} you've saved`}
 					</p>
 				</div>
 
-				{bookmarkedCompetitions.length === 0 ? (
+				{isLoading ? (
+					<div className="flex items-center justify-center py-16">
+						<p className="text-muted-foreground">Loading saved competitions...</p>
+					</div>
+				) : bookmarkedCompetitions.length === 0 ? (
 					<div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-border py-16">
 						<div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
 							<Bookmark className="h-6 w-6 text-muted-foreground" />

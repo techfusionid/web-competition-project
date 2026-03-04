@@ -1,3 +1,5 @@
+"use client";
+
 import {
 	Briefcase,
 	Heart,
@@ -12,9 +14,10 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
-import { competitions } from "@/data/competitions";
-import { CATEGORIES } from "@/types/competition";
+import { fetchCompetitions } from "@/app/actions/competitions";
+import { CATEGORIES, type Competition } from "@/types/competition";
 import { cn } from "@/lib/utils";
+import { useEffect, useState, useMemo } from "react";
 
 // Map categories to icons and colors
 const categoryConfig: Record<
@@ -118,30 +121,53 @@ export function CategorySection({
 	limit,
 	className,
 }: CategorySectionProps) {
-	const categoryMap = new Map<string, number>();
+	const [allCompetitions, setAllCompetitions] = useState<Competition[]>([]);
+	const [isLoading, setIsLoading] = useState(true);
 
-	CATEGORIES.forEach((cat) => {
-		categoryMap.set(cat, 0);
-	});
+	useEffect(() => {
+		async function loadCompetitions() {
+			setIsLoading(true);
+			try {
+				const data = await fetchCompetitions();
+				setAllCompetitions(data);
+			} catch (error) {
+				console.error("Failed to fetch competitions:", error);
+				setAllCompetitions([]);
+			} finally {
+				setIsLoading(false);
+			}
+		}
+		loadCompetitions();
+	}, []);
 
-	competitions.forEach((competition) => {
-		const count = categoryMap.get(competition.category) || 0;
-		categoryMap.set(competition.category, count + 1);
-	});
+	const categoryMap = useMemo(() => {
+		const map = new Map<string, number>();
+		CATEGORIES.forEach((cat) => {
+			map.set(cat, 0);
+		});
 
-	const categories = CATEGORIES.map((cat) => ({
-		name: cat,
-		count: categoryMap.get(cat) || 0,
-		config: categoryConfig[cat] || {
-			icon: Monitor,
-			color: "text-primary",
-			gradient: "from-primary/20 via-primary/10 to-transparent",
-			image: "",
-		},
-	}))
-		.filter((cat) => limit === undefined || cat.count > 0)
-		.slice(0, limit)
-		.sort((a, b) => b.count - a.count);
+		allCompetitions.forEach((competition) => {
+			const count = map.get(competition.category) || 0;
+			map.set(competition.category, count + 1);
+		});
+		return map;
+	}, [allCompetitions]);
+
+	const categories = useMemo(() => {
+		return CATEGORIES.map((cat) => ({
+			name: cat,
+			count: categoryMap.get(cat) || 0,
+			config: categoryConfig[cat] || {
+				icon: Monitor,
+				color: "text-primary",
+				gradient: "from-primary/20 via-primary/10 to-transparent",
+				image: "",
+			},
+		}))
+			.filter((cat) => limit === undefined || cat.count > 0)
+			.slice(0, limit)
+			.sort((a, b) => b.count - a.count);
+	}, [categoryMap, limit]);
 
 	const CategoryIcon = (name: string) => {
 		const config = categoryConfig[name];
@@ -167,8 +193,13 @@ export function CategorySection({
 						</Link>
 					</div>
 				)}
-				<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-					{categories.map((category) => {
+				{isLoading ? (
+					<div className="text-center py-8">
+						<p className="text-sm text-muted-foreground">Loading categories...</p>
+					</div>
+				) : (
+					<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+						{categories.map((category) => {
 						const Icon = CategoryIcon(category.name);
 						return (
 							<Link
@@ -199,8 +230,9 @@ export function CategorySection({
 								</div>
 							</Link>
 						);
-					})}
-				</div>
+						})}
+					</div>
+				)}
 			</section>
 		);
 	}
@@ -224,8 +256,13 @@ export function CategorySection({
 						</Link>
 					</div>
 				)}
-				<div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-					{categories.map((category) => {
+				{isLoading ? (
+					<div className="text-center py-8">
+						<p className="text-sm text-muted-foreground">Loading categories...</p>
+					</div>
+				) : (
+					<div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+						{categories.map((category) => {
 						const Icon = CategoryIcon(category.name);
 						return (
 							<Link
@@ -262,8 +299,9 @@ export function CategorySection({
 								</div>
 							</Link>
 						);
-					})}
-				</div>
+						})}
+					</div>
+				)}
 			</section>
 		);
 	}
@@ -284,8 +322,14 @@ export function CategorySection({
 					</Link>
 				</div>
 			)}
-			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-				{categories.map((category) => {
+			{isLoading ? (
+				<div className="text-center py-12">
+					<p className="text-sm text-muted-foreground">Loading categories...</p>
+				</div>
+			) : (
+				<>
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+						{categories.map((category) => {
 					const Icon = CategoryIcon(category.name);
 					return (
 						<Link
@@ -320,8 +364,10 @@ export function CategorySection({
 							</Card>
 						</Link>
 					);
-				})}
-			</div>
+					})}
+				</div>
+			</>
+			)}
 		</section>
 	);
 }

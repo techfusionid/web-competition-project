@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import type { Competition } from "@/types/competition";
 import { SharePopup } from "./SharePopup";
-import { StatusBadge } from "./StatusBadge";
 
 const formatLabels: Record<string, string> = {
 	online: "Online",
@@ -52,12 +51,8 @@ export function CompetitionCard({
 						</button>
 					</div>
 					<div className="flex shrink-0 items-center gap-1">
-						{/* Status visible by default (non-hover) */}
-						<div className="opacity-100 group-hover:opacity-0 transition-opacity duration-200 md:group-hover:hidden">
-							<StatusBadge status={competition.status} />
-						</div>
 						<Button
-							className="h-7 w-7 md:h-8 md:w-8 shrink-0 opacity-70 hover:opacity-100 transition-opacity"
+							className="h-7 w-7 md:h-8 md:w-8 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
 							onClick={(e) => {
 								e.stopPropagation();
 								setShowShare(true);
@@ -86,7 +81,6 @@ export function CompetitionCard({
 								<Calendar className="h-3 w-3 md:h-3.5 md:w-3.5" />
 								<span className="font-medium">{format(competition.deadline, "d MMM yyyy")}</span>
 							</div>
-							<StatusBadge status={competition.status} />
 						</div>
 						<div className="flex flex-wrap gap-1">
 							<span className="rounded bg-secondary px-2 py-0.5 text-[10px] md:text-xs text-secondary-foreground">

@@ -26,7 +26,6 @@ import {
 import { type Competition, LEVELS } from "@/types/competition";
 import { ClaimCompetitionDialog } from "./ClaimCompetitionDialog";
 import { ReportCompetitionDialog } from "./ReportCompetitionDialog";
-import { StatusBadge } from "./StatusBadge";
 
 interface CompetitionDialogProps {
 	competition: Competition | null;
@@ -242,8 +241,7 @@ export function CompetitionDialog({
 									<h2 className="text-sm md:text-lg font-semibold text-foreground leading-tight">
 										{competition.title}
 									</h2>
-									<StatusBadge status={competition.status} />
-								</div>
+									</div>
 								<p className="text-[11px] md:text-sm text-muted-foreground">
 									{competition.organizer}
 								</p>

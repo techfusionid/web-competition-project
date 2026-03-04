@@ -1,9 +1,12 @@
+"use client";
+
 import { Building2, Trophy } from "lucide-react";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { competitions } from "@/data/competitions";
+import { fetchAllOrganizers } from "@/app/actions/competitions";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
 interface Institution {
 	name: string;
@@ -19,35 +22,6 @@ interface OrganizerSectionProps {
 	className?: string;
 }
 
-function getInstitutions(): Institution[] {
-	const institutionMap = new Map<
-		string,
-		{ name: string; competitionCount: number; categories: Set<string> }
-	>();
-
-	competitions.forEach((competition) => {
-		if (competition.institutions) {
-			competition.institutions.forEach((institution) => {
-				if (institutionMap.has(institution)) {
-					const existing = institutionMap.get(institution)!;
-					existing.competitionCount += 1;
-					existing.categories.add(competition.category);
-				} else {
-					institutionMap.set(institution, {
-						name: institution,
-						competitionCount: 1,
-						categories: new Set([competition.category]),
-					});
-				}
-			});
-		}
-	});
-
-	return Array.from(institutionMap.values()).sort(
-		(a, b) => b.competitionCount - a.competitionCount
-	);
-}
-
 export function OrganizerSection({
 	title = "Organizers",
 	description = "Explore competitions by organizer institutions",
@@ -55,7 +29,24 @@ export function OrganizerSection({
 	limit,
 	className,
 }: OrganizerSectionProps) {
-	const institutions = getInstitutions().slice(0, limit);
+	const [institutions, setInstitutions] = useState<Institution[]>([]);
+	const [isLoading, setIsLoading] = useState(true);
+
+	useEffect(() => {
+		async function loadOrganizers() {
+			setIsLoading(true);
+			try {
+				const data = await fetchAllOrganizers();
+				setInstitutions(data.slice(0, limit ?? data.length));
+			} catch (error) {
+				console.error("Failed to fetch organizers:", error);
+				setInstitutions([]);
+			} finally {
+				setIsLoading(false);
+			}
+		}
+		loadOrganizers();
+	}, [limit]);
 
 	if (variant === "compact") {
 		return (
@@ -76,8 +67,13 @@ export function OrganizerSection({
 						</Link>
 					</div>
 				)}
-				<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-					{institutions.map((institution) => (
+				{isLoading ? (
+					<div className="text-center py-8">
+						<p className="text-sm text-muted-foreground">Loading organizers...</p>
+					</div>
+				) : (
+					<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+						{institutions.map((institution) => (
 						<Link
 							href={`/organizer/${encodeURIComponent(institution.name)}`}
 							key={institution.name}
@@ -98,6 +94,7 @@ export function OrganizerSection({
 						</Link>
 					))}
 				</div>
+				)}
 			</section>
 		);
 	}
@@ -181,9 +178,15 @@ export function OrganizerSection({
 					</Link>
 				</div>
 			)}
-			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-				{institutions.map((institution) => (
-					<Link
+			{isLoading ? (
+				<div className="text-center py-12">
+					<p className="text-sm text-muted-foreground">Loading organizers...</p>
+				</div>
+			) : (
+				<>
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+						{institutions.map((institution) => (
+							<Link
 						href={`/organizer/${encodeURIComponent(institution.name)}`}
 						key={institution.name}
 					>
@@ -222,14 +225,16 @@ export function OrganizerSection({
 							</CardContent>
 						</Card>
 					</Link>
-				))}
-			</div>
+						))}
+					</div>
 
-			{institutions.length === 0 && (
-				<div className="text-center py-12">
-					<Building2 className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-					<p className="text-muted-foreground">No organizers found</p>
-				</div>
+					{institutions.length === 0 && !isLoading && (
+						<div className="text-center py-12">
+							<Building2 className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+							<p className="text-muted-foreground">No organizers found</p>
+						</div>
+					)}
+				</>
 			)}
 		</section>
 	);

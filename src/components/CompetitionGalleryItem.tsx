@@ -1,7 +1,6 @@
 import { Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Competition } from "@/types/competition";
-import { StatusBadge } from "./StatusBadge";
 
 interface CompetitionGalleryItemProps {
 	competition: Competition;
@@ -35,11 +34,6 @@ export function CompetitionGalleryItem({
 						<Trophy className="h-5 w-5 text-primary/30" />
 					</div>
 				)}
-
-				{/* Status Badge */}
-				<div className="absolute left-1 top-1">
-					<StatusBadge status={competition.status} />
-				</div>
 			</div>
 
 			{/* Minimal Content - just title */}

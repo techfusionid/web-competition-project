@@ -11,7 +11,6 @@ import {
 import { cn } from "@/lib/utils";
 import type { Competition } from "@/types/competition";
 import { SharePopup } from "./SharePopup";
-import { StatusBadge } from "./StatusBadge";
 
 interface CompetitionCardPosterProps {
 	competition: Competition;
@@ -100,11 +99,6 @@ export function CompetitionCardPoster({
 						</div>
 					)}
 
-					{/* Status Badge - Top Right */}
-					<div className="absolute top-2 right-2">
-						<StatusBadge status={competition.status} />
-					</div>
-
 					{/* Bookmark Button - Top Left */}
 					<Button
 						className={cn(
@@ -145,7 +139,6 @@ export function CompetitionCardPoster({
 									<Calendar className="h-4 w-4" />
 									<span className="font-medium">{formatDateRange()}</span>
 								</div>
-								<StatusBadge status={competition.status} className="text-white" />
 							</div>
 
 							{/* Share + Klaim/Laporkan */}
@@ -185,7 +178,7 @@ export function CompetitionCardPoster({
 									</DropdownMenu>
 								)}
 								<Button
-									className="gap-1.5 text-xs bg-white/20 hover:bg-white/30 border-0 text-white"
+									className="gap-1.5 text-xs bg-white/20 hover:bg-white/30 border-0 text-white opacity-0 group-hover:opacity-100 transition-opacity"
 									onClick={(e) => {
 										e.stopPropagation();
 										setShowShare(true);
@@ -212,7 +205,6 @@ export function CompetitionCardPoster({
 							</p>
 						</div>
 						<div className="shrink-0">
-							<StatusBadge status={competition.status} />
 						</div>
 					</div>
 					<p className="text-[10px] text-muted-foreground leading-relaxed line-clamp-2">

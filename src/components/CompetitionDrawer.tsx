@@ -13,7 +13,6 @@ import {
 import { type Competition, LEVELS } from "@/types/competition";
 import { ClaimCompetitionDialog } from "./ClaimCompetitionDialog";
 import { ReportCompetitionDialog } from "./ReportCompetitionDialog";
-import { StatusBadge } from "./StatusBadge";
 
 interface CompetitionDrawerProps {
 	competition: Competition | null;
@@ -113,8 +112,7 @@ export function CompetitionDrawer({
 								<h2 className="text-base font-semibold text-foreground leading-tight pr-2">
 									{competition.title}
 								</h2>
-								<StatusBadge status={competition.status} />
-							</div>
+								</div>
 							<p className="text-sm text-muted-foreground">
 								{competition.organizer}
 							</p>

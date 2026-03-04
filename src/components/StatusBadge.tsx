@@ -1,4 +1,3 @@
-import { Circle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { CompetitionStatus } from "@/types/competition";
 
@@ -11,15 +10,15 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
 	const statusConfig = {
 		open: {
 			label: "Open",
-			dotColor: "text-success",
+			color: "text-emerald-600 dark:text-emerald-400",
 		},
 		"closing-soon": {
 			label: "Closing Soon",
-			dotColor: "text-warning",
+			color: "text-amber-600 dark:text-amber-400",
 		},
 		closed: {
 			label: "Closed",
-			dotColor: "text-muted-foreground",
+			color: "text-muted-foreground",
 		},
 	};
 
@@ -28,11 +27,11 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
 	return (
 		<span
 			className={cn(
-				"inline-flex items-center gap-1.5 text-xs text-muted-foreground",
+				"text-xs",
+				config.color,
 				className
 			)}
 		>
-			<Circle className={cn("h-2 w-2 fill-current", config.dotColor)} />
 			{config.label}
 		</span>
 	);

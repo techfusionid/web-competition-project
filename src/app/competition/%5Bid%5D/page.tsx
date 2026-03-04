@@ -15,19 +15,46 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useState, useEffect } from "react";
 import { toast } from "sonner"; // Changed from use-toast as sonner seems to be the preferred toast in this project
-import { StatusBadge } from "@/components/StatusBadge";
 import { Button } from "@/components/ui/button";
-import { competitions } from "@/data/competitions";
+import { fetchCompetitionById } from "@/app/actions/competitions";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { cn } from "@/lib/utils";
+import type { Competition } from "@/types/competition";
 
 export default function CompetitionDetailPage() {
 	const params = useParams();
 	const competitionId = params.id as string;
 	const { isBookmarked, toggleBookmark } = useBookmarks();
+	const [competition, setCompetition] = useState<Competition | null>(null);
+	const [isLoading, setIsLoading] = useState(true);
 
-	const competition = competitions.find((c) => c.id === competitionId);
+	useEffect(() => {
+		async function loadCompetition() {
+			setIsLoading(true);
+			try {
+				const data = await fetchCompetitionById(competitionId);
+				setCompetition(data);
+			} catch (error) {
+				console.error("Failed to fetch competition:", error);
+				setCompetition(null);
+			} finally {
+				setIsLoading(false);
+			}
+		}
+		loadCompetition();
+	}, [competitionId]);
+
+	if (isLoading) {
+		return (
+			<>
+				<main className="container flex flex-1 flex-col items-center justify-center py-16">
+					<p className="text-muted-foreground">Memuat kompetisi...</p>
+				</main>
+			</>
+		);
+	}
 
 	if (!competition) {
 		return (
@@ -99,7 +126,6 @@ export default function CompetitionDetailPage() {
 									<span className="rounded bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground">
 										{competition.category}
 									</span>
-									<StatusBadge status={competition.status} />
 								</div>
 								<h1 className="mt-2 text-xl font-semibold text-foreground md:text-2xl">
 									{competition.title}

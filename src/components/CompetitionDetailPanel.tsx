@@ -8,7 +8,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { type Competition, LEVELS } from "@/types/competition";
 import { ClaimCompetitionDialog } from "./ClaimCompetitionDialog";
 import { ReportCompetitionDialog } from "./ReportCompetitionDialog";
-import { StatusBadge } from "./StatusBadge";
 
 interface CompetitionDetailPanelProps {
 	competition: Competition | null;
@@ -111,7 +110,6 @@ export function CompetitionDetailPanel({
 							<h2 className="text-lg font-semibold text-foreground leading-tight">
 								{competition.title}
 							</h2>
-							<StatusBadge status={competition.status} />
 						</div>
 						<p className="text-sm text-muted-foreground">
 							{competition.organizer}
