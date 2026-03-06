@@ -1,6 +1,6 @@
 import { format } from "date-fns";
-import { BadgeCheck, Bookmark, Calendar, ChevronDown, Flag, Share2 } from "lucide-react";
-import { useCallback, useRef, useState } from "react";
+import { BadgeCheck, Bookmark, Calendar, ChevronDown, Flag } from "lucide-react";
+import { useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import type { Competition } from "@/types/competition";
-import { SharePopup } from "./SharePopup";
 
 interface CompetitionCardPosterProps {
 	competition: Competition;
@@ -37,7 +36,6 @@ export function CompetitionCardPoster({
 }: CompetitionCardPosterProps) {
 	const longPressTimer = useRef<NodeJS.Timeout | null>(null);
 	const isLongPress = useRef(false);
-	const [showShare, setShowShare] = useState(false);
 
 	const handlePointerDown = useCallback(() => {
 		isLongPress.current = false;
@@ -70,8 +68,6 @@ export function CompetitionCardPoster({
 		}
 		return format(competition.deadline, "d MMM yyyy");
 	};
-
-	const shareUrl = `${window.location.origin}/competition/${competition.id}`;
 
 	return (
 		<>
@@ -120,7 +116,7 @@ export function CompetitionCardPoster({
 						/>
 					</Button>
 
-					{/* Hover Overlay - deadline, category, format, status, share (no level, no participant type). On touch always visible */}
+					{/* Hover Overlay - deadline, category, format, status (no level, no participant type). On touch always visible */}
 					<div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 opacity-0 md:group-hover:opacity-100 transition-all duration-300 [@media(hover:none)]:opacity-100">
 						<div className="space-y-3 text-white transform translate-y-4 md:group-hover:translate-y-0 transition-transform duration-300 [@media(hover:none)]:translate-y-0">
 							{/* Tags: category, format */}
@@ -141,9 +137,9 @@ export function CompetitionCardPoster({
 								</div>
 							</div>
 
-							{/* Share + Klaim/Laporkan */}
+							{/* Klaim/Laporkan */}
 							<div className="flex justify-end items-center gap-1.5 pt-2">
-								{(onClaim ?? onReport) && (
+								{(onClaim || onReport) && (
 									<DropdownMenu>
 										<DropdownMenuTrigger asChild>
 											<Button
@@ -177,17 +173,7 @@ export function CompetitionCardPoster({
 										</DropdownMenuContent>
 									</DropdownMenu>
 								)}
-								<Button
-									className="gap-1.5 text-xs bg-white/20 hover:bg-white/30 border-0 text-white opacity-0 group-hover:opacity-100 transition-opacity"
-									onClick={(e) => {
-										e.stopPropagation();
-										setShowShare(true);
-									}}
-									size="sm"
-								>
-									<Share2 className="h-3.5 w-3.5" />
-									Share
-								</Button>
+
 							</div>
 						</div>
 					</div>
@@ -197,7 +183,7 @@ export function CompetitionCardPoster({
 				<div className="p-3 space-y-1.5">
 					<div className="flex items-start justify-between gap-2">
 						<div className="min-w-0 flex-1">
-							<h3 className="truncate text-sm font-semibold text-foreground transition-colors group-hover:text-primary">
+							<h3 className="truncate text-base md:text-lg font-semibold text-foreground transition-colors group-hover:text-primary">
 								{competition.title}
 							</h3>
 							<p className="truncate text-xs text-muted-foreground">
@@ -207,18 +193,12 @@ export function CompetitionCardPoster({
 						<div className="shrink-0">
 						</div>
 					</div>
-					<p className="text-[10px] text-muted-foreground leading-relaxed line-clamp-2">
-						{competition.description}
-					</p>
+					<div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+						<Calendar className="h-3.5 w-3.5" />
+						<span className="font-medium">{formatDateRange()}</span>
+					</div>
 				</div>
 			</div>
-
-			<SharePopup
-				isOpen={showShare}
-				onClose={() => setShowShare(false)}
-				title={competition.title}
-				url={shareUrl}
-			/>
 		</>
 	);
 }

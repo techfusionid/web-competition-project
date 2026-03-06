@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { PostHogProvider } from "@/components/posthog-provider";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { Agentation } from "agentation";
 import "./globals.css";
 
 const greedStandard = localFont({
@@ -27,6 +28,13 @@ export const metadata: Metadata = {
    description: "Discover and join competitions across various categories including Technology, Business, Science, Design, Arts, and more. Find your next competition and showcase your skills.",
    keywords: ["competitions", "contests", "awards", "challenges", "technology competitions", "business competitions", "design competitions"],
    authors: [{ name: "Competitions" }],
+   manifest: "/manifest.json",
+   themeColor: "#3b82f6",
+   appleWebApp: {
+      capable: true,
+      statusBarStyle: "black-translucent",
+      title: "Web Competition",
+   },
    openGraph: {
       type: "website",
       locale: "en_US",
@@ -53,6 +61,9 @@ export default function RootLayout({
       <html lang="en" suppressHydrationWarning>
          <head>
             <link href="/favicon.svg" rel="icon" type="image/svg+xml"></link>
+            <link href="/manifest.json" rel="manifest"></link>
+            <meta content="#3b82f6" name="theme-color"></meta>
+            <link href="/apple-touch-icon.png" rel="apple-touch-icon"></link>
          </head>
          <body className={`${greedStandard.variable} ${geistMono.variable} font-sans antialiased`}>
             <ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange enableSystem>
@@ -64,6 +75,7 @@ export default function RootLayout({
                <Footer />
                </PostHogProvider>
             </ThemeProvider>
+            {process.env.NODE_ENV === "development" && <Agentation />}
          </body>
       </html>
    );

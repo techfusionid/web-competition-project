@@ -8,15 +8,11 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { Competition } from "@/types/competition";
-import { ClaimCompetitionDialog } from "./ClaimCompetitionDialog";
 import { CompetitionCard } from "./CompetitionCard";
 import { CompetitionCardPoster } from "./CompetitionCardPoster";
 import { CompetitionDetailPanel } from "./CompetitionDetailPanel";
 import { CompetitionDialog } from "./CompetitionDialog";
 import { CompetitionDrawer } from "./CompetitionDrawer";
-import { ReportCompetitionDialog } from "./ReportCompetitionDialog";
-import { CompetitionGalleryItem } from "./CompetitionGalleryItem";
-import { type DetailViewMode, DetailViewToggle } from "./DetailViewToggle";
 import { type FilterState, Filters } from "./Filters";
 import { PosterPopup } from "./PosterPopup";
 import { SearchBar } from "./SearchBar";
@@ -37,13 +33,11 @@ const defaultFilters: FilterState = {
 	levels: [],
 	format: "all",
 	participationType: "all",
-	status: "all",
 };
 
 type SortOption = "deadline" | "name";
 
 const VIEW_MODE_KEY = "competitions-view-mode";
-const DETAIL_VIEW_MODE_KEY = "competitions-detail-view-mode";
 
 function getInitialViewMode(isMobile: boolean): ViewMode {
 	if (typeof window === "undefined") return isMobile ? "poster" : "card";
@@ -52,15 +46,6 @@ function getInitialViewMode(isMobile: boolean): ViewMode {
 		return stored;
 	}
 	return isMobile ? "poster" : "card";
-}
-
-function getInitialDetailViewMode(): DetailViewMode {
-	if (typeof window === "undefined") return "sidebar";
-	const stored = localStorage.getItem(DETAIL_VIEW_MODE_KEY);
-	if (stored === "popup" || stored === "sidebar") {
-		return stored;
-	}
-	return "sidebar";
 }
 
 export function CompetitionList({
@@ -77,14 +62,9 @@ export function CompetitionList({
 	const [sortBy, setSortBy] = useState<SortOption>("deadline");
 	const [showFilters, setShowFilters] = useState(false);
 	const [viewMode, setViewMode] = useState<ViewMode>("card");
-	const [detailViewMode, setDetailViewMode] = useState<DetailViewMode>(
-		() => getInitialDetailViewMode()
-	);
 	const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 	const [dialogIndex, setDialogIndex] = useState<number | null>(null);
 	const [posterPopupIndex, setPosterPopupIndex] = useState<number | null>(null);
-	const [claimReportCompetition, setClaimReportCompetition] = useState<Competition | null>(null);
-	const [claimReportMode, setClaimReportMode] = useState<"claim" | "report" | null>(null);
 	const [visibleCount, setVisibleCount] = useState(20);
 	const selectedItemRef = useRef<HTMLDivElement>(null);
 
@@ -111,11 +91,6 @@ export function CompetitionList({
 		const initialMode = getInitialViewMode(isMobile);
 		setViewMode(initialMode);
 	}, [isMobile]);
-
-	const handleDetailViewModeChange = useCallback((mode: DetailViewMode) => {
-		setDetailViewMode(mode);
-		localStorage.setItem(DETAIL_VIEW_MODE_KEY, mode);
-	}, []);
 
 	// Close split view / dialog and reset visible count when filters change
 	useEffect(() => {
@@ -178,10 +153,6 @@ export function CompetitionList({
 				return false;
 			}
 
-			if (filters.status !== "all" && comp.status !== filters.status) {
-				return false;
-			}
-
 			return true;
 		});
 
@@ -215,13 +186,9 @@ export function CompetitionList({
 
 	const handleItemClick = useCallback(
 		(index: number) => {
-			if (!isMobile && detailViewMode === "popup") {
-				setDialogIndex(index);
-			} else {
-				setSelectedIndex(index);
-			}
+			setSelectedIndex(index);
 		},
-		[isMobile, detailViewMode]
+		[]
 	);
 
 	const handleCloseDialog = useCallback(() => {
@@ -391,16 +358,10 @@ export function CompetitionList({
 						<p className="text-sm text-muted-foreground">
 							{filteredCompetitions.length} competition{filteredCompetitions.length !== 1 ? "s" : ""} found
 						</p>
-						<div className="flex items-center gap-2">
-							<DetailViewToggle
-								detailViewMode={detailViewMode}
-								onDetailViewModeChange={handleDetailViewModeChange}
-							/>
-							<ViewToggle
-								onViewModeChange={handleViewModeChange}
-								viewMode={viewMode}
-							/>
-						</div>
+						<ViewToggle
+							onViewModeChange={handleViewModeChange}
+							viewMode={viewMode}
+						/>
 					</div>
 				</div>
 
@@ -418,7 +379,7 @@ export function CompetitionList({
 							Reset Filters
 						</Button>
 					</div>
-				) : selectedIndex !== null && detailViewMode === "sidebar" ? (
+				) : selectedIndex !== null ? (
 					/* Split View - when a card is clicked and sidebar mode */
 					<div className="grid grid-cols-5 gap-4">
 						{/* Left - Scrollable gallery with 2 columns of posters */}
@@ -488,7 +449,7 @@ export function CompetitionList({
 				) : viewMode === "card" ? (
 					/* Normal Card Grid View */
 					<>
-						<div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+						<div className="grid gap-4 grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
 							{visibleCompetitions.map((competition, index) => (
 								<CompetitionCard
 									competition={competition}

@@ -15,10 +15,15 @@ import { dbToCompetition, dbToCompetitions } from "@/lib/data-transformer";
 import type { Competition } from "@/types/competition";
 
 export async function fetchCompetitions(filters?: FilterState): Promise<Competition[]> {
-	const dbRecords = filters
-		? await getCompetitionsByFilter(filters)
-		: await getAllCompetitions();
-	return dbToCompetitions(dbRecords);
+	try {
+		const dbRecords = filters
+			? await getCompetitionsByFilter(filters)
+			: await getAllCompetitions();
+		return dbToCompetitions(dbRecords);
+	} catch (error) {
+		console.error("fetchCompetitions error:", error);
+		throw new Error(`Failed to fetch competitions: ${error instanceof Error ? error.message : String(error)}`);
+	}
 }
 
 export async function fetchCompetitionById(id: string): Promise<Competition | null> {
@@ -27,24 +32,49 @@ export async function fetchCompetitionById(id: string): Promise<Competition | nu
 }
 
 export async function fetchCompetitionsByOrganizer(organizerName: string): Promise<Competition[]> {
-	const dbRecords = await getCompetitionsByOrganizer(organizerName);
-	return dbToCompetitions(dbRecords);
+	try {
+		const dbRecords = await getCompetitionsByOrganizer(organizerName);
+		return dbToCompetitions(dbRecords);
+	} catch (error) {
+		console.error("fetchCompetitionsByOrganizer error:", error);
+		throw new Error(`Failed to fetch competitions by organizer: ${error instanceof Error ? error.message : String(error)}`);
+	}
 }
 
 export async function fetchCompetitionsByCategory(category: string): Promise<Competition[]> {
-	const dbRecords = await getCompetitionsByCategory(category);
-	return dbToCompetitions(dbRecords);
+	try {
+		const dbRecords = await getCompetitionsByCategory(category);
+		return dbToCompetitions(dbRecords);
+	} catch (error) {
+		console.error("fetchCompetitionsByCategory error:", error);
+		throw new Error(`Failed to fetch competitions by category: ${error instanceof Error ? error.message : String(error)}`);
+	}
 }
 
 export async function fetchCompetitionsByIds(ids: string[]): Promise<Competition[]> {
-	const dbRecords = await getCompetitionsByIds(ids);
-	return dbToCompetitions(dbRecords);
+	try {
+		const dbRecords = await getCompetitionsByIds(ids);
+		return dbToCompetitions(dbRecords);
+	} catch (error) {
+		console.error("fetchCompetitionsByIds error:", error);
+		throw new Error(`Failed to fetch competitions by IDs: ${error instanceof Error ? error.message : String(error)}`);
+	}
 }
 
 export async function fetchAllOrganizers() {
-	return await getAllOrganizers();
+	try {
+		return await getAllOrganizers();
+	} catch (error) {
+		console.error("fetchAllOrganizers error:", error);
+		throw new Error(`Failed to fetch organizers: ${error instanceof Error ? error.message : String(error)}`);
+	}
 }
 
 export async function fetchAllCategories(): Promise<string[]> {
-	return await getAllCategories();
+	try {
+		return await getAllCategories();
+	} catch (error) {
+		console.error("fetchAllCategories error:", error);
+		throw new Error(`Failed to fetch categories: ${error instanceof Error ? error.message : String(error)}`);
+	}
 }

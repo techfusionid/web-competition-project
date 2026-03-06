@@ -2,12 +2,12 @@ import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import { BadgeCheck, Calendar, ExternalLink, Flag, MapPin, Share2, Users, X } from "lucide-react";
 import { useState } from "react";
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { type Competition, LEVELS } from "@/types/competition";
 import { ClaimCompetitionDialog } from "./ClaimCompetitionDialog";
 import { ReportCompetitionDialog } from "./ReportCompetitionDialog";
+import { SharePopup } from "./SharePopup";
 
 interface CompetitionDetailPanelProps {
 	competition: Competition | null;
@@ -20,27 +20,7 @@ export function CompetitionDetailPanel({
 }: CompetitionDetailPanelProps) {
 	const [showReport, setShowReport] = useState(false);
 	const [showClaim, setShowClaim] = useState(false);
-
-	const handleShare = async () => {
-		if (!competition) return;
-
-		const shareData = {
-			title: competition.title,
-			text: `Lihat kompetisi "${competition.title}" di Competitions!`,
-			url: competition.registrationUrl,
-		};
-
-		try {
-			if (navigator.share) {
-				await navigator.share(shareData);
-			} else {
-				await navigator.clipboard.writeText(competition.registrationUrl);
-				toast.success("Link berhasil disalin!");
-			}
-		} catch (err) {
-			// User cancelled sharing
-		}
-	};
+	const [showShare, setShowShare] = useState(false);
 
 	const levelLabels = LEVELS.reduce(
 		(acc, l) => {
@@ -94,7 +74,7 @@ export function CompetitionDetailPanel({
 					{/* Share Button */}
 					<Button
 						className="absolute right-3 top-3 h-9 w-9 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
-						onClick={handleShare}
+						onClick={() => setShowShare(true)}
 						size="icon"
 						variant="ghost"
 					>
@@ -175,7 +155,7 @@ export function CompetitionDetailPanel({
 						<p className="text-xs font-medium text-muted-foreground mb-1.5">
 							Deskripsi
 						</p>
-						<p className="text-sm text-muted-foreground leading-relaxed">
+						<p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
 							{competition.description}
 						</p>
 					</div>
@@ -223,6 +203,12 @@ export function CompetitionDetailPanel({
 				competition={competition}
 				isOpen={showClaim}
 				onClose={() => setShowClaim(false)}
+			/>
+			<SharePopup
+				isOpen={showShare}
+				onClose={() => setShowShare(false)}
+				title={competition.title}
+				url={competition.registrationUrl}
 			/>
 		</ScrollArea>
 	);

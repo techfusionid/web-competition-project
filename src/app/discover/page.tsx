@@ -51,7 +51,7 @@ export default function DiscoverPage() {
 			{/* Header Section - Desktop */}
 			<section className="hidden md:block py-12 md:py-20">
 				<div className="container">
-					<div className="mx-auto max-w-2xl">
+					<div className="max-w-2xl">
 						<h1 className="text-balance text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-5xl">
 							Discover Competitions
 						</h1>
@@ -135,7 +135,7 @@ export default function DiscoverPage() {
 			{/* Desktop Content - Original Layout */}
 			<div className="hidden md:block">
 				{/* Browse by Category Section */}
-				<section className="py-12 md:py-16">
+				<section className="pb-8 md:pb-10">
 					<div className="container">
 						<h2 className="text-xl font-semibold text-foreground mb-6">Browse by Category</h2>
 						<div className="grid md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -154,7 +154,7 @@ export default function DiscoverPage() {
 				</section>
 
 				{/* Browse by Organizer Section */}
-				<section className="py-12 md:py-16">
+				<section className="pt-8 md:pt-10">
 					<div className="container">
 						<h2 className="text-xl font-semibold text-foreground mb-6">Browse by Organizer</h2>
 						<div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4">

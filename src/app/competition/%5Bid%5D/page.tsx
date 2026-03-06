@@ -168,9 +168,9 @@ export default function CompetitionDetailPage() {
 								<h2 className="text-base font-medium text-foreground">
 									Tentang Kompetisi
 								</h2>
-								<p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-									{competition.description}
-								</p>
+							<div className="mt-3 text-sm leading-relaxed text-muted-foreground whitespace-pre-line">
+								{competition.description}
+							</div>
 								<p className="mt-3 text-sm leading-relaxed text-muted-foreground">
 									Ikuti kompetisi ini untuk mengasah kemampuan dan bersaing
 									dengan peserta terbaik dari seluruh Indonesia. Kesempatan emas

@@ -1,4 +1,4 @@
-import { CategorySection } from "@/components/sections/CategorySection";
+import { CategorySection } from "@/components/sections";
 
 export const metadata = {
 	title: "Categories",

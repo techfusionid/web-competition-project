@@ -11,7 +11,6 @@ import {
 	CATEGORIES,
 	type CompetitionFormat,
 	type CompetitionLevel,
-	type CompetitionStatus,
 	LEVELS,
 	type ParticipationType,
 } from "@/types/competition";
@@ -21,7 +20,6 @@ export interface FilterState {
 	levels: CompetitionLevel[];
 	format: CompetitionFormat | "all";
 	participationType: ParticipationType | "all";
-	status: CompetitionStatus | "all";
 }
 
 interface FiltersProps {
@@ -39,8 +37,7 @@ export function Filters({
 		filters.categories.length > 0 ||
 		filters.levels.length > 0 ||
 		filters.format !== "all" ||
-		filters.participationType !== "all" ||
-		filters.status !== "all";
+		filters.participationType !== "all";
 
 	const formatOptions: { value: CompetitionFormat | "all"; label: string }[] = [
 		{ value: "all", label: "All" },

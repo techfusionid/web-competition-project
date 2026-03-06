@@ -2,11 +2,10 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Loader2 } from "lucide-react";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { CompetitionDialog } from "@/components/CompetitionDialog";
 import { Button } from "@/components/ui/button";
-// Using the same data source as the home page
-import { competitions } from "@/data/competitions";
+import { fetchCompetitions } from "@/app/actions/competitions";
 import type { Competition } from "@/types/competition";
 
 interface Card {
@@ -31,9 +30,7 @@ const enterAnimation = {
 	scale: 0.9,
 };
 
-// Get a random competition from the full list
-// Uses the same competitions data source as the home page (@/data/competitions)
-function getRandomCompetition(exclude?: string[]): Competition {
+function getRandomCompetition(competitions: Competition[], exclude?: string[]): Competition {
 	const available = exclude
 		? competitions.filter((c) => !exclude.includes(c.id))
 		: competitions;
@@ -41,12 +38,11 @@ function getRandomCompetition(exclude?: string[]): Competition {
 	return pool[Math.floor(Math.random() * pool.length)];
 }
 
-// Get initial random competitions
-function getInitialCards(): Card[] {
+function getInitialCards(competitions: Competition[]): Card[] {
 	const used: string[] = [];
 	const cards: Card[] = [];
 	for (let i = 0; i < 3; i++) {
-		const comp = getRandomCompetition(used);
+		const comp = getRandomCompetition(competitions, used);
 		used.push(comp.id);
 		cards.push({ id: i + 1, competition: comp });
 	}
@@ -154,15 +150,32 @@ function AnimatedCard({
 }
 
 export default function AnimatedCardStack() {
-	const [cards, setCards] = useState<Card[]>(getInitialCards);
+	const [allCompetitions, setAllCompetitions] = useState<Competition[]>([]);
+	const [cards, setCards] = useState<Card[]>([]);
 	const [isSpinning, setIsSpinning] = useState(false);
 	const [transitionSpeed, setTransitionSpeed] = useState(0.3);
-	const [selectedCompetition, setSelectedCompetition] =
-		useState<Competition | null>(null);
+	const [selectedCompetition, setSelectedCompetition] = useState<Competition | null>(null);
+	const [isLoading, setIsLoading] = useState(true);
 	const nextIdRef = useRef(4);
 
+	// Load competitions from database
+	useEffect(() => {
+		async function loadCompetitions() {
+			try {
+				const data = await fetchCompetitions();
+				setAllCompetitions(data);
+				setCards(getInitialCards(data));
+			} catch (error) {
+				console.error("Failed to load competitions:", error);
+			} finally {
+				setIsLoading(false);
+			}
+		}
+		loadCompetitions();
+	}, []);
+
 	const handleSpin = useCallback(() => {
-		if (isSpinning) return;
+		if (isSpinning || allCompetitions.length === 0) return;
 		setIsSpinning(true);
 
 		// Spin configuration - random number of spins between 10-18
@@ -179,16 +192,15 @@ export default function AnimatedCardStack() {
 
 			// Calculate delay - starts fast (40ms), ends slow (500ms)
 			const progress = currentSpin / totalSpins;
-			const easeOut = 1 - Math.pow(1 - progress, 3); // Cubic ease out
+			const easeOut = 1 - Math.pow(1 - progress, 3);
 			const delay = 40 + easeOut * 460;
 
 			// Update transition speed based on progress
 			setTransitionSpeed(0.08 + easeOut * 0.35);
 
 			// Get truly random competition from full list
-			// Uses the same competitions data source as the home page
-			const randomIndex = Math.floor(Math.random() * competitions.length);
-			const nextComp = competitions[randomIndex];
+			const randomIndex = Math.floor(Math.random() * allCompetitions.length);
+			const nextComp = allCompetitions[randomIndex];
 			const newId = nextIdRef.current++;
 
 			setCards((prev) => [
@@ -202,7 +214,7 @@ export default function AnimatedCardStack() {
 
 		// Start spinning
 		spin();
-	}, [isSpinning]);
+	}, [isSpinning, allCompetitions]);
 
 	const handleViewClick = useCallback((competition: Competition) => {
 		setSelectedCompetition(competition);
@@ -211,6 +223,23 @@ export default function AnimatedCardStack() {
 	const handleCloseDialog = useCallback(() => {
 		setSelectedCompetition(null);
 	}, []);
+
+	if (isLoading) {
+		return (
+			<div className="flex flex-col items-center justify-center gap-4 py-16">
+				<Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+				<p className="text-sm text-muted-foreground">Loading competitions...</p>
+			</div>
+		);
+	}
+
+	if (allCompetitions.length === 0) {
+		return (
+			<div className="flex flex-col items-center justify-center gap-4 py-16">
+				<p className="text-sm text-muted-foreground">No competitions available</p>
+			</div>
+		);
+	}
 
 	return (
 		<div className="flex flex-col items-center justify-center gap-8 py-8">

@@ -37,11 +37,11 @@ export function CompetitionCard({
 				{/* Header - Title, Organizer, Status (default), Share */}
 				<div className="flex items-start justify-between gap-2">
 					<div className="min-w-0 flex-1">
-						<h3 className="truncate text-sm md:text-base font-semibold text-foreground group-hover:text-primary transition-colors">
-							{competition.title}
-						</h3>
+					<h3 className="truncate text-base md:text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+						{competition.title}
+					</h3>
 						<button
-							className="truncate text-xs md:text-sm text-muted-foreground hover:text-primary hover:underline text-left w-full"
+							className="truncate text-xs md:text-sm text-muted-foreground hover:text-primary text-left w-full"
 							onClick={(e) => {
 								e.stopPropagation();
 								onOrganizerClick?.(competition.organizer);
@@ -65,14 +65,14 @@ export function CompetitionCard({
 					</div>
 				</div>
 
-				{/* Content Area - Fixed height for smooth transition */}
-				<div className="mt-2 md:mt-3 relative min-h-[60px] md:min-h-[70px]">
-					{/* Default: Description. Hidden on hover (desktop); on touch (hover:none) hidden so meta shows below */}
-					<div className="absolute inset-0 opacity-100 group-hover:opacity-0 transition-opacity duration-200 [@media(hover:none)]:opacity-0">
-						<p className="text-[10px] md:text-xs text-muted-foreground leading-relaxed line-clamp-2">
-							{competition.description}
-						</p>
-					</div>
+			{/* Content Area */}
+			<div className="mt-2 md:mt-3 relative min-h-[48px] md:min-h-[56px]">
+				{/* Default: Description. Hidden on hover (desktop); on touch (hover:none) hidden so meta shows below */}
+				<div className="absolute inset-0 opacity-100 group-hover:opacity-0 transition-opacity duration-200 [@media(hover:none)]:opacity-0">
+					<p className="text-xs md:text-sm text-muted-foreground leading-relaxed line-clamp-2">
+						{competition.description}
+					</p>
+				</div>
 
 					{/* Hover: deadline, category, format, status. On touch (hover:none) always visible */}
 					<div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col justify-center gap-2 [@media(hover:none)]:opacity-100">
