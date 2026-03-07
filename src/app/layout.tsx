@@ -1,12 +1,13 @@
-import localFont from "next/font/local";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Agentation } from "agentation";
 import type { Metadata, Viewport } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
+import { Amplitude } from "@/amplitude";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
+import { PostHogProvider } from "@/components/posthog-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { PostHogProvider } from "@/components/posthog-provider";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { Agentation } from "agentation";
 import "./globals.css";
 
 const greedStandard = localFont({
@@ -82,6 +83,7 @@ export default function RootLayout({
 			<body
 				className={`${greedStandard.variable} ${geistMono.variable} font-sans antialiased`}
 			>
+				<Amplitude />
 				<ThemeProvider
 					attribute="class"
 					defaultTheme="system"
