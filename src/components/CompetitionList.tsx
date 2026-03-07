@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
 	Carousel,
 	CarouselContent,
 	CarouselItem,
 } from "@/components/ui/carousel";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { Competition } from "@/types/competition";
 import { CompetitionCard } from "./CompetitionCard";
@@ -13,6 +12,8 @@ import { CompetitionCardPoster } from "./CompetitionCardPoster";
 import { CompetitionDetailPanel } from "./CompetitionDetailPanel";
 import { CompetitionDialog } from "./CompetitionDialog";
 import { CompetitionDrawer } from "./CompetitionDrawer";
+import { CompetitionSheet } from "./CompetitionSheet";
+import { type DetailViewMode, DetailViewToggle } from "./DetailViewToggle";
 import { type FilterState, Filters } from "./Filters";
 import { PosterPopup } from "./PosterPopup";
 import { SearchBar } from "./SearchBar";
@@ -38,6 +39,7 @@ const defaultFilters: FilterState = {
 type SortOption = "deadline" | "name";
 
 const VIEW_MODE_KEY = "competitions-view-mode";
+const DETAIL_VIEW_MODE_KEY = "competitions-detail-view-mode";
 
 function getInitialViewMode(isMobile: boolean): ViewMode {
 	if (typeof window === "undefined") return isMobile ? "poster" : "card";
@@ -62,28 +64,33 @@ export function CompetitionList({
 	const [sortBy, setSortBy] = useState<SortOption>("deadline");
 	const [showFilters, setShowFilters] = useState(false);
 	const [viewMode, setViewMode] = useState<ViewMode>("card");
+	const [detailViewMode, setDetailViewMode] =
+		useState<DetailViewMode>("dialog");
 	const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 	const [dialogIndex, setDialogIndex] = useState<number | null>(null);
 	const [posterPopupIndex, setPosterPopupIndex] = useState<number | null>(null);
 	const [visibleCount, setVisibleCount] = useState(20);
-	const selectedItemRef = useRef<HTMLDivElement>(null);
 
 	const ITEMS_PER_PAGE = 20;
-
-	// Auto-scroll to selected item in gallery
-	useEffect(() => {
-		if (selectedIndex !== null && selectedItemRef.current) {
-			selectedItemRef.current.scrollIntoView({
-				behavior: "smooth",
-				block: "center",
-			});
-		}
-	}, [selectedIndex]);
 
 	// Update view mode when it changes and persist to localStorage
 	const handleViewModeChange = useCallback((mode: ViewMode) => {
 		setViewMode(mode);
 		localStorage.setItem(VIEW_MODE_KEY, mode);
+	}, []);
+
+	// Update detail view mode when it changes and persist to localStorage
+	const handleDetailViewModeChange = useCallback((mode: DetailViewMode) => {
+		setDetailViewMode(mode);
+		localStorage.setItem(DETAIL_VIEW_MODE_KEY, mode);
+	}, []);
+
+	// Initialize detail view mode on mount from localStorage
+	useEffect(() => {
+		const stored = localStorage.getItem(DETAIL_VIEW_MODE_KEY);
+		if (stored === "dialog" || stored === "sheet") {
+			setDetailViewMode(stored);
+		}
 	}, []);
 
 	// Initialize view mode on mount and handle device changes
@@ -109,9 +116,9 @@ export function CompetitionList({
 			setDialogIndex(null);
 			setPosterPopupIndex(null);
 			// Scroll to top of competitions section
-			const competitionsSection = document.getElementById('competitions');
+			const competitionsSection = document.getElementById("competitions");
 			if (competitionsSection) {
-				competitionsSection.scrollIntoView({ behavior: 'smooth' });
+				competitionsSection.scrollIntoView({ behavior: "smooth" });
 			}
 		}
 	}, [resetTrigger]);
@@ -186,20 +193,24 @@ export function CompetitionList({
 
 	const handleItemClick = useCallback(
 		(index: number) => {
-			setSelectedIndex(index);
+			if (detailViewMode === "dialog") {
+				setDialogIndex(index);
+			} else if (detailViewMode === "sheet") {
+				setSelectedIndex(index);
+			}
 		},
-		[]
+		[detailViewMode]
 	);
 
 	const handleCloseDialog = useCallback(() => {
 		setSelectedIndex(null);
 	}, []);
 
-	const handlePrevious = useCallback(() => {
+	const handleSheetPrevious = useCallback(() => {
 		setSelectedIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : prev));
 	}, []);
 
-	const handleNext = useCallback(() => {
+	const handleSheetNext = useCallback(() => {
 		setSelectedIndex((prev) =>
 			prev !== null && prev < filteredCompetitions.length - 1 ? prev + 1 : prev
 		);
@@ -234,7 +245,8 @@ export function CompetitionList({
 						</div>
 						<div className="flex items-center justify-between">
 							<p className="text-xs text-muted-foreground">
-								{filteredCompetitions.length} competition{filteredCompetitions.length !== 1 ? "s" : ""}
+								{filteredCompetitions.length} competition
+								{filteredCompetitions.length !== 1 ? "s" : ""}
 							</p>
 							<ViewToggle
 								onViewModeChange={handleViewModeChange}
@@ -354,10 +366,7 @@ export function CompetitionList({
 							onFiltersChange={setFilters}
 						/>
 					</div>
-					<div className="flex items-center justify-between gap-3 flex-wrap">
-						<p className="text-sm text-muted-foreground">
-							{filteredCompetitions.length} competition{filteredCompetitions.length !== 1 ? "s" : ""} found
-						</p>
+					<div className="flex items-center justify-end gap-3 flex-wrap">
 						<ViewToggle
 							onViewModeChange={handleViewModeChange}
 							viewMode={viewMode}
@@ -379,73 +388,6 @@ export function CompetitionList({
 							Reset Filters
 						</Button>
 					</div>
-				) : selectedIndex !== null ? (
-					/* Split View - when a card is clicked and sidebar mode */
-					<div className="grid grid-cols-5 gap-4">
-						{/* Left - Scrollable gallery with 2 columns of posters */}
-						<div className="col-span-2 min-w-0 overflow-hidden">
-							<ScrollArea className="h-[calc(100vh-6rem)]">
-								<div className={viewMode === "card" ? "flex flex-col gap-3 pr-3 pl-1 pt-1" : "grid grid-cols-2 gap-2 pr-3 pl-1 pt-1"}>
-									{visibleCompetitions.map((competition, index) => {
-										const isCurrentlySelected = selectedIndex === index;
-
-										return (
-											<div
-												className={`transition-all duration-300 ${
-													isCurrentlySelected
-														? viewMode === "card" ? "ring-2 ring-primary rounded-lg" : "opacity-100 scale-[1.02]"
-														: viewMode === "card" ? "opacity-80 hover:opacity-100" : "opacity-60 hover:opacity-100"
-												}`}
-												key={competition.id}
-												ref={isCurrentlySelected ? selectedItemRef : null}
-											>
-												{viewMode === "card" ? (
-													<CompetitionCard
-														competition={competition}
-														onClick={() => handleItemClick(index)}
-														onOrganizerClick={onOrganizerClick}
-													/>
-												) : (
-													<CompetitionCardPoster
-														competition={competition}
-														isBookmarked={bookmarks.includes(competition.id)}
-														onClick={() => handleItemClick(index)}
-														onLongPress={() => setPosterPopupIndex(index)}
-														onToggleBookmark={onToggleBookmark}
-													/>
-												)}
-											</div>
-										);
-									})}
-									{hasMore && (
-										<div className="col-span-2">
-											<Button
-												className="mt-2 w-full"
-												onClick={handleLoadMore}
-												size="sm"
-												variant="outline"
-											>
-												Load{" "}
-												{Math.min(
-													ITEMS_PER_PAGE,
-													filteredCompetitions.length - visibleCount
-												)}{" "}
-												more
-											</Button>
-										</div>
-									)}
-								</div>
-							</ScrollArea>
-						</div>
-
-						{/* Right - Large detail panel */}
-						<div className="col-span-3 sticky top-18 h-[calc(100vh-6rem)]">
-							<CompetitionDetailPanel
-								competition={selectedCompetition}
-								onClose={handleCloseDialog}
-							/>
-						</div>
-					</div>
 				) : viewMode === "card" ? (
 					/* Normal Card Grid View */
 					<>
@@ -462,8 +404,7 @@ export function CompetitionList({
 						{hasMore && (
 							<div className="mt-6 flex justify-center">
 								<Button onClick={handleLoadMore} variant="outline">
-									Load more (
-									{filteredCompetitions.length - visibleCount} more)
+									Load more ({filteredCompetitions.length - visibleCount} more)
 								</Button>
 							</div>
 						)}
@@ -493,8 +434,7 @@ export function CompetitionList({
 						{hasMore && (
 							<div className="mt-6 flex justify-center">
 								<Button onClick={handleLoadMore} variant="outline">
-									Load more (
-									{filteredCompetitions.length - visibleCount} more)
+									Load more ({filteredCompetitions.length - visibleCount} more)
 								</Button>
 							</div>
 						)}
@@ -511,31 +451,53 @@ export function CompetitionList({
 					</>
 				)}
 
-				{/* Desktop detail dialog - used for popup mode (card click) and poster long-press */}
-				<CompetitionDialog
-					competition={
-						dialogIndex !== null ? filteredCompetitions[dialogIndex] : null
-					}
-					hasNext={
-						dialogIndex !== null &&
-						dialogIndex < filteredCompetitions.length - 1
-					}
-					hasPrevious={dialogIndex !== null && dialogIndex > 0}
-					isOpen={dialogIndex !== null}
-					onClose={() => setDialogIndex(null)}
-					onNext={() =>
-						setDialogIndex((prev) =>
-							prev !== null && prev < filteredCompetitions.length - 1
-								? prev + 1
-								: prev
-						)
-					}
-					onPrevious={() =>
-						setDialogIndex((prev) =>
-							prev !== null && prev > 0 ? prev - 1 : prev
-						)
-					}
-				/>
+				{/* Desktop detail dialog - used for dialog mode */}
+				{detailViewMode === "dialog" && (
+					<CompetitionDialog
+						competition={
+							dialogIndex !== null ? filteredCompetitions[dialogIndex] : null
+						}
+						detailViewMode={detailViewMode}
+						hasNext={
+							dialogIndex !== null &&
+							dialogIndex < filteredCompetitions.length - 1
+						}
+						hasPrevious={dialogIndex !== null && dialogIndex > 0}
+						isOpen={dialogIndex !== null}
+						onClose={() => setDialogIndex(null)}
+						onDetailViewModeChange={handleDetailViewModeChange}
+						onNext={() =>
+							setDialogIndex((prev) =>
+								prev !== null && prev < filteredCompetitions.length - 1
+									? prev + 1
+									: prev
+							)
+						}
+						onPrevious={() =>
+							setDialogIndex((prev) =>
+								prev !== null && prev > 0 ? prev - 1 : prev
+							)
+						}
+					/>
+				)}
+
+				{/* Desktop sheet - used for sheet mode */}
+				{detailViewMode === "sheet" && (
+					<CompetitionSheet
+						competition={selectedCompetition}
+						detailViewMode={detailViewMode}
+						hasNext={
+							selectedIndex !== null &&
+							selectedIndex < filteredCompetitions.length - 1
+						}
+						hasPrevious={selectedIndex !== null && selectedIndex > 0}
+						isOpen={selectedIndex !== null}
+						onClose={() => setSelectedIndex(null)}
+						onDetailViewModeChange={handleDetailViewModeChange}
+						onNext={handleSheetNext}
+						onPrevious={handleSheetPrevious}
+					/>
+				)}
 			</div>
 		</section>
 	);

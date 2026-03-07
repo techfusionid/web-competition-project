@@ -1,9 +1,21 @@
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-import { BadgeCheck, Calendar, ExternalLink, Flag, MapPin, Share2, Users, X } from "lucide-react";
+import {
+	BadgeCheck,
+	Calendar,
+	ExternalLink,
+	Eye,
+	Flag,
+	MapPin,
+	Share2,
+	Users,
+	X,
+} from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogPortal } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { cn } from "@/lib/utils";
 import { type Competition, LEVELS } from "@/types/competition";
 import { ClaimCompetitionDialog } from "./ClaimCompetitionDialog";
 import { ReportCompetitionDialog } from "./ReportCompetitionDialog";
@@ -21,6 +33,7 @@ export function CompetitionDetailPanel({
 	const [showReport, setShowReport] = useState(false);
 	const [showClaim, setShowClaim] = useState(false);
 	const [showShare, setShowShare] = useState(false);
+	const [showPosterLightbox, setShowPosterLightbox] = useState(false);
 
 	const levelLabels = LEVELS.reduce(
 		(acc, l) => {
@@ -43,21 +56,36 @@ export function CompetitionDetailPanel({
 	return (
 		<ScrollArea className="h-full rounded-lg border border-border bg-card">
 			<div className="p-0">
-				{/* Poster Image */}
-				<div className="relative aspect-[16/9] w-full overflow-hidden bg-secondary">
-					{competition.imageUrl ? (
-						<img
-							alt={competition.title}
-							className="h-full w-full object-cover"
-							src={competition.imageUrl}
-						/>
-					) : (
-						<div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5">
-							<span className="text-6xl font-bold text-primary/30">
-								{competition.title.charAt(0)}
-							</span>
-						</div>
-					)}
+				{/* Poster Image with hover effect */}
+				<div className="relative w-full overflow-hidden bg-card px-4 py-4">
+					<div className="group relative mx-auto w-full max-w-xs">
+						{competition.imageUrl ? (
+							<>
+								<img
+									alt={competition.title}
+									className="h-auto w-full rounded-lg transition-all duration-300 group-hover:scale-105"
+									src={competition.imageUrl}
+								/>
+								{/* Hover overlay with View Detail button */}
+								<div className="absolute inset-0 flex items-center justify-center rounded-lg bg-black/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+									<Button
+										className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg"
+										onClick={() => setShowPosterLightbox(true)}
+										size="sm"
+									>
+										<Eye className="mr-2 h-4 w-4" />
+										View Detail
+									</Button>
+								</div>
+							</>
+						) : (
+							<div className="flex aspect-[16/9] w-full items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-primary/5">
+								<span className="text-6xl font-bold text-primary/30">
+									{competition.title.charAt(0)}
+								</span>
+							</div>
+						)}
+					</div>
 
 					{/* Close Button */}
 					{onClose && (
@@ -85,9 +113,9 @@ export function CompetitionDetailPanel({
 				{/* Content */}
 				<div className="space-y-4 p-5">
 					{/* Header */}
-					<div className="space-y-1.5">
+					<div className="space-y-2">
 						<div className="flex items-start justify-between gap-3">
-							<h2 className="text-lg font-semibold text-foreground leading-tight">
+							<h2 className="text-2xl font-bold text-foreground leading-tight">
 								{competition.title}
 							</h2>
 						</div>
@@ -114,30 +142,36 @@ export function CompetitionDetailPanel({
 						</span>
 					</div>
 
-					{/* Details */}
+					{/* Details - Boxed Style */}
 					<div className="grid gap-2 text-sm">
-						<div className="flex items-center gap-2 text-muted-foreground">
-							<Calendar className="h-4 w-4" />
-							<span>
+						<div className="flex items-center gap-3 rounded-lg bg-muted/50 px-3 py-2.5">
+							<div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
+								<Calendar className="h-4 w-4 text-primary" />
+							</div>
+							<span className="text-foreground">
 								{competition.startDate
 									? `${format(competition.startDate, "d MMMM", { locale: id })} - ${format(competition.deadline, "d MMMM yyyy", { locale: id })}`
 									: `Deadline: ${format(competition.deadline, "d MMMM yyyy", { locale: id })}`}
 							</span>
 						</div>
-						<div className="flex items-center gap-2 text-muted-foreground">
-							<Users className="h-4 w-4" />
-							<span className="capitalize">
+						{competition.location && (
+							<div className="flex items-center gap-3 rounded-lg bg-muted/50 px-3 py-2.5">
+								<div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
+									<MapPin className="h-4 w-4 text-primary" />
+								</div>
+								<span className="text-foreground">{competition.location}</span>
+							</div>
+						)}
+						<div className="flex items-center gap-3 rounded-lg bg-muted/50 px-3 py-2.5">
+							<div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
+								<Users className="h-4 w-4 text-primary" />
+							</div>
+							<span className="text-foreground capitalize">
 								{competition.participationType === "team"
 									? "Tim"
 									: "Individual"}
 							</span>
 						</div>
-						{competition.location && (
-							<div className="flex items-center gap-2 text-muted-foreground">
-								<MapPin className="h-4 w-4" />
-								<span>{competition.location}</span>
-							</div>
-						)}
 					</div>
 
 					{/* Prize */}
@@ -172,24 +206,24 @@ export function CompetitionDetailPanel({
 					</a>
 
 					{/* Report & Claim */}
-					<div className="flex gap-2">
+					<div className="flex flex-col gap-2 pt-2">
 						<Button
-							className="flex-1 gap-1.5 text-muted-foreground"
+							className="w-fit justify-start gap-2 text-muted-foreground"
 							onClick={() => setShowReport(true)}
 							size="sm"
-							variant="outline"
+							variant="ghost"
 						>
-							<Flag className="h-3.5 w-3.5" />
-							Laporkan
+							<Flag className="h-4 w-4" />
+							Report event
 						</Button>
 						<Button
-							className="flex-1 gap-1.5 text-muted-foreground"
+							className="w-fit justify-start gap-2 text-muted-foreground"
 							onClick={() => setShowClaim(true)}
 							size="sm"
-							variant="outline"
+							variant="ghost"
 						>
-							<BadgeCheck className="h-3.5 w-3.5" />
-							Klaim
+							<BadgeCheck className="h-4 w-4" />
+							Contact the host
 						</Button>
 					</div>
 				</div>
@@ -210,6 +244,31 @@ export function CompetitionDetailPanel({
 				title={competition.title}
 				url={competition.registrationUrl}
 			/>
+
+			{/* Poster Lightbox Dialog */}
+			<Dialog onOpenChange={setShowPosterLightbox} open={showPosterLightbox}>
+				<DialogPortal>
+					<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
+						<div className="relative max-h-[90vh] max-w-4xl">
+							<Button
+								className="absolute right-0 top-0 z-10 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
+								onClick={() => setShowPosterLightbox(false)}
+								size="icon"
+								variant="ghost"
+							>
+								<X className="h-5 w-5" />
+							</Button>
+							{competition.imageUrl && (
+								<img
+									alt={competition.title}
+									className="h-auto max-h-[90vh] w-auto rounded-lg object-contain"
+									src={competition.imageUrl}
+								/>
+							)}
+						</div>
+					</div>
+				</DialogPortal>
+			</Dialog>
 		</ScrollArea>
 	);
 }

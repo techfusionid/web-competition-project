@@ -1,19 +1,10 @@
 "use client";
 
-import { Flag } from "lucide-react";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 import type { Competition } from "@/types/competition";
 
 interface ReportCompetitionDialogProps {
@@ -22,34 +13,25 @@ interface ReportCompetitionDialogProps {
 	onClose: () => void;
 }
 
-const REPORT_REASONS = [
-	{ value: "spam", label: "Spam atau iklan" },
-	{ value: "incorrect", label: "Informasi salah / menyesatkan" },
-	{ value: "duplicate", label: "Duplikat" },
-	{ value: "inappropriate", label: "Konten tidak pantas" },
-	{ value: "other", label: "Lainnya" },
-] as const;
-
 export function ReportCompetitionDialog({
 	competition,
 	isOpen,
 	onClose,
 }: ReportCompetitionDialogProps) {
-	const [reason, setReason] = useState<string>("");
 	const [details, setDetails] = useState("");
 
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
-		if (!competition) return;
+	const handleSubmit = () => {
+		if (!details.trim()) {
+			toast.error("Please provide information about your report.");
+			return;
+		}
 		// Placeholder: in production would POST to API or send email
-		toast.success("Laporan telah dikirim. Terima kasih atas masukan Anda.");
-		setReason("");
+		toast.success("Report submitted. Thank you for your feedback.");
 		setDetails("");
 		onClose();
 	};
 
 	const handleClose = () => {
-		setReason("");
 		setDetails("");
 		onClose();
 	};
@@ -58,51 +40,43 @@ export function ReportCompetitionDialog({
 
 	return (
 		<Dialog onOpenChange={(open) => !open && handleClose()} open={isOpen}>
-			<DialogContent className="sm:max-w-md">
-				<DialogHeader>
-					<DialogTitle className="flex items-center gap-2">
-						<Flag className="h-5 w-5" />
-						Laporkan Kompetisi
-					</DialogTitle>
-					<DialogDescription>
-						Laporkan listing ini jika terdapat masalah. Laporan akan ditinjau oleh tim kami.
-					</DialogDescription>
-				</DialogHeader>
-				<form onSubmit={handleSubmit} className="space-y-4">
-					<div className="space-y-2">
-						<Label htmlFor="report-reason">Alasan</Label>
-						<select
-							className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-							id="report-reason"
-							onChange={(e) => setReason(e.target.value)}
-							required
-							value={reason}
+			<DialogContent className="w-full max-w-[320px] rounded-2xl p-6">
+				<div className="space-y-4">
+					<div className="flex items-center gap-2">
+						<svg
+							className="h-5 w-5 text-muted-foreground"
+							fill="none"
+							viewBox="0 0 24 24"
+							xmlns="http://www.w3.org/2000/svg"
 						>
-							<option value="">Pilih alasan...</option>
-							{REPORT_REASONS.map((r) => (
-								<option key={r.value} value={r.value}>
-									{r.label}
-								</option>
-							))}
-						</select>
+							<path
+								clipRule="evenodd"
+								fillRule="evenodd"
+								d="M1.25 12C1.25 6.06294 6.06294 1.25 12 1.25C17.937 1.25 22.75 6.06293 22.75 12C22.75 17.937 17.937 22.75 12 22.75C10.1437 22.75 8.39536 22.2788 6.87016 21.4493L2.63727 22.2373C2.39422 22.2826 2.14448 22.2051 1.96967 22.0303C1.79485 21.8555 1.71742 21.6058 1.76267 21.3627L2.55076 17.1298C1.72113 15.6046 1.25 13.8563 1.25 12ZM12 7.25C12.4142 7.25 12.75 7.58579 12.75 8V12C12.75 12.4142 12.4142 12.75 12 12.75C11.5858 12.75 11.25 12.4142 11.25 12V8C11.25 7.58579 11.5858 7.25 12 7.25ZM12.5672 16.501C12.8445 16.1933 12.8198 15.7191 12.512 15.4418C12.2043 15.1646 11.73 15.1893 11.4528 15.497L11.4428 15.5081C11.1655 15.8159 11.1902 16.2901 11.498 16.5673C11.8057 16.8446 12.28 16.8199 12.5572 16.5121L12.5672 16.501Z"
+								fill="currentColor"
+							/>
+						</svg>
+						<h2 className="text-xl font-semibold">Report Event</h2>
 					</div>
-					<div className="space-y-2">
-						<Label htmlFor="report-details">Detail (opsional)</Label>
-						<Textarea
-							className="min-h-[80px] resize-none"
-							id="report-details"
-							onChange={(e) => setDetails(e.target.value)}
-							placeholder="Jelaskan lebih lanjut jika perlu..."
-							value={details}
-						/>
-					</div>
-					<DialogFooter>
-						<Button type="button" variant="outline" onClick={handleClose}>
-							Batal
+
+					<p className="text-md text-muted-foreground">
+						Please share more information about why you are reporting this
+						event.
+					</p>
+
+					<Textarea
+						className="min-h-[120px] resize-none w-full"
+						onChange={(e) => setDetails(e.target.value)}
+						placeholder="Any information you can share will be very helpful."
+						value={details}
+					/>
+
+					<div className="flex justify-end pt-2 w-full">
+						<Button className="w-full" onClick={handleSubmit} size="sm">
+							Submit Report
 						</Button>
-						<Button type="submit">Kirim Laporan</Button>
-					</DialogFooter>
-				</form>
+					</div>
+				</div>
 			</DialogContent>
 		</Dialog>
 	);

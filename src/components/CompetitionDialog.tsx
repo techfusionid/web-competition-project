@@ -3,10 +3,8 @@ import { format } from "date-fns";
 import {
 	BadgeCheck,
 	Calendar,
-	ChevronDown,
 	ChevronLeft,
 	ChevronRight,
-	ChevronUp,
 	ExternalLink,
 	Flag,
 	MapPin,
@@ -23,8 +21,14 @@ import {
 	DialogPortal,
 	DialogTitle,
 } from "@/components/ui/dialog";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { type Competition, LEVELS } from "@/types/competition";
 import { ClaimCompetitionDialog } from "./ClaimCompetitionDialog";
+import { type DetailViewMode, DetailViewToggle } from "./DetailViewToggle";
 import { ReportCompetitionDialog } from "./ReportCompetitionDialog";
 
 interface CompetitionDialogProps {
@@ -35,6 +39,8 @@ interface CompetitionDialogProps {
 	onNext: () => void;
 	hasPrevious: boolean;
 	hasNext: boolean;
+	detailViewMode?: DetailViewMode;
+	onDetailViewModeChange?: (mode: DetailViewMode) => void;
 }
 
 export function CompetitionDialog({
@@ -45,6 +51,8 @@ export function CompetitionDialog({
 	onNext,
 	hasPrevious,
 	hasNext,
+	detailViewMode = "dialog",
+	onDetailViewModeChange,
 }: CompetitionDialogProps) {
 	const contentRef = useRef<HTMLDivElement>(null);
 	const [showReport, setShowReport] = useState(false);
@@ -59,16 +67,12 @@ export function CompetitionDialog({
 	// Minimum swipe distance (in px)
 	const minSwipeDistance = 50;
 
-	// Keyboard navigation (arrows: up/previous, down/next; left/right for swipe consistency)
+	// Keyboard navigation (arrows: left/previous, right/next)
 	useEffect(() => {
 		if (!isOpen) return;
 
 		const handleKeyDown = (e: KeyboardEvent) => {
-			if (e.key === "ArrowUp" && hasPrevious) {
-				onPrevious();
-			} else if (e.key === "ArrowDown" && hasNext) {
-				onNext();
-			} else if (e.key === "ArrowLeft" && hasPrevious) {
+			if (e.key === "ArrowLeft" && hasPrevious) {
 				onPrevious();
 			} else if (e.key === "ArrowRight" && hasNext) {
 				onNext();
@@ -151,55 +155,82 @@ export function CompetitionDialog({
 
 				<DialogPrimitive.Content
 					className={
-						"fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-[340px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-xl border bg-background p-0 shadow-lg md:max-w-lg md:w-full"
+						"fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-[340px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-xl border bg-background p-0 shadow-lg md:max-w-2xl md:w-full"
 					}
 					ref={contentRef}
 				>
 					<DialogTitle className="sr-only">{competition.title}</DialogTitle>
 
-					{/* Top-left: small up/down arrows to switch competition */}
+					{/* Top bar with close button and view toggle */}
+					<div className="flex items-center justify-end border-b bg-background/95 p-2 backdrop-blur-sm">
+						<div className="flex items-center gap-2">
+							{onDetailViewModeChange && (
+								<DetailViewToggle
+									detailViewMode={detailViewMode}
+									onDetailViewModeChange={onDetailViewModeChange}
+								/>
+							)}
+							<DialogPrimitive.Close className="inline-flex h-8 w-8 items-center justify-center rounded-full hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring">
+								<X className="h-4 w-4" />
+								<span className="sr-only">Close</span>
+							</DialogPrimitive.Close>
+						</div>
+					</div>
+
+					{/* Top-left: left/right arrows to switch competition */}
 					{hasPrevious || hasNext ? (
 						<div className="absolute left-2 top-2 z-10 flex flex-row items-center gap-0.5">
 							{hasPrevious && (
-								<Button
-									className="h-6 w-6 rounded-full bg-background/80 backdrop-blur-sm p-0 hover:bg-background focus:outline-none focus:ring-2 focus:ring-ring"
-									onClick={onPrevious}
-									size="icon"
-									variant="ghost"
-									aria-label="Previous competition"
-								>
-									<ChevronUp className="h-3.5 w-3.5" />
-								</Button>
+								<Tooltip>
+									<TooltipTrigger asChild>
+										<Button
+											aria-label="Previous competition"
+											className="h-6 w-6 rounded-full bg-background/80 backdrop-blur-sm p-0 hover:bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+											onClick={onPrevious}
+											size="icon"
+											variant="ghost"
+										>
+											<ChevronLeft className="h-3.5 w-3.5" />
+										</Button>
+									</TooltipTrigger>
+									<TooltipContent>Previous</TooltipContent>
+								</Tooltip>
 							)}
 							{hasNext && (
-								<Button
-									className="h-6 w-6 rounded-full bg-background/80 backdrop-blur-sm p-0 hover:bg-background focus:outline-none focus:ring-2 focus:ring-ring"
-									onClick={onNext}
-									size="icon"
-									variant="ghost"
-									aria-label="Next competition"
-								>
-									<ChevronDown className="h-3.5 w-3.5" />
-								</Button>
+								<Tooltip>
+									<TooltipTrigger asChild>
+										<Button
+											aria-label="Next competition"
+											className="h-6 w-6 rounded-full bg-background/80 backdrop-blur-sm p-0 hover:bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+											onClick={onNext}
+											size="icon"
+											variant="ghost"
+										>
+											<ChevronRight className="h-3.5 w-3.5" />
+										</Button>
+									</TooltipTrigger>
+									<TooltipContent>Next</TooltipContent>
+								</Tooltip>
 							)}
 						</div>
 					) : null}
 
-					{/* Top-right: Share and Close side by side */}
-					<div className="absolute right-2 top-2 z-10 flex items-center gap-1.5">
-						<Button
-							className="h-8 w-8 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
-							onClick={handleShare}
-							size="icon"
-							variant="ghost"
-							aria-label="Share"
-						>
-							<Share2 className="h-4 w-4" />
-						</Button>
-						<DialogPrimitive.Close className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm hover:bg-background focus:outline-none focus:ring-2 focus:ring-ring">
-							<X className="h-4 w-4" />
-							<span className="sr-only">Close</span>
-						</DialogPrimitive.Close>
+					{/* Top-right: Share button */}
+					<div className="absolute right-2 top-14 z-10 md:top-2">
+						<Tooltip>
+							<TooltipTrigger asChild>
+								<Button
+									aria-label="Share"
+									className="h-8 w-8 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
+									onClick={handleShare}
+									size="icon"
+									variant="ghost"
+								>
+									<Share2 className="h-4 w-4" />
+								</Button>
+							</TooltipTrigger>
+							<TooltipContent>Share</TooltipContent>
+						</Tooltip>
 					</div>
 
 					{/* Scroll container (fix iOS/Android scroll) */}
@@ -241,7 +272,7 @@ export function CompetitionDialog({
 									<h2 className="text-sm md:text-lg font-semibold text-foreground leading-tight">
 										{competition.title}
 									</h2>
-									</div>
+								</div>
 								<p className="text-[11px] md:text-sm text-muted-foreground">
 									{competition.organizer}
 								</p>
