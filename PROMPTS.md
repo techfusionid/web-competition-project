@@ -1,0 +1,2 @@
+- [ ] ubah mekanisme card lomba ini kalo di klik itu jadi ada 2 cara dan bisa dikustom, bisa dialog atau sheet ada tombolnya, mekanisme nya mirip seperti notion 
+- [ ] pada sheet view gedein tulisan title competition
