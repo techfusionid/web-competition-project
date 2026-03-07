@@ -195,41 +195,42 @@ export function CategorySection({
 				)}
 				{isLoading ? (
 					<div className="text-center py-8">
-						<p className="text-sm text-muted-foreground">Loading categories...</p>
+						<p className="text-sm text-muted-foreground">
+							Loading categories...
+						</p>
 					</div>
 				) : (
 					<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
 						{categories.map((category) => {
-						const Icon = CategoryIcon(category.name);
-						return (
-							<Link
-								href={`/category/${encodeURIComponent(category.name)}`}
-								key={category.name}
-								className="group"
-							>
-								<div className="flex flex-col items-center gap-2 p-4 rounded-lg border border-border bg-card/50 hover:bg-card transition-all hover:border-primary/50">
-									<div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-										<Icon
-											className={cn(
-												"h-5 w-5",
-												categoryConfig[category.name]?.color ||
-													"text-primary"
+							const Icon = CategoryIcon(category.name);
+							return (
+								<Link
+									href={`/category/${encodeURIComponent(category.name)}`}
+									key={category.name}
+									className="group"
+								>
+									<div className="flex flex-col items-center gap-2 p-4 rounded-lg border border-border bg-card/50 hover:bg-card transition-all hover:border-primary/50">
+										<div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+											<Icon
+												className={cn(
+													"h-5 w-5",
+													categoryConfig[category.name]?.color || "text-primary"
+												)}
+											/>
+										</div>
+										<div className="text-center">
+											<h3 className="text-sm font-medium group-hover:text-primary transition-colors">
+												{category.name}
+											</h3>
+											{showCount && (
+												<p className="text-xs text-muted-foreground">
+													{category.count}
+												</p>
 											)}
-										/>
+										</div>
 									</div>
-									<div className="text-center">
-										<h3 className="text-sm font-medium group-hover:text-primary transition-colors">
-											{category.name}
-										</h3>
-										{showCount && (
-											<p className="text-xs text-muted-foreground">
-												{category.count}
-											</p>
-										)}
-									</div>
-								</div>
-							</Link>
-						);
+								</Link>
+							);
 						})}
 					</div>
 				)}
@@ -258,47 +259,46 @@ export function CategorySection({
 				)}
 				{isLoading ? (
 					<div className="text-center py-8">
-						<p className="text-sm text-muted-foreground">Loading categories...</p>
+						<p className="text-sm text-muted-foreground">
+							Loading categories...
+						</p>
 					</div>
 				) : (
 					<div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
 						{categories.map((category) => {
-						const Icon = CategoryIcon(category.name);
-						return (
-							<Link
-								href={`/category/${encodeURIComponent(category.name)}`}
-								key={category.name}
-								className="group"
-							>
-								<div className="relative overflow-hidden rounded-xl border border-border bg-card transition-all hover:shadow-lg hover:border-primary/50">
-									<div
-										className={cn(
-											"absolute inset-0 bg-gradient-to-br",
-											category.config.gradient
-										)}
-									/>
-									<div className="relative p-6">
-										<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-background/80 backdrop-blur mb-4">
-											<Icon
-												className={cn(
-													"h-6 w-6",
-													category.config.color
-												)}
-											/>
+							const Icon = CategoryIcon(category.name);
+							return (
+								<Link
+									href={`/category/${encodeURIComponent(category.name)}`}
+									key={category.name}
+									className="group"
+								>
+									<div className="relative overflow-hidden rounded-xl border border-border bg-card transition-all hover:shadow-lg hover:border-primary/50">
+										<div
+											className={cn(
+												"absolute inset-0 bg-gradient-to-br",
+												category.config.gradient
+											)}
+										/>
+										<div className="relative p-6">
+											<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-background/80 backdrop-blur mb-4">
+												<Icon
+													className={cn("h-6 w-6", category.config.color)}
+												/>
+											</div>
+											<h3 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
+												{category.name}
+											</h3>
+											{showCount && (
+												<p className="text-sm text-muted-foreground">
+													{category.count} competition
+													{category.count !== 1 ? "s" : ""}
+												</p>
+											)}
 										</div>
-										<h3 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
-											{category.name}
-										</h3>
-										{showCount && (
-											<p className="text-sm text-muted-foreground">
-												{category.count} competition
-												{category.count !== 1 ? "s" : ""}
-											</p>
-										)}
 									</div>
-								</div>
-							</Link>
-						);
+								</Link>
+							);
 						})}
 					</div>
 				)}
@@ -317,7 +317,10 @@ export function CategorySection({
 							<p className="text-sm text-muted-foreground">{description}</p>
 						)}
 					</div>
-					<Link href="/category" className="text-sm text-primary hover:underline">
+					<Link
+						href="/category"
+						className="text-sm text-primary hover:underline"
+					>
 						View all
 					</Link>
 				</div>
@@ -330,43 +333,43 @@ export function CategorySection({
 				<>
 					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 						{categories.map((category) => {
-					const Icon = CategoryIcon(category.name);
-					return (
-						<Link
-							href={`/category/${encodeURIComponent(category.name)}`}
-							key={category.name}
-						>
-							<Card className="h-full transition-all hover:shadow-md hover:border-primary/50">
-								<CardContent className="p-5">
-									<div className="flex items-center gap-4">
-										<div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-secondary">
-											<Icon
-												className={cn(
-													"h-6 w-6",
-													categoryConfig[category.name]?.color ||
-														"text-primary"
-												)}
-											/>
-										</div>
-										<div className="flex-1 min-w-0">
-											<h3 className="font-semibold text-foreground">
-												{category.name}
-											</h3>
-											{showCount && (
-												<p className="text-sm text-muted-foreground">
-													{category.count} competition
-													{category.count !== 1 ? "s" : ""}
-												</p>
-											)}
-										</div>
-									</div>
-								</CardContent>
-							</Card>
-						</Link>
-					);
-					})}
-				</div>
-			</>
+							const Icon = CategoryIcon(category.name);
+							return (
+								<Link
+									href={`/category/${encodeURIComponent(category.name)}`}
+									key={category.name}
+								>
+									<Card className="h-full transition-all hover:shadow-md hover:border-primary/50">
+										<CardContent className="p-5">
+											<div className="flex items-center gap-4">
+												<div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-secondary">
+													<Icon
+														className={cn(
+															"h-6 w-6",
+															categoryConfig[category.name]?.color ||
+																"text-primary"
+														)}
+													/>
+												</div>
+												<div className="flex-1 min-w-0">
+													<h3 className="font-semibold text-foreground">
+														{category.name}
+													</h3>
+													{showCount && (
+														<p className="text-sm text-muted-foreground">
+															{category.count} competition
+															{category.count !== 1 ? "s" : ""}
+														</p>
+													)}
+												</div>
+											</div>
+										</CardContent>
+									</Card>
+								</Link>
+							);
+						})}
+					</div>
+				</>
 			)}
 		</section>
 	);

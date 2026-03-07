@@ -1,6 +1,15 @@
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-import { BadgeCheck, Calendar, ExternalLink, Flag, MapPin, Share2, Users, X } from "lucide-react";
+import {
+	BadgeCheck,
+	Calendar,
+	ExternalLink,
+	Flag,
+	MapPin,
+	Share2,
+	Users,
+	X,
+} from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -112,7 +121,7 @@ export function CompetitionDrawer({
 								<h2 className="text-base font-semibold text-foreground leading-tight pr-2">
 									{competition.title}
 								</h2>
-								</div>
+							</div>
 							<p className="text-sm text-muted-foreground">
 								{competition.organizer}
 							</p>

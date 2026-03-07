@@ -18,7 +18,7 @@ export default function SettingsProfilePage() {
 				</p>
 			</div>
 			<Separator />
-			
+
 			{/* Avatar Section */}
 			<div className="flex items-center gap-x-6">
 				<Avatar className="h-20 w-20">
@@ -38,7 +38,9 @@ export default function SettingsProfilePage() {
 			{/* Form */}
 			<div className="space-y-8">
 				<div className="grid gap-2">
-					<Label htmlFor="name">Name <span className="text-red-500">*</span></Label>
+					<Label htmlFor="name">
+						Name <span className="text-red-500">*</span>
+					</Label>
 					<Input id="name" defaultValue="Agnes Devita Widjaja" />
 				</div>
 

@@ -1,11 +1,25 @@
-import { Check, Copy, Facebook, MessageCircle, Share2, X } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
+"use client";
+
+import { useState, useEffect } from "react";
 import {
 	Dialog,
 	DialogContent,
+	DialogTitle,
+	DialogDescription,
 } from "@/components/ui/dialog";
-import { cn } from "@/lib/utils";
+import {
+	Copy,
+	Check,
+	Facebook,
+	Twitter,
+	MessageCircle,
+	Send,
+	Linkedin,
+	Mail,
+	Share2,
+} from "lucide-react";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { toast } from "sonner";
 
 interface SharePopupProps {
 	isOpen: boolean;
@@ -16,83 +30,17 @@ interface SharePopupProps {
 
 export function SharePopup({ isOpen, onClose, title, url }: SharePopupProps) {
 	const [copied, setCopied] = useState(false);
+	const [isMobile, setIsMobile] = useState(false);
 
-	const shareOptions = [
-		{
-			name: "WhatsApp",
-			icon: MessageCircle,
-			bgColor: "bg-[#25D366]",
-			hoverColor: "hover:bg-[#20bd5a]",
-			onClick: () => {
-				const text = encodeURIComponent(`${title}\n${url}`);
-				window.open(`https://wa.me/?text=${text}`, "_blank");
-				onClose();
-			},
-		},
-		{
-			name: "Facebook",
-			icon: Facebook,
-			bgColor: "bg-[#1877F2]",
-			hoverColor: "hover:bg-[#1464d4]",
-			onClick: () => {
-				window.open(
-					`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
-					"_blank"
-				);
-				onClose();
-			},
-		},
-		{
-			name: "Twitter",
-			icon: () => (
-				<svg className="h-5 w-5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
-					<path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-				</svg>
-			),
-			bgColor: "bg-black",
-			hoverColor: "hover:bg-gray-900 dark:hover:bg-gray-800",
-			onClick: () => {
-				const text = encodeURIComponent(title);
-				window.open(
-					`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(url)}`,
-					"_blank"
-				);
-				onClose();
-			},
-		},
-		{
-			name: "Telegram",
-			icon: () => (
-				<svg className="h-5 w-5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
-					<path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.941z" fillRule="evenodd"/>
-				</svg>
-			),
-			bgColor: "bg-[#0088cc]",
-			hoverColor: "hover:bg-[#0077b3]",
-			onClick: () => {
-				const text = encodeURIComponent(`${title}\n${url}`);
-				window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`, "_blank");
-				onClose();
-			},
-		},
-		{
-			name: "LinkedIn",
-			icon: () => (
-				<svg className="h-5 w-5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
-					<path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-				</svg>
-			),
-			bgColor: "bg-[#0077b5]",
-			hoverColor: "hover:bg-[#006399]",
-			onClick: () => {
-				window.open(
-					`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
-					"_blank"
-				);
-				onClose();
-			},
-		},
-	];
+	useEffect(() => {
+		const checkMobile = () => {
+			setIsMobile(window.innerWidth < 768);
+		};
+
+		checkMobile();
+		window.addEventListener("resize", checkMobile);
+		return () => window.removeEventListener("resize", checkMobile);
+	}, []);
 
 	const handleCopyLink = async () => {
 		try {
@@ -106,90 +54,135 @@ export function SharePopup({ isOpen, onClose, title, url }: SharePopupProps) {
 		}
 	};
 
+	const shareOptions = [
+		{
+			name: "Salin",
+			icon: copied ? Check : Copy,
+			color: "bg-gray-200 dark:bg-gray-700",
+			hoverColor: "hover:bg-gray-300 dark:hover:bg-gray-600",
+			onClick: handleCopyLink,
+		},
+		{
+			name: "X",
+			icon: Twitter,
+			color: "bg-black",
+			hoverColor: "hover:bg-gray-800",
+			onClick: () => {
+				const text = encodeURIComponent(title);
+				const shareUrl = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(url)}`;
+				window.open(shareUrl, "_blank", "width=600,height=400");
+				onClose();
+			},
+		},
+		{
+			name: "Facebook",
+			icon: Facebook,
+			color: "bg-[#1877F2]",
+			hoverColor: "hover:bg-[#166FE5]",
+			onClick: () => {
+				const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+				window.open(shareUrl, "_blank", "width=600,height=400");
+				onClose();
+			},
+		},
+		{
+			name: "WhatsApp",
+			icon: MessageCircle,
+			color: "bg-[#25D366]",
+			hoverColor: "hover:bg-[#20BA5C]",
+			onClick: () => {
+				const text = encodeURIComponent(`${title}\n${url}`);
+				const shareUrl = `https://wa.me/?text=${text}`;
+				window.open(shareUrl, "_blank", "width=600,height=400");
+				onClose();
+			},
+		},
+		{
+			name: "LinkedIn",
+			icon: Linkedin,
+			color: "bg-[#0A66C2]",
+			hoverColor: "hover:bg-[#095195]",
+			onClick: () => {
+				const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+				window.open(shareUrl, "_blank", "width=600,height=400");
+				onClose();
+			},
+		},
+		{
+			name: "Telegram",
+			icon: Send,
+			color: "bg-[#0088cc]",
+			hoverColor: "hover:bg-[#0077b3]",
+			onClick: () => {
+				const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`;
+				window.open(shareUrl, "_blank", "width=600,height=400");
+				onClose();
+			},
+		},
+	];
+
+	const contentClass = isMobile
+		? "w-full border-0 bg-white dark:bg-gray-900 p-0 rounded-t-3xl max-h-[90vh] overflow-y-auto"
+		: "w-full max-w-md border-0 bg-white dark:bg-gray-900 p-0 rounded-xl shadow-xl";
+
 	return (
-		<Dialog onOpenChange={(open) => !open && onClose()} open={isOpen}>
-			<DialogContent
-				className="sm:max-w-md gap-0 p-0 overflow-hidden"
-				showCloseButton={false}
-			>
-				{/* Header */}
-				<div className="flex items-center justify-between border-b px-5 py-4">
-					<div className="flex items-center gap-2">
-						<Share2 className="h-5 w-5 text-foreground" />
-						<h2 className="font-semibold text-foreground">Bagikan kompetisi</h2>
-					</div>
-					<button
-						className="rounded-full p-1 hover:bg-muted transition-colors"
-						onClick={onClose}
-					>
-						<X className="h-5 w-5 text-muted-foreground" />
-					</button>
-				</div>
+		<Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+			<DialogContent className={contentClass}>
+				<VisuallyHidden>
+					<DialogTitle>Bagikan kompetisi</DialogTitle>
+					<DialogDescription>
+						Bagikan kompetisi ini ke media sosial
+					</DialogDescription>
+				</VisuallyHidden>
 
-				<div className="p-5 space-y-5">
-					{/* Copy Link Section */}
-					<div className="space-y-2">
-						<label className="text-sm font-medium text-foreground">
-							Salin tautan
-						</label>
-						<div className="flex items-center gap-2 rounded-lg border border-border bg-background p-2">
-							<input
-								className="flex-1 bg-transparent text-sm text-muted-foreground outline-none truncate"
-								readOnly
-								type="text"
-								value={url}
-							/>
-							<button
-								className={cn(
-									"shrink-0 rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
-									copied
-										? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-										: "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-								)}
-								onClick={handleCopyLink}
-							>
-								{copied ? (
-									<span className="flex items-center gap-1.5">
-										<Check className="h-3.5 w-3.5" />
-										Tersalin
-									</span>
-								) : (
-									<span className="flex items-center gap-1.5">
-										<Copy className="h-3.5 w-3.5" />
-										Salin
-									</span>
-								)}
-							</button>
-						</div>
+				<div className={isMobile ? "p-6" : "p-6"}>
+					{/* Header */}
+					<div className="text-center mb-6">
+						<h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+							Bagikan kompetisi
+						</h2>
 					</div>
 
-					{/* Social Media Share */}
-					<div className="space-y-3">
-						<label className="text-sm font-medium text-foreground">
-							Bagikan ke media sosial
-						</label>
-						<div className="grid grid-cols-5 gap-2">
-							{shareOptions.map((option) => {
-								const Icon = option.icon;
-								return (
-									<button
-										className={cn(
-											"flex flex-col items-center justify-center gap-1.5 rounded-xl p-3 transition-all duration-200 hover:scale-105 active:scale-95",
-											option.bgColor,
-											option.hoverColor
-										)}
-										key={option.name}
-										onClick={option.onClick}
-									>
-										<div className="text-white">
-											<Icon className="h-5 w-5" />
-										</div>
-										<span className="text-[10px] font-medium text-white text-center leading-tight">
-											{option.name}
-										</span>
-									</button>
-								);
-							})}
+					{/* Link Preview Section */}
+					<div className="mb-6 mx-auto max-w-[240px] rounded-2xl bg-gray-50 dark:bg-gray-800 p-4 border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-md hover:border-gray-300 dark:hover:border-gray-600 hover:bg-white dark:hover:bg-gray-800">
+						<h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-1 truncate">
+							{title}
+						</h3>
+						<p className="text-xs text-gray-500 dark:text-gray-400 mb-2 truncate">
+							{url}
+						</p>
+						<p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+							Klik tombol di bawah untuk membagikan ke berbagai platform.
+						</p>
+					</div>
+
+					{/* Social Share Section */}
+					<div className="text-center">
+						<p className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-4">
+							Bagikan ke
+						</p>
+						<div className="overflow-x-auto -mx-6 px-6 pb-2">
+							<div className="flex gap-3 min-w-min justify-center">
+								{shareOptions.map((option) => {
+									const Icon = option.icon;
+									return (
+										<button
+											key={option.name}
+											onClick={option.onClick}
+											className="flex flex-col items-center gap-1.5 group flex-shrink-0"
+										>
+											<div
+												className={`${option.color} ${option.hoverColor} h-10 w-10 rounded-full flex items-center justify-center transition-all group-hover:scale-110 text-white`}
+											>
+												<Icon className="h-4 w-4" />
+											</div>
+											<span className="text-xs text-gray-700 dark:text-gray-300 text-center whitespace-nowrap">
+												{option.name}
+											</span>
+										</button>
+									);
+								})}
+							</div>
 						</div>
 					</div>
 				</div>

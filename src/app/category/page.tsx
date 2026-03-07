@@ -10,7 +10,9 @@ export default function CategoriesPage() {
 		<>
 			<main className="container py-8">
 				<div className="mb-8">
-					<h1 className="text-3xl font-bold text-foreground mb-2">Categories</h1>
+					<h1 className="text-3xl font-bold text-foreground mb-2">
+						Categories
+					</h1>
 					<p className="text-muted-foreground">
 						Explore competitions by categories you're interested in
 					</p>

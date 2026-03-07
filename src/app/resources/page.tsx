@@ -244,8 +244,8 @@ export default function ResourcesPage() {
 						Resources
 					</h1>
 					<p className="text-muted-foreground">
-						Collection of tools, accounts, and channels to help you
-						organize competitions more effectively.
+						Collection of tools, accounts, and channels to help you organize
+						competitions more effectively.
 					</p>
 				</div>
 

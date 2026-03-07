@@ -1,5 +1,11 @@
 import { format } from "date-fns";
-import { BadgeCheck, Bookmark, Calendar, ChevronDown, Flag } from "lucide-react";
+import {
+	BadgeCheck,
+	Bookmark,
+	Calendar,
+	ChevronDown,
+	Flag,
+} from "lucide-react";
 import { useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -109,10 +115,7 @@ export function CompetitionCardPoster({
 						variant="ghost"
 					>
 						<Bookmark
-							className={cn(
-								"h-4 w-4",
-								isBookmarked && "fill-current"
-							)}
+							className={cn("h-4 w-4", isBookmarked && "fill-current")}
 						/>
 					</Button>
 
@@ -151,7 +154,10 @@ export function CompetitionCardPoster({
 												<ChevronDown className="h-3 w-3" />
 											</Button>
 										</DropdownMenuTrigger>
-										<DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
+										<DropdownMenuContent
+											align="end"
+											onClick={(e) => e.stopPropagation()}
+										>
 											{onClaim && (
 												<DropdownMenuItem
 													onClick={() => onClaim(competition)}
@@ -173,7 +179,6 @@ export function CompetitionCardPoster({
 										</DropdownMenuContent>
 									</DropdownMenu>
 								)}
-
 							</div>
 						</div>
 					</div>
@@ -190,8 +195,7 @@ export function CompetitionCardPoster({
 								{competition.organizer}
 							</p>
 						</div>
-						<div className="shrink-0">
-						</div>
+						<div className="shrink-0"></div>
 					</div>
 					<div className="flex items-center gap-1.5 text-xs text-muted-foreground">
 						<Calendar className="h-3.5 w-3.5" />

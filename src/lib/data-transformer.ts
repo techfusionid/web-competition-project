@@ -10,48 +10,53 @@ const categoryMapping: Record<string, string> = {
 	"Olahraga & E-sports": "Sports",
 	"Sastra & Bahasa": "Writing",
 	"Sosial & Lingkungan": "Social",
-	"Keagamaan": "Social",
+	Keagamaan: "Social",
 	"Gaya Hidup & Hobi": "Art",
-	"Lainnya": "Other",
+	Lainnya: "Other",
 };
 
 const formatMapping: Record<string, Competition["format"]> = {
-	"Online": "online",
-	"Offline": "offline",
-	"Hybrid": "hybrid",
+	Online: "online",
+	Offline: "offline",
+	Hybrid: "hybrid",
 };
 
-const participationTypeMapping: Record<string, Competition["participationType"]> = {
-	"Individual": "individual",
-	"Team": "team",
+const participationTypeMapping: Record<
+	string,
+	Competition["participationType"]
+> = {
+	Individual: "individual",
+	Team: "team",
 };
 
 const levelMapping: Record<string, Competition["level"][number]> = {
 	// Direct mappings
-	"SMA": "sma",
-	"Mahasiswa": "mahasiswa",
-	"Umum": "umum",
-	"Profesional": "profesional",
+	SMA: "sma",
+	Mahasiswa: "mahasiswa",
+	Umum: "umum",
+	Profesional: "profesional",
 	// English equivalents
 	"High School": "sma",
-	"University": "mahasiswa",
-	"General": "umum",
-	"Professional": "profesional",
+	University: "mahasiswa",
+	General: "umum",
+	Professional: "profesional",
 	// Additional mappings based on database
-	"SMP": "sma",
-	"SD": "sma",
-	"Sederajat": "umum",
-	"Gapyear": "umum",
+	SMP: "sma",
+	SD: "sma",
+	Sederajat: "umum",
+	Gapyear: "umum",
 	"Gap Year": "umum",
-	"Staff": "profesional",
-	"Public": "umum",
+	Staff: "profesional",
+	Public: "umum",
 };
 
 function getStatus(deadline: Date | null | undefined): Competition["status"] {
 	if (!deadline) return "closed";
 
 	const now = new Date();
-	const daysUntilDeadline = Math.ceil((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+	const daysUntilDeadline = Math.ceil(
+		(deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+	);
 
 	if (daysUntilDeadline < 0) return "closed";
 	if (daysUntilDeadline <= 7) return "closing-soon";
@@ -69,9 +74,9 @@ function formatPrize(pricing: unknown): string {
 	if (Array.isArray(pricing)) {
 		// Filter for valid numbers
 		for (const p of pricing) {
-			if (typeof p === 'number' && !isNaN(p)) {
+			if (typeof p === "number" && !isNaN(p)) {
 				prices.push(p);
-			} else if (typeof p === 'string') {
+			} else if (typeof p === "string") {
 				// Handle string numbers like "50000"
 				const num = Number(p);
 				if (!isNaN(num)) {
@@ -81,19 +86,23 @@ function formatPrize(pricing: unknown): string {
 		}
 	}
 	// If it's an object with numeric values
-	else if (typeof pricing === 'object' && pricing !== null && !Array.isArray(pricing)) {
+	else if (
+		typeof pricing === "object" &&
+		pricing !== null &&
+		!Array.isArray(pricing)
+	) {
 		for (const v of Object.values(pricing)) {
-			if (typeof v === 'number' && !isNaN(v)) {
+			if (typeof v === "number" && !isNaN(v)) {
 				prices.push(v);
 			}
 		}
 	}
 	// If it's a single number (primitive)
-	else if (typeof pricing === 'number') {
+	else if (typeof pricing === "number") {
 		prices = [pricing];
 	}
 	// If it's a string (like "Rp 100.000")
-	else if (typeof pricing === 'string') {
+	else if (typeof pricing === "string") {
 		// Try to extract numbers from string
 		const numbers = pricing.match(/\d+/g);
 		if (numbers) {
@@ -160,7 +169,7 @@ export function dbToCompetition(dbRecord: DbCompetition): Competition {
 	}
 
 	const category = dbRecord.categories
-		? (categoryMapping[dbRecord.categories] || dbRecord.categories)
+		? categoryMapping[dbRecord.categories] || dbRecord.categories
 		: "Other";
 
 	const endDate = dbRecord.endDate || dbRecord.startDate;
@@ -175,9 +184,11 @@ export function dbToCompetition(dbRecord: DbCompetition): Competition {
 		level: normalizeLevels(dbRecord.level),
 		startDate: dbRecord.startDate ? new Date(dbRecord.startDate) : undefined,
 		deadline,
-		format: dbRecord.format ? (formatMapping[dbRecord.format] || "online") : "online",
+		format: dbRecord.format
+			? formatMapping[dbRecord.format] || "online"
+			: "online",
 		participationType: dbRecord.participationType
-			? (participationTypeMapping[dbRecord.participationType] || "individual")
+			? participationTypeMapping[dbRecord.participationType] || "individual"
 			: "individual",
 		status: getStatus(deadline),
 		prize: formatPrize(dbRecord.pricing),

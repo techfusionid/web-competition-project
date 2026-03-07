@@ -22,8 +22,8 @@ export default function About() {
 					</h1>
 					<p className="text-lg text-muted-foreground">
 						TechFusion adalah direktori lomba yang membantu mahasiswa dan pemuda
-						menemukan kompetisi sesuai minat—dari Indonesia hingga internasional—dalam
-						satu tempat yang mudah diakses.
+						menemukan kompetisi sesuai minat—dari Indonesia hingga
+						internasional—dalam satu tempat yang mudah diakses.
 					</p>
 				</div>
 
@@ -56,10 +56,10 @@ export default function About() {
 					<div className="space-y-4 text-muted-foreground">
 						<p>
 							Kami ingin memudahkan mahasiswa dan pemuda menemukan lomba yang
-							tepat: satu platform terpusat, filter yang jelas (kategori,
-							status aktif, institusi), dan informasi yang ter-update. Dengan
-							itu, kamu bisa fokus mengembangkan diri lewat kompetisi—lokal
-							maupun global—tanpa harus mengumpulkan info dari banyak sumber.
+							tepat: satu platform terpusat, filter yang jelas (kategori, status
+							aktif, institusi), dan informasi yang ter-update. Dengan itu, kamu
+							bisa fokus mengembangkan diri lewat kompetisi—lokal maupun
+							global—tanpa harus mengumpulkan info dari banyak sumber.
 						</p>
 					</div>
 				</section>
@@ -79,9 +79,9 @@ export default function About() {
 									Satu tempat terpusat
 								</h3>
 								<p className="text-sm text-muted-foreground">
-									Semua info lomba dalam satu platform. Tidak perlu lagi
-									berburu dari grup ke grup atau situs ke situs—akses daftar
-									lomba dengan cepat dan rapi.
+									Semua info lomba dalam satu platform. Tidak perlu lagi berburu
+									dari grup ke grup atau situs ke situs—akses daftar lomba
+									dengan cepat dan rapi.
 								</p>
 							</CardContent>
 						</Card>
@@ -133,13 +133,17 @@ export default function About() {
 						<li>Tailwind CSS — styling yang konsisten dan responsif</li>
 						<li>shadcn/ui — komponen UI yang dapat diandalkan</li>
 						<li>Drizzle & PostgreSQL — data lomba dan kategori</li>
-						<li>TypeScript — keamanan tipe dan pengalaman develop yang lebih baik</li>
+						<li>
+							TypeScript — keamanan tipe dan pengalaman develop yang lebih baik
+						</li>
 					</ul>
 				</section>
 
 				{/* Contact */}
 				<section className="mb-12">
-					<h2 className="text-2xl font-bold text-foreground mb-4">Hubungi kami</h2>
+					<h2 className="text-2xl font-bold text-foreground mb-4">
+						Hubungi kami
+					</h2>
 					<p className="text-muted-foreground mb-4">
 						Punya pertanyaan, saran, atau ingin kerja sama? Silakan hubungi kami
 						lewat channel berikut:

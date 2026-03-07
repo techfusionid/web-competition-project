@@ -11,7 +11,10 @@ export interface FilterState {
 }
 
 export async function getAllCompetitions() {
-	const allCompetitions = await db.select().from(competitions).orderBy(desc(competitions.createdAt));
+	const allCompetitions = await db
+		.select()
+		.from(competitions)
+		.orderBy(desc(competitions.createdAt));
 	return allCompetitions;
 }
 
@@ -28,7 +31,7 @@ export async function getCompetitionsByFilter(filter: FilterState) {
 	const conditions = [];
 
 	if (filter.category) {
-		conditions.push(eq(competitions.categories, filter.category as any));
+		conditions.push(ilike(competitions.categories, filter.category));
 	}
 
 	if (filter.format) {
@@ -36,7 +39,9 @@ export async function getCompetitionsByFilter(filter: FilterState) {
 	}
 
 	if (filter.participationType) {
-		conditions.push(eq(competitions.participationType, filter.participationType as any));
+		conditions.push(
+			eq(competitions.participationType, filter.participationType as any)
+		);
 	}
 
 	if (filter.status) {
@@ -61,12 +66,14 @@ export async function getCompetitionsByFilter(filter: FilterState) {
 }
 
 export async function getCompetitionsByOrganizer(organizerName: string) {
-	// Organizer is stored as JSONB array like ["Organizer Name"]
-	// Use JSONB array contains operator to check if organizer name matches
+	// Organizer is stored as JSONB object like {name: "Organizer Name", ...}
+	// Use JSONB querying to check if organizer name matches
 	const results = await db
 		.select()
 		.from(competitions)
-		.where(sql`${competitions.organizer}::text ILIKE ${`%${organizerName}%`}`)
+		.where(
+			sql`(${competitions.organizer}->>'name') ILIKE ${`%${organizerName}%`}`
+		)
 		.orderBy(desc(competitions.createdAt));
 
 	return results;
@@ -76,7 +83,7 @@ export async function getCompetitionsByCategory(category: string) {
 	const results = await db
 		.select()
 		.from(competitions)
-		.where(eq(competitions.categories, category as any))
+		.where(ilike(competitions.categories, category))
 		.orderBy(desc(competitions.createdAt));
 
 	return results;
@@ -107,18 +114,21 @@ export async function getAllOrganizers(): Promise<Organizer[]> {
 		})
 		.from(competitions);
 
-	const organizerMap = new Map<string, { name: string; competitionCount: number; categories: Set<string> }>();
+	const organizerMap = new Map<
+		string,
+		{ name: string; competitionCount: number; categories: Set<string> }
+	>();
 
 	allCompetitions.forEach((competition) => {
 		// Organizer is stored as JSONB array like ["Organizer Name"]
 		const org = competition.organizer as unknown;
 		let name = null;
 
-		if (Array.isArray(org) && org.length > 0 && typeof org[0] === 'string') {
+		if (Array.isArray(org) && org.length > 0 && typeof org[0] === "string") {
 			name = org[0];
-		} else if (typeof org === 'object' && org !== null && 'name' in org) {
+		} else if (typeof org === "object" && org !== null && "name" in org) {
 			name = (org as { name: string }).name;
-		} else if (typeof org === 'string') {
+		} else if (typeof org === "string") {
 			name = org;
 		}
 
@@ -133,7 +143,9 @@ export async function getAllOrganizers(): Promise<Organizer[]> {
 				organizerMap.set(name, {
 					name,
 					competitionCount: 1,
-					categories: new Set(competition.category ? [competition.category] : []),
+					categories: new Set(
+						competition.category ? [competition.category] : []
+					),
 				});
 			}
 		}
@@ -164,11 +176,13 @@ export async function getAllCategories(): Promise<string[]> {
 				"Olahraga & E-sports": "Sports",
 				"Sastra & Bahasa": "Writing",
 				"Sosial & Lingkungan": "Social",
-				"Keagamaan": "Social",
+				Keagamaan: "Social",
 				"Gaya Hidup & Hobi": "Art",
-				"Lainnya": "Other",
+				Lainnya: "Other",
 			};
-			categorySet.add(categoryMapping[competition.category] || competition.category);
+			categorySet.add(
+				categoryMapping[competition.category] || competition.category
+			);
 		}
 	});
 

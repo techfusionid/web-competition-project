@@ -13,8 +13,8 @@ export default function RandomizePage() {
 						Randomize Competition
 					</h1>
 					<p className="text-muted-foreground max-w-md mx-auto">
-						Not sure which competition to join? Let us pick one
-						at random for you!
+						Not sure which competition to join? Let us pick one at random for
+						you!
 					</p>
 				</div>
 

@@ -19,6 +19,8 @@
     "hooks": "@/hooks"
   },
   "registries": {
-    "@magicui": "https://magicui.design/r/{name}"
+    "@magicui": "https://magicui.design/r/{name}",
+    "@ss-components": "https://ss-components.style-c.com/r/{name}",
+    "@ncdai": "https://chanhdai.com/r/{name}.json"
   }
 }

@@ -30,7 +30,10 @@ const enterAnimation = {
 	scale: 0.9,
 };
 
-function getRandomCompetition(competitions: Competition[], exclude?: string[]): Competition {
+function getRandomCompetition(
+	competitions: Competition[],
+	exclude?: string[]
+): Competition {
 	const available = exclude
 		? competitions.filter((c) => !exclude.includes(c.id))
 		: competitions;
@@ -154,7 +157,8 @@ export default function AnimatedCardStack() {
 	const [cards, setCards] = useState<Card[]>([]);
 	const [isSpinning, setIsSpinning] = useState(false);
 	const [transitionSpeed, setTransitionSpeed] = useState(0.3);
-	const [selectedCompetition, setSelectedCompetition] = useState<Competition | null>(null);
+	const [selectedCompetition, setSelectedCompetition] =
+		useState<Competition | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const nextIdRef = useRef(4);
 
@@ -236,7 +240,9 @@ export default function AnimatedCardStack() {
 	if (allCompetitions.length === 0) {
 		return (
 			<div className="flex flex-col items-center justify-center gap-4 py-16">
-				<p className="text-sm text-muted-foreground">No competitions available</p>
+				<p className="text-sm text-muted-foreground">
+					No competitions available
+				</p>
 			</div>
 		);
 	}

@@ -3,19 +3,24 @@ import { OrganizerCard } from "@/components/OrganizerCard";
 const organizers = [
 	{
 		title: "ITB",
-		image: "https://upload.wikimedia.org/wikipedia/id/9/95/Logo_Institut_Teknologi_Bandung.png",
-		description: "Institut Teknologi Bandung - Innovation and technology competitions",
+		image:
+			"https://upload.wikimedia.org/wikipedia/id/9/95/Logo_Institut_Teknologi_Bandung.png",
+		description:
+			"Institut Teknologi Bandung - Innovation and technology competitions",
 		href: "/organizer/itb",
 	},
 	{
 		title: "UI",
-		image: "https://upload.wikimedia.org/wikipedia/id/thumb/0/0f/Makara_of_Universitas_Indonesia.svg/250px-Makara_of_Universitas_Indonesia.svg.png",
-		description: "Universitas Indonesia - Leading academic and research competitions",
+		image:
+			"https://upload.wikimedia.org/wikipedia/id/thumb/0/0f/Makara_of_Universitas_Indonesia.svg/250px-Makara_of_Universitas_Indonesia.svg.png",
+		description:
+			"Universitas Indonesia - Leading academic and research competitions",
 		href: "/organizer/ui",
 	},
 	{
 		title: "Google",
-		image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN1HgAOQZBf48TI55AvzbnfV0IFrCCrX6ldg&s",
+		image:
+			"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN1HgAOQZBf48TI55AvzbnfV0IFrCCrX6ldg&s",
 		description: "Google developer challenges and tech competitions",
 		href: "/organizer/google",
 	},
@@ -37,7 +42,9 @@ export default function OrganizersPage() {
 		<>
 			<main className="container py-8">
 				<div className="mb-8">
-					<h1 className="text-3xl font-bold text-foreground mb-2">Organizers</h1>
+					<h1 className="text-3xl font-bold text-foreground mb-2">
+						Organizers
+					</h1>
 					<p className="text-muted-foreground">
 						Explore competitions by organizer institutions
 					</p>

@@ -35,7 +35,9 @@ export function ClaimCompetitionDialog({
 		e.preventDefault();
 		if (!competition) return;
 		// Placeholder: in production would POST to API for organizer verification
-		toast.success("Klaim telah dikirim. Tim kami akan memverifikasi dan menghubungi Anda.");
+		toast.success(
+			"Klaim telah dikirim. Tim kami akan memverifikasi dan menghubungi Anda."
+		);
 		setEmail("");
 		setProof("");
 		onClose();
@@ -58,7 +60,9 @@ export function ClaimCompetitionDialog({
 						Klaim sebagai Penyelenggara
 					</DialogTitle>
 					<DialogDescription>
-						Klaim kompetisi "{competition.title}" jika Anda adalah penyelenggara resmi. Kami akan memverifikasi dan memberi Anda akses mengelola listing.
+						Klaim kompetisi "{competition.title}" jika Anda adalah penyelenggara
+						resmi. Kami akan memverifikasi dan memberi Anda akses mengelola
+						listing.
 					</DialogDescription>
 				</DialogHeader>
 				<form onSubmit={handleSubmit} className="space-y-4">

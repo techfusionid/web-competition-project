@@ -11,7 +11,9 @@ import type { Competition } from "@/types/competition";
 
 export default function BookmarksPage() {
 	const { bookmarks, toggleBookmark } = useBookmarks();
-	const [bookmarkedCompetitions, setBookmarkedCompetitions] = useState<Competition[]>([]);
+	const [bookmarkedCompetitions, setBookmarkedCompetitions] = useState<
+		Competition[]
+	>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
@@ -42,13 +44,17 @@ export default function BookmarksPage() {
 						Saved Competitions
 					</h1>
 					<p className="mt-1 text-sm text-muted-foreground">
-						{isLoading ? "Loading..." : `${bookmarkedCompetitions.length} competition${bookmarkedCompetitions.length !== 1 ? "s" : ""} you've saved`}
+						{isLoading
+							? "Loading..."
+							: `${bookmarkedCompetitions.length} competition${bookmarkedCompetitions.length !== 1 ? "s" : ""} you've saved`}
 					</p>
 				</div>
 
 				{isLoading ? (
 					<div className="flex items-center justify-center py-16">
-						<p className="text-muted-foreground">Loading saved competitions...</p>
+						<p className="text-muted-foreground">
+							Loading saved competitions...
+						</p>
 					</div>
 				) : bookmarkedCompetitions.length === 0 ? (
 					<div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-border py-16">
@@ -70,10 +76,7 @@ export default function BookmarksPage() {
 				) : (
 					<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 						{bookmarkedCompetitions.map((competition) => (
-							<CompetitionCard
-								competition={competition}
-								key={competition.id}
-							/>
+							<CompetitionCard competition={competition} key={competition.id} />
 						))}
 					</div>
 				)}

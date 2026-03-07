@@ -1,10 +1,6 @@
 "use client";
 
-import {
-	BookOpen,
-	Info,
-	ArrowUpRight,
-} from "lucide-react";
+import { BookOpen, Info, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -31,7 +27,7 @@ export function Header({ onHomeClick, sticky = false }: HeaderProps = {}) {
 
 	const handleHomeClick = (e: React.MouseEvent) => {
 		// Dispatch custom event to reset all app state
-		window.dispatchEvent(new CustomEvent('reset-app'));
+		window.dispatchEvent(new CustomEvent("reset-app"));
 
 		if (pathname === "/" && onHomeClick) {
 			e.preventDefault();

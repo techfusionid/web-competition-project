@@ -1,24 +1,24 @@
 {
-	"name": "Web Competition",
-	"short_name": "WebComp",
-	"description": "Discover and join web development competitions",
-	"start_url": "/",
-	"display": "standalone",
-	"background_color": "#0a0a0a",
-	"theme_color": "#3b82f6",
-	"orientation": "portrait-primary",
-	"icons": [
-		{
-			"src": "/favicon.svg",
-			"sizes": "any",
-			"type": "image/svg+xml",
-			"purpose": "any maskable"
-		},
-		{
-			"src": "/techfusion.png",
-			"sizes": "512x512",
-			"type": "image/png",
-			"purpose": "any"
-		}
-	]
+  "name": "Web Competition",
+  "short_name": "WebComp",
+  "description": "Discover and join web development competitions",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/techfusion.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
 }

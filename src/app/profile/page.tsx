@@ -12,7 +12,7 @@ export default function ProfilePage() {
 				<Avatar className="h-32 w-32 border-4 border-background shadow-lg">
 					<AvatarImage
 						alt="Agnes Devita Widjaja"
-						src="https://github.com/shadcn.png" 
+						src="https://github.com/shadcn.png"
 					/>
 					<AvatarFallback>AD</AvatarFallback>
 				</Avatar>
@@ -43,13 +43,21 @@ export default function ProfilePage() {
 
 					<div className="flex items-center gap-2 mt-2">
 						{/* Mock Links - only render if exists. For now hardcoding "hasLink" logic */}
-						<Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-foreground">
+						<Button
+							size="icon"
+							variant="ghost"
+							className="h-8 w-8 text-muted-foreground hover:text-foreground"
+						>
 							<Instagram className="h-5 w-5" />
 						</Button>
-						<Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-foreground">
+						<Button
+							size="icon"
+							variant="ghost"
+							className="h-8 w-8 text-muted-foreground hover:text-foreground"
+						>
 							<Linkedin className="h-5 w-5" />
 						</Button>
-                        {/* Example of a missing link: X/Twitter is not rendered if not present */}
+						{/* Example of a missing link: X/Twitter is not rendered if not present */}
 					</div>
 				</div>
 			</div>
@@ -70,13 +78,13 @@ export default function ProfilePage() {
 										</div>
 									</div>
 								</div>
-								
+
 								<div className="flex flex-col justify-center gap-1">
 									<div className="text-sm text-muted-foreground">
 										Sat 28 Mar, 10:00
 									</div>
 									<h3 className="text-lg font-bold">Cafe Cursor Tangerang</h3>
-									
+
 									<div className="flex items-center gap-2 mt-1 mb-2">
 										<div className="flex -space-x-2">
 											<Avatar className="h-6 w-6 border-2 border-background">
@@ -92,9 +100,12 @@ export default function ProfilePage() {
 											By Aurelius Ivan Wijaya & Agnes Devita Widjaja
 										</span>
 									</div>
-									
+
 									<div className="flex items-center gap-2">
-										<Badge variant="secondary" className="bg-zinc-800 text-zinc-300 hover:bg-zinc-700">
+										<Badge
+											variant="secondary"
+											className="bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+										>
 											Madjapahit Styles
 										</Badge>
 									</div>
@@ -116,7 +127,7 @@ export default function ProfilePage() {
 										Scale Your Product And Expertise with AI
 									</div>
 								</div>
-								
+
 								<div className="flex flex-col justify-center gap-1">
 									<div className="text-sm text-muted-foreground">
 										Thu 22 Jan, 18:00
@@ -124,7 +135,7 @@ export default function ProfilePage() {
 									<h3 className="text-lg font-bold">
 										Scale Your Product & Expertise with AI
 									</h3>
-									
+
 									<div className="flex items-center gap-2 mt-1 mb-2">
 										<div className="flex -space-x-2">
 											<Avatar className="h-6 w-6 border-2 border-background">
@@ -135,10 +146,11 @@ export default function ProfilePage() {
 											</Avatar>
 										</div>
 										<span className="line-clamp-1 text-sm text-muted-foreground">
-											By Irvan Putra, Septianus Angga, QuantumByte, Annie Liao & 4 oth...
+											By Irvan Putra, Septianus Angga, QuantumByte, Annie Liao &
+											4 oth...
 										</span>
 									</div>
-									
+
 									<div className="flex items-center gap-1 text-sm text-muted-foreground">
 										<MapPin className="h-3.5 w-3.5" />
 										<span>Wisma Barito Pacific II</span>

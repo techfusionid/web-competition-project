@@ -53,15 +53,15 @@ export const LEVELS: { value: CompetitionLevel; label: string }[] = [
 
 // Mapping from English category names (used in UI) to Indonesian (used in database)
 export const CATEGORY_MAPPING: Record<string, string> = {
-	"Technology": "Teknologi & IT",
-	"Business": "Bisnis & Startup",
-	"Science": "Akademik & Sains",
-	"Design": "Seni & Kreatif",
-	"Writing": "Sastra & Bahasa",
-	"Debate": "Sastra & Bahasa",
-	"Sports": "Olahraga & E-sports",
-	"Art": "Seni & Kreatif",
-	"Social": "Sosial & Lingkungan",
+	Technology: "Teknologi & IT",
+	Business: "Bisnis & Startup",
+	Science: "Akademik & Sains",
+	Design: "Seni & Kreatif",
+	Writing: "Sastra & Bahasa",
+	Debate: "Sastra & Bahasa",
+	Sports: "Olahraga & E-sports",
+	Art: "Seni & Kreatif",
+	Social: "Sosial & Lingkungan",
 };
 
 // Reverse mapping from Indonesian to English

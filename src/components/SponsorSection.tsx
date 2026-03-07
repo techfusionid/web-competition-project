@@ -20,23 +20,28 @@ const tierConfig: Record<
 	{ gradient: string; badge: string }
 > = {
 	platinum: {
-		gradient: "from-gray-200 via-gray-100 to-white dark:from-gray-600 dark:via-gray-500 dark:to-gray-400",
+		gradient:
+			"from-gray-200 via-gray-100 to-white dark:from-gray-600 dark:via-gray-500 dark:to-gray-400",
 		badge: "Platinum",
 	},
 	gold: {
-		gradient: "from-yellow-200 via-yellow-100 to-amber-100 dark:from-yellow-600 dark:via-yellow-500 dark:to-amber-500",
+		gradient:
+			"from-yellow-200 via-yellow-100 to-amber-100 dark:from-yellow-600 dark:via-yellow-500 dark:to-amber-500",
 		badge: "Gold",
 	},
 	silver: {
-		gradient: "from-gray-300 via-gray-200 to-gray-100 dark:from-gray-500 dark:via-gray-400 dark:to-gray-300",
+		gradient:
+			"from-gray-300 via-gray-200 to-gray-100 dark:from-gray-500 dark:via-gray-400 dark:to-gray-300",
 		badge: "Silver",
 	},
 	bronze: {
-		gradient: "from-orange-200 via-orange-100 to-amber-100 dark:from-orange-700 dark:via-orange-600 dark:to-amber-600",
+		gradient:
+			"from-orange-200 via-orange-100 to-amber-100 dark:from-orange-700 dark:via-orange-600 dark:to-amber-600",
 		badge: "Bronze",
 	},
 	partner: {
-		gradient: "from-blue-100 via-blue-50 to-cyan-50 dark:from-blue-900 dark:via-blue-800 dark:to-cyan-900",
+		gradient:
+			"from-blue-100 via-blue-50 to-cyan-50 dark:from-blue-900 dark:via-blue-800 dark:to-cyan-900",
 		badge: "Partner",
 	},
 };
@@ -112,9 +117,9 @@ export function SponsorSection({
 
 	if (variant === "minimal") {
 		return (
-		<section className="py-8 border-t border-border">
-			<div className="container">
-				<div className="max-w-3xl mx-auto text-center mb-6">
+			<section className="py-8 border-t border-border">
+				<div className="container">
+					<div className="max-w-3xl mx-auto text-center mb-6">
 						<h2 className="text-xl md:text-2xl font-semibold text-foreground mb-3">
 							{title}
 						</h2>
@@ -150,7 +155,8 @@ export function SponsorSection({
 								>
 									{/* Logo */}
 									<div className="h-10 w-full flex items-center justify-center">
-										{sponsor.logo.startsWith("http") || sponsor.logo.startsWith("data:") ? (
+										{sponsor.logo.startsWith("http") ||
+										sponsor.logo.startsWith("data:") ? (
 											<img
 												src={sponsor.logo}
 												alt={sponsor.name}
@@ -176,9 +182,14 @@ export function SponsorSection({
 								</a>
 							))}
 							{/* Empty slots to fill 8 total */}
-							{Array.from({ length: Math.max(0, 8 - sponsors.length) }).map((_, i) => (
-								<div key={`empty-${i}`} className="flex items-center justify-center p-4" />
-							))}
+							{Array.from({ length: Math.max(0, 8 - sponsors.length) }).map(
+								(_, i) => (
+									<div
+										key={`empty-${i}`}
+										className="flex items-center justify-center p-4"
+									/>
+								)
+							)}
 						</div>
 					</div>
 				</div>
@@ -188,85 +199,88 @@ export function SponsorSection({
 
 	if (variant === "compact") {
 		return (
-		<section className="py-8 border-t border-border">
-			<div className="container">
-				<div className="flex items-center justify-between mb-6">
-					<div className="flex-1">
-						<h2 className="text-lg font-semibold text-foreground">{title}</h2>
-						{description && (
-							<p className="text-sm text-muted-foreground">{description}</p>
-						)}
-					</div>
-					<div className="flex items-center gap-2">
-						{sponsorCtaLink && (
-							<Button asChild>
-								<a
-									href={sponsorCtaLink}
-									target="_blank"
-									rel="noopener noreferrer"
+			<section className="py-8 border-t border-border">
+				<div className="container">
+					<div className="flex items-center justify-between mb-6">
+						<div className="flex-1">
+							<h2 className="text-lg font-semibold text-foreground">{title}</h2>
+							{description && (
+								<p className="text-sm text-muted-foreground">{description}</p>
+							)}
+						</div>
+						<div className="flex items-center gap-2">
+							{sponsorCtaLink && (
+								<Button asChild>
+									<a
+										href={sponsorCtaLink}
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										{sponsorCtaText}
+									</a>
+								</Button>
+							)}
+							{dismissible && (
+								<Button
+									onClick={toggleVisibility}
+									variant="ghost"
+									size="icon"
+									className="h-8 w-8 text-muted-foreground hover:text-destructive"
 								>
-									{sponsorCtaText}
-								</a>
-							</Button>
-						)}
-						{dismissible && (
-							<Button
-								onClick={toggleVisibility}
-								variant="ghost"
-								size="icon"
-								className="h-8 w-8 text-muted-foreground hover:text-destructive"
-							>
-								<X className="h-4 w-4" />
-							</Button>
-						)}
+									<X className="h-4 w-4" />
+								</Button>
+							)}
+						</div>
 					</div>
-				</div>
 
-				{/* Table-like grid layout */}
-				<div className="border border-border rounded-lg overflow-hidden bg-card">
-					<div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 divide-x divide-y divide-border">
-						{sponsors.map((sponsor) => (
-							<a
-								key={sponsor.id}
-								href={sponsor.website || "#"}
-								target={sponsor.website ? "_blank" : undefined}
-								rel={sponsor.website ? "noopener noreferrer" : undefined}
-								className="group relative flex flex-col items-center justify-center p-4 hover:bg-muted/50 transition-colors duration-200"
-							>
-								{/* Logo */}
-								<div className="h-10 w-full flex items-center justify-center mb-2">
-									{sponsor.logo.startsWith("http") || sponsor.logo.startsWith("data:") ? (
-										<img
-											src={sponsor.logo}
-											alt={sponsor.name}
-											className="h-8 w-auto max-w-[80px] object-contain group-hover:scale-105 transition-transform duration-200"
-										/>
-									) : (
-										<span className="text-2xl">{sponsor.logo}</span>
-									)}
-								</div>
-
-								{/* Sponsor Name - always visible */}
-								<p className="text-xs font-medium text-foreground text-center line-clamp-1 group-hover:text-primary transition-colors">
-									{sponsor.name}
-								</p>
-
-								{/* Tooltip - CSS hover only */}
-								{sponsor.description && (
-									<div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-50 w-48 p-2 rounded-lg bg-popover text-popover-foreground shadow-lg border border-border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-										<p className="text-xs font-medium text-center">{sponsor.name}</p>
-										<p className="text-xs text-muted-foreground text-center mt-1 line-clamp-2">
-											{sponsor.description}
-										</p>
+					{/* Table-like grid layout */}
+					<div className="border border-border rounded-lg overflow-hidden bg-card">
+						<div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 divide-x divide-y divide-border">
+							{sponsors.map((sponsor) => (
+								<a
+									key={sponsor.id}
+									href={sponsor.website || "#"}
+									target={sponsor.website ? "_blank" : undefined}
+									rel={sponsor.website ? "noopener noreferrer" : undefined}
+									className="group relative flex flex-col items-center justify-center p-4 hover:bg-muted/50 transition-colors duration-200"
+								>
+									{/* Logo */}
+									<div className="h-10 w-full flex items-center justify-center mb-2">
+										{sponsor.logo.startsWith("http") ||
+										sponsor.logo.startsWith("data:") ? (
+											<img
+												src={sponsor.logo}
+												alt={sponsor.name}
+												className="h-8 w-auto max-w-[80px] object-contain group-hover:scale-105 transition-transform duration-200"
+											/>
+										) : (
+											<span className="text-2xl">{sponsor.logo}</span>
+										)}
 									</div>
-								)}
-							</a>
-						))}
+
+									{/* Sponsor Name - always visible */}
+									<p className="text-xs font-medium text-foreground text-center line-clamp-1 group-hover:text-primary transition-colors">
+										{sponsor.name}
+									</p>
+
+									{/* Tooltip - CSS hover only */}
+									{sponsor.description && (
+										<div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-50 w-48 p-2 rounded-lg bg-popover text-popover-foreground shadow-lg border border-border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+											<p className="text-xs font-medium text-center">
+												{sponsor.name}
+											</p>
+											<p className="text-xs text-muted-foreground text-center mt-1 line-clamp-2">
+												{sponsor.description}
+											</p>
+										</div>
+									)}
+								</a>
+							))}
+						</div>
 					</div>
 				</div>
-			</div>
-		</section>
-	);
+			</section>
+		);
 	}
 
 	// Default variant - detailed with tier badges
@@ -306,7 +320,11 @@ export function SponsorSection({
 				</div>
 
 				{/* Group sponsors by tier */}
-				{(["platinum", "gold", "silver", "bronze", "partner"] as Array<"platinum" | "gold" | "silver" | "bronze" | "partner">)
+				{(
+					["platinum", "gold", "silver", "bronze", "partner"] as Array<
+						"platinum" | "gold" | "silver" | "bronze" | "partner"
+					>
+				)
 					.filter((tier) => sponsors.some((s) => s.tier === tier))
 					.map((tier) => {
 						const tierSponsors = sponsors.filter((s) => s.tier === tier);
@@ -315,17 +333,21 @@ export function SponsorSection({
 						return (
 							<div key={tier} className="mb-10 last:mb-0">
 								<div className="flex items-center justify-center gap-3 mb-6">
-									<div className={cn(
-										"h-px w-16 bg-gradient-to-r",
-										config.gradient
-									)} />
+									<div
+										className={cn(
+											"h-px w-16 bg-gradient-to-r",
+											config.gradient
+										)}
+									/>
 									<span className="text-sm font-bold uppercase tracking-wider text-foreground">
 										{config.badge}
 									</span>
-									<div className={cn(
-										"h-px w-16 bg-gradient-to-l",
-										config.gradient
-									)} />
+									<div
+										className={cn(
+											"h-px w-16 bg-gradient-to-l",
+											config.gradient
+										)}
+									/>
 								</div>
 
 								{/* Table-like grid layout */}
@@ -341,19 +363,24 @@ export function SponsorSection({
 												key={sponsor.id}
 												href={sponsor.website || "#"}
 												target={sponsor.website ? "_blank" : undefined}
-												rel={sponsor.website ? "noopener noreferrer" : undefined}
+												rel={
+													sponsor.website ? "noopener noreferrer" : undefined
+												}
 												className="group relative flex flex-col items-center justify-center p-6 md:p-8 hover:bg-muted/50 transition-colors duration-200"
 											>
 												{/* Logo */}
 												<div className="h-16 md:h-20 w-full flex items-center justify-center mb-3">
-													{sponsor.logo.startsWith("http") || sponsor.logo.startsWith("data:") ? (
+													{sponsor.logo.startsWith("http") ||
+													sponsor.logo.startsWith("data:") ? (
 														<img
 															src={sponsor.logo}
 															alt={sponsor.name}
 															className="h-12 md:h-16 w-auto max-w-[120px] object-contain group-hover:scale-105 transition-transform duration-200"
 														/>
 													) : (
-														<span className="text-4xl md:text-5xl">{sponsor.logo}</span>
+														<span className="text-4xl md:text-5xl">
+															{sponsor.logo}
+														</span>
 													)}
 												</div>
 

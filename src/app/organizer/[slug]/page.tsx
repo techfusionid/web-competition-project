@@ -15,7 +15,9 @@ export default function InstitutionDetailPage() {
 	const slug = params.slug as string;
 	const decodedName = slug ? decodeURIComponent(slug) : "";
 	const { isBookmarked, toggleBookmark } = useBookmarks();
-	const [institutionCompetitions, setInstitutionCompetitions] = useState<Competition[]>([]);
+	const [institutionCompetitions, setInstitutionCompetitions] = useState<
+		Competition[]
+	>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
@@ -54,7 +56,11 @@ export default function InstitutionDetailPage() {
 						</h1>
 						<div className="flex items-center gap-1.5 mt-1 text-muted-foreground">
 							<Trophy className="h-4 w-4" />
-							<span>{isLoading ? "Loading..." : `${institutionCompetitions.length} kompetisi`}</span>
+							<span>
+								{isLoading
+									? "Loading..."
+									: `${institutionCompetitions.length} kompetisi`}
+							</span>
 						</div>
 					</div>
 				</div>
@@ -66,10 +72,7 @@ export default function InstitutionDetailPage() {
 				) : institutionCompetitions.length > 0 ? (
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 						{institutionCompetitions.map((competition) => (
-							<CompetitionCard
-								competition={competition}
-								key={competition.id}
-							/>
+							<CompetitionCard competition={competition} key={competition.id} />
 						))}
 					</div>
 				) : (

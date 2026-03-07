@@ -21,7 +21,9 @@ export default withPWA({
 if (process.env.OPENNEXT_DEV || process.env.CF_PAGES) {
 	// Top-level import is required. Dynamic `import` is not allowed in Next.js config.
 	// eslint-disable-next-line @typescript-eslint/no-floating-promises
-	void import("@opennextjs/cloudflare").then(({ initOpenNextCloudflareForDev }) => {
-		initOpenNextCloudflareForDev();
-	});
+	void import("@opennextjs/cloudflare").then(
+		({ initOpenNextCloudflareForDev }) => {
+			initOpenNextCloudflareForDev();
+		}
+	);
 }
