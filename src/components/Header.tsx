@@ -53,13 +53,10 @@ export function Header({ onHomeClick, sticky = false }: HeaderProps = {}) {
 					onClick={handleHomeClick}
 				>
 					<img
-						src="/techfusion.png"
+						src="/logo.svg"
 						alt="Competitions"
-						className="h-7 w-7 rounded-md object-cover"
+						className="h-7 w-auto"
 					/>
-					<span className="text-base font-semibold text-foreground">
-						Competitions
-					</span>
 				</Link>
 
 				<nav className="hidden items-center gap-1 md:flex md:ml-8">

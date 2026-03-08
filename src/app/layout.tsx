@@ -1,6 +1,5 @@
 import { Agentation } from "agentation";
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import { Amplitude } from "@/amplitude";
 import { Footer } from "@/components/Footer";
@@ -9,17 +8,14 @@ import { PostHogProvider } from "@/components/posthog-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
+import { cn } from "@/lib/utils";
 
 const greedStandard = localFont({
 	src: "../fonts/GreedStandard-TRIAL-Regular.otf",
 	variable: "--font-greed-standard",
+	style: "normal",
 	weight: "400",
 	display: "swap",
-});
-
-const geistMono = Geist_Mono({
-	subsets: ["latin"],
-	variable: "--font-geist-mono",
 });
 
 export const metadata: Metadata = {
@@ -74,15 +70,14 @@ export default function RootLayout({
 	children,
 }: Readonly<{ children: React.ReactNode }>) {
 	return (
-		<html lang="en" suppressHydrationWarning>
+		<html lang="en" suppressHydrationWarning className={cn("font-sans", greedStandard.variable)}>
 			<head>
-				<link href="/favicon.svg" rel="icon" type="image/svg+xml"></link>
+				<link href="/favicon.ico" rel="icon" sizes="32x32"></link>
+				<link href="/icon.svg" rel="icon" type="image/svg+xml"></link>
+				<link href="/apple-icon.png" rel="apple-touch-icon" sizes="180x180"></link>
 				<link href="/manifest.json" rel="manifest"></link>
-				<link href="/apple-touch-icon.png" rel="apple-touch-icon"></link>
 			</head>
-			<body
-				className={`${greedStandard.variable} ${geistMono.variable} font-sans antialiased`}
-			>
+			<body className="font-sans antialiased">
 				<Amplitude />
 				<ThemeProvider
 					attribute="class"
