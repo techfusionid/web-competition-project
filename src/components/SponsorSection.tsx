@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { ArrowRight, ExternalLink, X } from "lucide-react";
-import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
 	Tooltip,
@@ -87,7 +87,9 @@ export function SponsorSection({
 
 	// Load visibility state from localStorage (only when dismissible)
 	useEffect(() => {
-		if (!dismissible) return;
+		if (!dismissible) {
+			return;
+		}
 
 		const stored = localStorage.getItem(fullStorageKey);
 		if (stored !== null) {
@@ -97,7 +99,9 @@ export function SponsorSection({
 
 	// Save visibility state to localStorage (only when dismissible)
 	const toggleVisibility = () => {
-		if (!dismissible) return;
+		if (!dismissible) {
+			return;
+		}
 
 		const newValue = !isVisible;
 		setIsVisible(newValue);
@@ -109,10 +113,10 @@ export function SponsorSection({
 			<div className="container py-8">
 				<div className="flex items-center justify-center">
 					<Button
-						onClick={toggleVisibility}
-						variant="outline"
-						size="sm"
 						className="text-muted-foreground hover:text-foreground"
+						onClick={toggleVisibility}
+						size="sm"
+						variant="outline"
 					>
 						Show Sponsors
 					</Button>
@@ -124,19 +128,19 @@ export function SponsorSection({
 	// Common tooltip content component
 	const SponsorTooltip = ({ sponsor }: { sponsor: Sponsor }) => (
 		<TooltipContent
+			arrowClassName="bg-slate-900 dark:bg-slate-50 fill-slate-900 dark:fill-slate-50 border-r border-b border-slate-700 dark:border-slate-200"
+			className="fade-in-0 zoom-in-95 max-w-48 animate-in rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white shadow-xl backdrop-blur-sm dark:border-slate-200 dark:bg-slate-50 dark:text-slate-900"
 			side="bottom"
 			sideOffset={8}
-			className="bg-slate-900 dark:bg-slate-50 backdrop-blur-sm text-white dark:text-slate-900 border border-slate-700 dark:border-slate-200 shadow-xl rounded-lg px-3 py-2 max-w-48 animate-in fade-in-0 zoom-in-95"
-			arrowClassName="bg-slate-900 dark:bg-slate-50 fill-slate-900 dark:fill-slate-50 border-r border-b border-slate-700 dark:border-slate-200"
 		>
-			<p className="text-sm font-medium text-center">{sponsor.name}</p>
+			<p className="text-center font-medium text-sm">{sponsor.name}</p>
 			{sponsor.description && (
-				<p className="text-xs text-slate-300 dark:text-slate-600 mt-1 line-clamp-2 text-center">
+				<p className="mt-1 line-clamp-2 text-center text-slate-300 text-xs dark:text-slate-600">
 					{sponsor.description}
 				</p>
 			)}
 			{sponsor.website && (
-				<span className="text-xs text-sky-400 dark:text-sky-600 inline-flex items-center gap-1 justify-center mt-1.5 w-full">
+				<span className="mt-1.5 inline-flex w-full items-center justify-center gap-1 text-sky-400 text-xs dark:text-sky-600">
 					Visit <ExternalLink className="h-3 w-3" />
 				</span>
 			)}
@@ -146,19 +150,19 @@ export function SponsorSection({
 	const content = (() => {
 		if (variant === "minimal") {
 			return (
-				<section className="py-8 border-t border-border">
+				<section className="border-border border-t py-8">
 					<div className="container">
-						<div className="max-w-3xl mx-auto text-center mb-6">
-							<h2 className="text-xl md:text-2xl font-semibold text-foreground mb-3">
+						<div className="mx-auto mb-6 max-w-3xl text-center">
+							<h2 className="mb-3 font-semibold text-foreground text-xl md:text-2xl">
 								{title}
 							</h2>
 							{description && (
-								<p className="text-sm text-muted-foreground mb-5">
+								<p className="mb-5 text-muted-foreground text-sm">
 									{description}
 								</p>
 							)}
 							{sponsorCtaLink && (
-								<Button variant="outline" asChild>
+								<Button asChild variant="outline">
 									<Link href={sponsorCtaLink}>
 										{sponsorCtaText}
 										<ArrowRight className="ml-2 h-4 w-4" />
@@ -168,28 +172,28 @@ export function SponsorSection({
 						</div>
 
 						{/* Table-like grid layout - 4 columns x 2 rows */}
-						<div className="border border-border rounded-lg bg-card max-w-4xl mx-auto overflow-visible">
+						<div className="mx-auto max-w-4xl overflow-visible rounded-lg border border-border bg-card">
 							<div className="grid grid-cols-4 grid-rows-2 divide-x divide-y divide-border">
 								{/* Render sponsors */}
 								{sponsors.slice(0, 8).map((sponsor) => (
 									<Tooltip key={sponsor.id}>
 										<TooltipTrigger asChild>
 											<a
+												className="group flex flex-col items-center justify-center p-4 transition-colors duration-200 hover:bg-muted/50"
 												href={sponsor.website || "#"}
-												target={sponsor.website ? "_blank" : undefined}
 												rel={
 													sponsor.website ? "noopener noreferrer" : undefined
 												}
-												className="group flex flex-col items-center justify-center p-4 hover:bg-muted/50 transition-colors duration-200"
+												target={sponsor.website ? "_blank" : undefined}
 											>
 												{/* Logo */}
-												<div className="h-10 w-full flex items-center justify-center">
+												<div className="flex h-10 w-full items-center justify-center">
 													{sponsor.logo.startsWith("http") ||
 													sponsor.logo.startsWith("data:") ? (
 														<img
-															src={sponsor.logo}
 															alt={sponsor.name}
-															className="h-8 w-auto max-w-[60px] object-contain group-hover:scale-105 transition-transform duration-200"
+															className="h-8 w-auto max-w-[60px] object-contain transition-transform duration-200 group-hover:scale-105"
+															src={sponsor.logo}
 														/>
 													) : (
 														<span className="text-2xl">{sponsor.logo}</span>
@@ -204,8 +208,8 @@ export function SponsorSection({
 								{Array.from({ length: Math.max(0, 8 - sponsors.length) }).map(
 									(_, i) => (
 										<div
-											key={`empty-${i}`}
 											className="flex items-center justify-center p-4"
+											key={`empty-${i}`}
 										/>
 									)
 								)}
@@ -218,20 +222,20 @@ export function SponsorSection({
 
 		if (variant === "compact") {
 			return (
-				<section className="py-8 border-t border-border">
+				<section className="border-border border-t py-8">
 					<div className="container">
-						<div className="flex items-center justify-between mb-6">
+						<div className="mb-6 flex items-center justify-between">
 							<div className="flex-1">
-								<h2 className="text-lg font-semibold text-foreground">
+								<h2 className="font-semibold text-foreground text-lg">
 									{title}
 								</h2>
 								{description && (
-									<p className="text-sm text-muted-foreground">{description}</p>
+									<p className="text-muted-foreground text-sm">{description}</p>
 								)}
 							</div>
 							<div className="flex items-center gap-2">
 								{sponsorCtaLink && (
-									<Button variant="outline" asChild>
+									<Button asChild variant="outline">
 										<Link href={sponsorCtaLink}>
 											{sponsorCtaText}
 											<ArrowRight className="ml-2 h-4 w-4" />
@@ -240,10 +244,10 @@ export function SponsorSection({
 								)}
 								{dismissible && (
 									<Button
-										onClick={toggleVisibility}
-										variant="ghost"
-										size="icon"
 										className="h-8 w-8 text-muted-foreground hover:text-destructive"
+										onClick={toggleVisibility}
+										size="icon"
+										variant="ghost"
 									>
 										<X className="h-4 w-4" />
 									</Button>
@@ -252,27 +256,27 @@ export function SponsorSection({
 						</div>
 
 						{/* Table-like grid layout */}
-						<div className="border border-border rounded-lg bg-card">
-							<div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 divide-x divide-y divide-border">
+						<div className="rounded-lg border border-border bg-card">
+							<div className="grid grid-cols-3 divide-x divide-y divide-border sm:grid-cols-4 md:grid-cols-6">
 								{sponsors.map((sponsor) => (
 									<Tooltip key={sponsor.id}>
 										<TooltipTrigger asChild>
 											<a
+												className="group flex flex-col items-center justify-center p-4 transition-colors duration-200 hover:bg-muted/50"
 												href={sponsor.website || "#"}
-												target={sponsor.website ? "_blank" : undefined}
 												rel={
 													sponsor.website ? "noopener noreferrer" : undefined
 												}
-												className="group flex flex-col items-center justify-center p-4 hover:bg-muted/50 transition-colors duration-200"
+												target={sponsor.website ? "_blank" : undefined}
 											>
 												{/* Logo */}
-												<div className="h-10 w-full flex items-center justify-center mb-2">
+												<div className="mb-2 flex h-10 w-full items-center justify-center">
 													{sponsor.logo.startsWith("http") ||
 													sponsor.logo.startsWith("data:") ? (
 														<img
-															src={sponsor.logo}
 															alt={sponsor.name}
-															className="h-8 w-auto max-w-[80px] object-contain group-hover:scale-105 transition-transform duration-200"
+															className="h-8 w-auto max-w-[80px] object-contain transition-transform duration-200 group-hover:scale-105"
+															src={sponsor.logo}
 														/>
 													) : (
 														<span className="text-2xl">{sponsor.logo}</span>
@@ -280,7 +284,7 @@ export function SponsorSection({
 												</div>
 
 												{/* Sponsor Name - always visible */}
-												<p className="text-xs font-medium text-foreground text-center line-clamp-1 group-hover:text-primary transition-colors">
+												<p className="line-clamp-1 text-center font-medium text-foreground text-xs transition-colors group-hover:text-primary">
 													{sponsor.name}
 												</p>
 											</a>
@@ -299,18 +303,18 @@ export function SponsorSection({
 
 		// Default variant - detailed with tier badges
 		return (
-			<section className="py-16 border-t border-border">
+			<section className="border-border border-t py-16">
 				<div className="container">
-					<div className="flex flex-col items-center mb-10">
+					<div className="mb-10 flex flex-col items-center">
 						<div className="text-center">
-							<h2 className="text-2xl font-bold text-foreground">{title}</h2>
+							<h2 className="font-bold text-2xl text-foreground">{title}</h2>
 							{description && (
-								<p className="text-muted-foreground mt-2">{description}</p>
+								<p className="mt-2 text-muted-foreground">{description}</p>
 							)}
 						</div>
-						<div className="flex items-center gap-3 mt-4">
+						<div className="mt-4 flex items-center gap-3">
 							{sponsorCtaLink && (
-								<Button variant="outline" asChild>
+								<Button asChild variant="outline">
 									<Link href={sponsorCtaLink}>
 										{sponsorCtaText}
 										<ArrowRight className="ml-2 h-4 w-4" />
@@ -319,10 +323,10 @@ export function SponsorSection({
 							)}
 							{dismissible && (
 								<Button
-									onClick={toggleVisibility}
-									variant="ghost"
-									size="icon"
 									className="h-8 w-8 text-muted-foreground hover:text-destructive"
+									onClick={toggleVisibility}
+									size="icon"
+									variant="ghost"
 								>
 									<X className="h-4 w-4" />
 								</Button>
@@ -342,15 +346,15 @@ export function SponsorSection({
 							const config = tierConfig[tier];
 
 							return (
-								<div key={tier} className="mb-10 last:mb-0">
-									<div className="flex items-center justify-center gap-3 mb-6">
+								<div className="mb-10 last:mb-0" key={tier}>
+									<div className="mb-6 flex items-center justify-center gap-3">
 										<div
 											className={cn(
 												"h-px w-16 bg-gradient-to-r",
 												config.gradient
 											)}
 										/>
-										<span className="text-sm font-bold uppercase tracking-wider text-foreground">
+										<span className="font-bold text-foreground text-sm uppercase tracking-wider">
 											{config.badge}
 										</span>
 										<div
@@ -362,7 +366,7 @@ export function SponsorSection({
 									</div>
 
 									{/* Table-like grid layout */}
-									<div className="border border-border rounded-lg bg-card">
+									<div className="rounded-lg border border-border bg-card">
 										<div
 											className="grid divide-x divide-y divide-border bg-card"
 											style={{
@@ -373,23 +377,23 @@ export function SponsorSection({
 												<Tooltip key={sponsor.id}>
 													<TooltipTrigger asChild>
 														<a
+															className="group flex flex-col items-center justify-center p-6 transition-colors duration-200 hover:bg-muted/50 md:p-8"
 															href={sponsor.website || "#"}
-															target={sponsor.website ? "_blank" : undefined}
 															rel={
 																sponsor.website
 																	? "noopener noreferrer"
 																	: undefined
 															}
-															className="group flex flex-col items-center justify-center p-6 md:p-8 hover:bg-muted/50 transition-colors duration-200"
+															target={sponsor.website ? "_blank" : undefined}
 														>
 															{/* Logo */}
-															<div className="h-16 md:h-20 w-full flex items-center justify-center mb-3">
+															<div className="mb-3 flex h-16 w-full items-center justify-center md:h-20">
 																{sponsor.logo.startsWith("http") ||
 																sponsor.logo.startsWith("data:") ? (
 																	<img
-																		src={sponsor.logo}
 																		alt={sponsor.name}
-																		className="h-12 md:h-16 w-auto max-w-[120px] object-contain group-hover:scale-105 transition-transform duration-200"
+																		className="h-12 w-auto max-w-[120px] object-contain transition-transform duration-200 group-hover:scale-105 md:h-16"
+																		src={sponsor.logo}
 																	/>
 																) : (
 																	<span className="text-4xl md:text-5xl">
@@ -399,13 +403,13 @@ export function SponsorSection({
 															</div>
 
 															{/* Sponsor Name - always visible */}
-															<p className="text-sm md:text-base font-semibold text-foreground text-center group-hover:text-primary transition-colors">
+															<p className="text-center font-semibold text-foreground text-sm transition-colors group-hover:text-primary md:text-base">
 																{sponsor.name}
 															</p>
 
 															{/* External link indicator */}
 															{sponsor.website && (
-																<ExternalLink className="h-3.5 w-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-200 mt-1" />
+																<ExternalLink className="mt-1 h-3.5 w-3.5 text-muted-foreground opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
 															)}
 														</a>
 													</TooltipTrigger>

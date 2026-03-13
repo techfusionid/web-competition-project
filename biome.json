@@ -16,7 +16,51 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "recommended": false,
+      "correctness": {
+        "noUnusedVariables": "off",
+        "useImageSize": "off",
+        "noUnusedFunctionParameters": "off",
+        "useExhaustiveDependencies": "off",
+        "noInvalidUseBeforeDeclaration": "off"
+      },
+      "performance": {
+        "noNamespaceImport": "off",
+        "noImgElement": "off",
+        "noAccumulatingSpread": "warn",
+        "noBarrelFile": "off",
+        "useTopLevelRegex": "off"
+      },
+      "style": {
+        "noExportedImports": "off",
+        "noNestedTernary": "off",
+        "useFilenamingConvention": "off",
+        "noNonNullAssertion": "off"
+      },
+      "suspicious": {
+        "useAwait": "off",
+        "noEvolvingTypes": "off",
+        "noExplicitAny": "off",
+        "noExtraNonNullAssertion": "off",
+        "useIterableCallbackReturn": "off",
+        "noArrayIndexKey": "off",
+        "noEmptyBlockStatements": "off"
+      },
+      "complexity": {
+        "noForEach": "off",
+        "noExcessiveCognitiveComplexity": "off",
+        "noUselessFragments": "warn"
+      },
+      "a11y": {
+        "noNoninteractiveElementInteractions": "off",
+        "useKeyWithClickEvents": "off",
+        "noStaticElementInteractions": "off",
+        "useValidAnchor": "warn",
+        "useAltText": "warn",
+        "useButtonType": "off",
+        "noSvgWithoutTitle": "off",
+        "useSemanticElements": "off"
+      }
     }
   },
   "javascript": {

@@ -20,7 +20,7 @@ export function SearchBar({
 	return (
 		<div className="flex items-center gap-2 rounded-lg border border-border bg-card p-1.5">
 			<div className="relative flex-1">
-				<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+				<Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 				<Input
 					className="h-9 border-0 bg-transparent pl-9 text-sm shadow-none focus-visible:ring-0"
 					onChange={(e) => onChange(e.target.value)}

@@ -1,6 +1,5 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { format } from "date-fns";
-import Image from "next/image";
 import {
 	BadgeCheck,
 	Calendar,
@@ -13,6 +12,7 @@ import {
 	Users,
 	X,
 } from "lucide-react";
+import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -96,7 +96,9 @@ export function CompetitionDialog({
 
 	// Keyboard navigation (arrows: left/previous, right/next)
 	useEffect(() => {
-		if (!isOpen) return;
+		if (!isOpen) {
+			return;
+		}
 
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if (e.key === "ArrowLeft" && hasPrevious) {
@@ -126,13 +128,17 @@ export function CompetitionDialog({
 	}, []);
 
 	const onTouchEnd = useCallback(() => {
-		if (!touchStart || !touchEnd) return;
+		if (!(touchStart && touchEnd)) {
+			return;
+		}
 
 		const dx = touchStart.x - touchEnd.x;
 		const dy = touchStart.y - touchEnd.y;
 
 		// If user is scrolling vertically, don't treat it as a swipe
-		if (Math.abs(dx) <= Math.abs(dy)) return;
+		if (Math.abs(dx) <= Math.abs(dy)) {
+			return;
+		}
 
 		const isLeftSwipe = dx > minSwipeDistance;
 		const isRightSwipe = dx < -minSwipeDistance;
@@ -142,18 +148,12 @@ export function CompetitionDialog({
 		} else if (isRightSwipe && hasPrevious) {
 			onPrevious();
 		}
-	}, [
-		touchStart,
-		touchEnd,
-		minSwipeDistance,
-		hasNext,
-		hasPrevious,
-		onNext,
-		onPrevious,
-	]);
+	}, [touchStart, touchEnd, hasNext, hasPrevious, onNext, onPrevious]);
 
 	const handleShare = useCallback(async () => {
-		if (!shareData) return;
+		if (!shareData) {
+			return;
+		}
 
 		try {
 			if (navigator.share) {
@@ -162,12 +162,14 @@ export function CompetitionDialog({
 				await navigator.clipboard.writeText(shareData.url);
 				toast.success("Link copied successfully!");
 			}
-		} catch (err) {
+		} catch (_err) {
 			// User cancelled sharing
 		}
 	}, [shareData]);
 
-	if (!competition) return null;
+	if (!competition) {
+		return null;
+	}
 
 	return (
 		<Dialog onOpenChange={(open) => !open && onClose()} open={isOpen}>
@@ -176,7 +178,7 @@ export function CompetitionDialog({
 
 				<DialogPrimitive.Content
 					className={
-						"fixed left-1/2 top-1/2 z-50 w-[92vw] max-w-[340px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-xl border bg-background p-0 shadow-lg md:max-w-2xl md:w-full"
+						"fixed top-1/2 left-1/2 z-50 w-[92vw] max-w-[340px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-xl border bg-background p-0 shadow-lg md:w-full md:max-w-2xl"
 					}
 					ref={contentRef}
 				>
@@ -200,7 +202,7 @@ export function CompetitionDialog({
 
 					{/* Top-left: left/right arrows to switch competition */}
 					{hasPrevious || hasNext ? (
-						<div className="absolute left-2 top-2 z-10 flex items-center gap-1 max-w-[calc(100%-6rem)]">
+						<div className="absolute top-2 left-2 z-10 flex max-w-[calc(100%-6rem)] items-center gap-1">
 							{hasPrevious && (
 								<Tooltip>
 									<TooltipTrigger asChild>
@@ -237,7 +239,7 @@ export function CompetitionDialog({
 					) : null}
 
 					{/* Top-right: Share button */}
-					<div className="absolute right-2 top-14 z-10 md:top-2">
+					<div className="absolute top-14 right-2 z-10 md:top-2">
 						<Tooltip>
 							<TooltipTrigger asChild>
 								<Button
@@ -258,7 +260,7 @@ export function CompetitionDialog({
 					<div className="max-h-[90vh] overflow-y-auto overscroll-contain [webkit-overflow-scrolling:touch] md:max-h-[80vh]">
 						{/* Poster Image - 3:4 on mobile, 16:9 on desktop */}
 						<div
-							className="relative aspect-[3/4] md:aspect-[16/9] w-full overflow-hidden bg-secondary"
+							className="relative aspect-[3/4] w-full overflow-hidden bg-secondary md:aspect-[16/9]"
 							onTouchEnd={onTouchEnd}
 							onTouchMove={onTouchMove}
 							onTouchStart={onTouchStart}
@@ -267,21 +269,21 @@ export function CompetitionDialog({
 								<Image
 									alt={competition.title}
 									className="object-cover"
-									src={competition.imageUrl}
 									fill
-									sizes="(max-width: 640px) 92vw, (max-width: 768px) 340px, 48rem"
 									priority
+									sizes="(max-width: 640px) 92vw, (max-width: 768px) 340px, 48rem"
+									src={competition.imageUrl}
 								/>
 							) : (
 								<div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5">
-									<span className="text-3xl md:text-6xl font-bold text-primary/30">
+									<span className="font-bold text-3xl text-primary/30 md:text-6xl">
 										{competition.title.charAt(0)}
 									</span>
 								</div>
 							)}
 
 							{/* Swipe Indicator for Mobile */}
-							<div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 text-[10px] text-white/70 bg-black/40 px-2 py-1 rounded-full md:hidden">
+							<div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-black/40 px-2 py-1 text-[10px] text-white/70 md:hidden">
 								<ChevronLeft className="h-3 w-3" />
 								<span>Swipe to navigate</span>
 								<ChevronRight className="h-3 w-3" />
@@ -293,29 +295,29 @@ export function CompetitionDialog({
 							{/* Header */}
 							<div className="space-y-1">
 								<div className="flex items-start justify-between gap-2">
-									<h2 className="text-sm md:text-lg font-semibold text-foreground leading-tight">
+									<h2 className="font-semibold text-foreground text-sm leading-tight md:text-lg">
 										{competition.title}
 									</h2>
 								</div>
-								<p className="text-[11px] md:text-sm text-muted-foreground">
+								<p className="text-[11px] text-muted-foreground md:text-sm">
 									{competition.organizer}
 								</p>
 							</div>
 
 							{/* Tags */}
 							<div className="flex flex-wrap gap-1 md:gap-1.5">
-								<span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] md:text-xs font-medium text-primary">
+								<span className="rounded-full bg-primary/10 px-2 py-0.5 font-medium text-[10px] text-primary md:text-xs">
 									{competition.category}
 								</span>
 								{competition.level.slice(0, 2).map((l) => (
 									<span
-										className="rounded-full bg-secondary px-2 py-0.5 text-[10px] md:text-xs text-muted-foreground"
+										className="rounded-full bg-secondary px-2 py-0.5 text-[10px] text-muted-foreground md:text-xs"
 										key={l}
 									>
 										{levelLabels[l]}
 									</span>
 								))}
-								<span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] md:text-xs capitalize text-muted-foreground">
+								<span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] text-muted-foreground capitalize md:text-xs">
 									{competition.format}
 								</span>
 							</div>
@@ -349,10 +351,10 @@ export function CompetitionDialog({
 							{/* Prize */}
 							{competition.prize && (
 								<div className="rounded-lg bg-primary/5 p-2.5 md:p-3">
-									<p className="text-[10px] md:text-xs text-muted-foreground">
+									<p className="text-[10px] text-muted-foreground md:text-xs">
 										Prize
 									</p>
-									<p className="text-[11px] md:text-sm font-medium text-foreground">
+									<p className="font-medium text-[11px] text-foreground md:text-sm">
 										{competition.prize}
 									</p>
 								</div>
@@ -360,17 +362,17 @@ export function CompetitionDialog({
 
 							{/* Description */}
 							<div>
-								<p className="text-[10px] md:text-xs font-medium text-muted-foreground mb-1">
+								<p className="mb-1 font-medium text-[10px] text-muted-foreground md:text-xs">
 									Description
 								</p>
-								<p className="text-[11px] md:text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
+								<p className="whitespace-pre-wrap text-[11px] text-muted-foreground leading-relaxed md:text-sm">
 									{competition.description}
 								</p>
 							</div>
 
 							{/* CTA Button */}
 							<a
-								className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2 md:py-2.5 text-[11px] md:text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+								className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2 font-medium text-[11px] text-primary-foreground transition-colors hover:bg-primary/90 md:py-2.5 md:text-sm"
 								href={competition.registrationUrl}
 								rel="noopener noreferrer"
 								target="_blank"
@@ -382,7 +384,7 @@ export function CompetitionDialog({
 							{/* Report & Claim */}
 							<div className="flex gap-2 pt-1">
 								<Button
-									className="flex-1 gap-1.5 text-muted-foreground text-[11px] md:text-sm"
+									className="flex-1 gap-1.5 text-[11px] text-muted-foreground md:text-sm"
 									onClick={() => setShowReport(true)}
 									size="sm"
 									variant="outline"
@@ -391,7 +393,7 @@ export function CompetitionDialog({
 									Report
 								</Button>
 								<Button
-									className="flex-1 gap-1.5 text-muted-foreground text-[11px] md:text-sm"
+									className="flex-1 gap-1.5 text-[11px] text-muted-foreground md:text-sm"
 									onClick={() => setShowClaim(true)}
 									size="sm"
 									variant="outline"

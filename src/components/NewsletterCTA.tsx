@@ -1,4 +1,4 @@
-import { Star, Users } from "lucide-react";
+import { Star } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -49,7 +49,7 @@ export function NewsletterCTA() {
 					value={email}
 				/>
 				<Button
-					className="h-11 rounded-l-none px-5 text-sm font-medium"
+					className="h-11 rounded-l-none px-5 font-medium text-sm"
 					disabled={isLoading}
 					type="submit"
 				>
@@ -57,7 +57,7 @@ export function NewsletterCTA() {
 				</Button>
 			</form>
 
-			<div className="mt-4 flex items-center justify-center gap-6 text-sm text-muted-foreground">
+			<div className="mt-4 flex items-center justify-center gap-6 text-muted-foreground text-sm">
 				<div className="flex items-center gap-1.5">
 					<div className="flex -space-x-2">
 						<div className="h-6 w-6 rounded-full border-2 border-background bg-secondary" />
@@ -65,7 +65,7 @@ export function NewsletterCTA() {
 						<div className="h-6 w-6 rounded-full border-2 border-background bg-secondary" />
 					</div>
 					<div className="flex items-center gap-0.5 text-warning">
-						{[...Array(5)].map((_, i) => (
+						{[...new Array(5)].map((_, i) => (
 							<Star className="h-3 w-3 fill-current" key={i} />
 						))}
 					</div>

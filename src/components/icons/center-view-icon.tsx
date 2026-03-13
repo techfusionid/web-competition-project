@@ -3,9 +3,9 @@ import type { SVGProps } from "react";
 export function CenterViewIcon(props: SVGProps<SVGSVGElement>) {
 	return (
 		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			viewBox="0 0 20 20"
 			fill="currentColor"
+			viewBox="0 0 20 20"
+			xmlns="http://www.w3.org/2000/svg"
 			{...props}
 		>
 			<path d="M5.93 7.125a.5.5 0 0 0-.5.5v4.75a.5.5 0 0 0 .5.5h8.145a.5.5 0 0 0 .5-.5v-4.75a.5.5 0 0 0-.5-.5z" />

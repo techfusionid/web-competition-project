@@ -3,9 +3,9 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { fetchCompetitions } from "@/app/actions/competitions";
 import { CompetitionDialog } from "@/components/CompetitionDialog";
 import { Button } from "@/components/ui/button";
-import { fetchCompetitions } from "@/app/actions/competitions";
 import type { Competition } from "@/types/competition";
 
 interface Card {
@@ -61,7 +61,7 @@ function CardContent({
 }) {
 	return (
 		<div
-			className="relative flex flex-col rounded-xl border border-border bg-card shadow-lg overflow-hidden h-[320px]"
+			className="relative flex h-[320px] flex-col overflow-hidden rounded-xl border border-border bg-card shadow-lg"
 			onClick={onViewClick}
 		>
 			<div className="relative h-40 w-full overflow-hidden">
@@ -73,7 +73,7 @@ function CardContent({
 					/>
 				) : (
 					<div className="flex h-full w-full items-center justify-center bg-linear-to-br from-primary/20 to-primary/5">
-						<span className="text-4xl font-bold text-primary/30">
+						<span className="font-bold text-4xl text-primary/30">
 							{competition.title.charAt(0)}
 						</span>
 					</div>
@@ -83,16 +83,16 @@ function CardContent({
 
 			<div className="flex flex-1 flex-col justify-between p-4">
 				<div className="space-y-1">
-					<h3 className="font-bold text-foreground text-lg line-clamp-2">
+					<h3 className="line-clamp-2 font-bold text-foreground text-lg">
 						{competition.title}
 					</h3>
-					<p className="text-sm text-muted-foreground line-clamp-2">
+					<p className="line-clamp-2 text-muted-foreground text-sm">
 						{competition.organizer}
 					</p>
 				</div>
 
 				<div className="flex items-center justify-between">
-					<span className="text-xs text-primary font-medium">
+					<span className="font-medium text-primary text-xs">
 						{competition.category}
 					</span>
 					<Button
@@ -179,7 +179,9 @@ export default function AnimatedCardStack() {
 	}, []);
 
 	const handleSpin = useCallback(() => {
-		if (isSpinning || allCompetitions.length === 0) return;
+		if (isSpinning || allCompetitions.length === 0) {
+			return;
+		}
 		setIsSpinning(true);
 
 		// Spin configuration - random number of spins between 10-18
@@ -196,7 +198,7 @@ export default function AnimatedCardStack() {
 
 			// Calculate delay - starts fast (40ms), ends slow (500ms)
 			const progress = currentSpin / totalSpins;
-			const easeOut = 1 - Math.pow(1 - progress, 3);
+			const easeOut = 1 - (1 - progress) ** 3;
 			const delay = 40 + easeOut * 460;
 
 			// Update transition speed based on progress
@@ -232,7 +234,7 @@ export default function AnimatedCardStack() {
 		return (
 			<div className="flex flex-col items-center justify-center gap-4 py-16">
 				<Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-				<p className="text-sm text-muted-foreground">Loading competitions...</p>
+				<p className="text-muted-foreground text-sm">Loading competitions...</p>
 			</div>
 		);
 	}
@@ -240,7 +242,7 @@ export default function AnimatedCardStack() {
 	if (allCompetitions.length === 0) {
 		return (
 			<div className="flex flex-col items-center justify-center gap-4 py-16">
-				<p className="text-sm text-muted-foreground">
+				<p className="text-muted-foreground text-sm">
 					No competitions available
 				</p>
 			</div>
@@ -268,7 +270,7 @@ export default function AnimatedCardStack() {
 
 			<div className="flex flex-col items-center gap-4">
 				<Button
-					className="px-8 gap-2"
+					className="gap-2 px-8"
 					disabled={isSpinning}
 					onClick={handleSpin}
 					size="lg"
@@ -282,7 +284,7 @@ export default function AnimatedCardStack() {
 						<>🎲 Randomize Competition</>
 					)}
 				</Button>
-				<p className="text-sm text-muted-foreground">
+				<p className="text-muted-foreground text-sm">
 					{isSpinning
 						? "Searching for competitions for you..."
 						: "Click to find competitions randomly"}

@@ -32,17 +32,17 @@ export function CompetitionCard({
 	return (
 		<>
 			<div
-				className="group relative flex cursor-pointer flex-col rounded-lg border border-border ring-6 ring-background ring-inset bg-secondary/15 p-3 md:p-4 transition-all hover:border-primary/50 min-h-[200px]"
+				className="group relative flex min-h-[200px] cursor-pointer flex-col rounded-lg border border-border bg-secondary/15 p-3 ring-6 ring-background ring-inset transition-all hover:border-primary/50 md:p-4"
 				onClick={onClick}
 			>
 				{/* Header - Title, Organizer, Status (default), Share */}
 				<div className="flex items-start justify-between gap-2">
 					<div className="min-w-0 flex-1">
-						<h3 className="truncate text-base md:text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+						<h3 className="truncate font-semibold text-base text-foreground transition-colors group-hover:text-primary md:text-lg">
 							{competition.title}
 						</h3>
 						<button
-							className="truncate text-xs md:text-sm text-muted-foreground hover:text-primary text-left w-full"
+							className="w-full truncate text-left text-muted-foreground text-xs hover:text-primary md:text-sm"
 							onClick={(e) => {
 								e.stopPropagation();
 								onOrganizerClick?.(competition.organizer);
@@ -51,9 +51,9 @@ export function CompetitionCard({
 							{competition.organizer}
 						</button>
 					</div>
-					<div className="flex shrink-0 items-center gap-1 ">
+					<div className="flex shrink-0 items-center gap-1">
 						<Button
-							className="h-7 w-7 md:h-8 md:w-8 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+							className="h-7 w-7 shrink-0 opacity-0 transition-opacity group-hover:opacity-100 md:h-8 md:w-8"
 							onClick={(e) => {
 								e.stopPropagation();
 								setShowShare(true);
@@ -67,17 +67,17 @@ export function CompetitionCard({
 				</div>
 
 				{/* Content Area */}
-				<div className="mt-2 md:mt-3 relative min-h-[64px] md:min-h-[72px]">
+				<div className="relative mt-2 min-h-[64px] md:mt-3 md:min-h-[72px]">
 					{/* Default: Description. Hidden on hover (desktop); on touch (hover:none) hidden so meta shows below */}
-					<div className="absolute inset-0 opacity-100 group-hover:opacity-0 transition-opacity duration-200 [@media(hover:none)]:opacity-0">
-						<p className="text-xs md:text-sm text-muted-foreground leading-relaxed line-clamp-2">
+					<div className="absolute inset-0 opacity-100 transition-opacity duration-200 group-hover:opacity-0 [@media(hover:none)]:opacity-0">
+						<p className="line-clamp-2 text-muted-foreground text-xs leading-relaxed md:text-sm">
 							{competition.description}
 						</p>
 					</div>
 
 					{/* Hover: deadline, category, format, status. On touch (hover:none) always visible */}
-					<div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col justify-center gap-2 [@media(hover:none)]:opacity-100">
-						<div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] md:text-xs text-foreground">
+					<div className="absolute inset-0 flex flex-col justify-center gap-2 opacity-0 transition-opacity duration-200 group-hover:opacity-100 [@media(hover:none)]:opacity-100">
+						<div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] text-foreground md:text-xs">
 							<div className="flex items-center gap-1">
 								<Calendar className="h-3 w-3 md:h-3.5 md:w-3.5" />
 								<span className="font-medium">
@@ -86,10 +86,10 @@ export function CompetitionCard({
 							</div>
 						</div>
 						<div className="flex flex-wrap gap-1">
-							<span className="rounded bg-secondary px-2 py-0.5 text-[10px] md:text-xs text-secondary-foreground">
+							<span className="rounded bg-secondary px-2 py-0.5 text-[10px] text-secondary-foreground md:text-xs">
 								{competition.category}
 							</span>
-							<span className="rounded bg-secondary px-2 py-0.5 text-[10px] md:text-xs text-secondary-foreground capitalize">
+							<span className="rounded bg-secondary px-2 py-0.5 text-[10px] text-secondary-foreground capitalize md:text-xs">
 								{formatLabels[competition.format]}
 							</span>
 						</div>

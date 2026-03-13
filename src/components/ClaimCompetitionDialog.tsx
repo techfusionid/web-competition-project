@@ -2,6 +2,7 @@
 
 import { BadgeCheck } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -14,7 +15,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
 import type { Competition } from "@/types/competition";
 
 interface ClaimCompetitionDialogProps {
@@ -33,7 +33,9 @@ export function ClaimCompetitionDialog({
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		if (!competition) return;
+		if (!competition) {
+			return;
+		}
 		// Placeholder: in production would POST to API for organizer verification
 		toast.success(
 			"Klaim telah dikirim. Tim kami akan memverifikasi dan menghubungi Anda."
@@ -49,7 +51,9 @@ export function ClaimCompetitionDialog({
 		onClose();
 	};
 
-	if (!competition) return null;
+	if (!competition) {
+		return null;
+	}
 
 	return (
 		<Dialog onOpenChange={(open) => !open && handleClose()} open={isOpen}>
@@ -65,7 +69,7 @@ export function ClaimCompetitionDialog({
 						listing.
 					</DialogDescription>
 				</DialogHeader>
-				<form onSubmit={handleSubmit} className="space-y-4">
+				<form className="space-y-4" onSubmit={handleSubmit}>
 					<div className="space-y-2">
 						<Label htmlFor="claim-email">Email institusi / organisasi</Label>
 						<Input
@@ -89,7 +93,7 @@ export function ClaimCompetitionDialog({
 						/>
 					</div>
 					<DialogFooter>
-						<Button type="button" variant="outline" onClick={handleClose}>
+						<Button onClick={handleClose} type="button" variant="outline">
 							Batal
 						</Button>
 						<Button type="submit">Kirim Klaim</Button>

@@ -2,11 +2,11 @@
 
 import { Building2, Trophy } from "lucide-react";
 import Link from "next/link";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { fetchAllOrganizers } from "@/app/actions/competitions";
-import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import { fetchAllOrganizers } from "@/app/actions/competitions";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 interface Institution {
 	name: string;
@@ -54,41 +54,41 @@ export function OrganizerSection({
 				{(title || description) && (
 					<div className="flex items-center justify-between">
 						<div>
-							{title && <h2 className="text-lg font-semibold">{title}</h2>}
+							{title && <h2 className="font-semibold text-lg">{title}</h2>}
 							{description && (
-								<p className="text-sm text-muted-foreground">{description}</p>
+								<p className="text-muted-foreground text-sm">{description}</p>
 							)}
 						</div>
 						<Link
+							className="text-primary text-sm hover:underline"
 							href="/organizer"
-							className="text-sm text-primary hover:underline"
 						>
 							View all
 						</Link>
 					</div>
 				)}
 				{isLoading ? (
-					<div className="text-center py-8">
-						<p className="text-sm text-muted-foreground">
+					<div className="py-8 text-center">
+						<p className="text-muted-foreground text-sm">
 							Loading organizers...
 						</p>
 					</div>
 				) : (
-					<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+					<div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
 						{institutions.map((institution) => (
 							<Link
+								className="group"
 								href={`/organizer/${encodeURIComponent(institution.name)}`}
 								key={institution.name}
-								className="group"
 							>
-								<div className="p-4 rounded-lg border border-border bg-card/50 hover:bg-card transition-all hover:border-primary/50">
-									<div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 mb-3 mx-auto">
+								<div className="rounded-lg border border-border bg-card/50 p-4 transition-all hover:border-primary/50 hover:bg-card">
+									<div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
 										<Building2 className="h-5 w-5 text-primary" />
 									</div>
-									<h3 className="text-sm font-medium text-foreground text-center truncate group-hover:text-primary transition-colors">
+									<h3 className="truncate text-center font-medium text-foreground text-sm transition-colors group-hover:text-primary">
 										{institution.name}
 									</h3>
-									<p className="text-xs text-muted-foreground text-center mt-1">
+									<p className="mt-1 text-center text-muted-foreground text-xs">
 										{institution.competitionCount} competition
 										{institution.competitionCount !== 1 ? "s" : ""}
 									</p>
@@ -107,35 +107,35 @@ export function OrganizerSection({
 				{(title || description) && (
 					<div className="flex items-center justify-between">
 						<div>
-							{title && <h2 className="text-lg font-semibold">{title}</h2>}
+							{title && <h2 className="font-semibold text-lg">{title}</h2>}
 							{description && (
-								<p className="text-sm text-muted-foreground">{description}</p>
+								<p className="text-muted-foreground text-sm">{description}</p>
 							)}
 						</div>
 						<Link
+							className="text-primary text-sm hover:underline"
 							href="/organizer"
-							className="text-sm text-primary hover:underline"
 						>
 							View all
 						</Link>
 					</div>
 				)}
-				<div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+				<div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
 					{institutions.map((institution) => (
 						<Link
+							className="group"
 							href={`/organizer/${encodeURIComponent(institution.name)}`}
 							key={institution.name}
-							className="group"
 						>
-							<Card className="h-full transition-all hover:shadow-lg hover:border-primary/50 overflow-hidden">
+							<Card className="h-full overflow-hidden transition-all hover:border-primary/50 hover:shadow-lg">
 								<CardContent className="p-6">
-									<div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 mb-4 mx-auto">
+									<div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10">
 										<Building2 className="h-7 w-7 text-primary" />
 									</div>
-									<h3 className="font-semibold text-foreground text-center mb-2 truncate group-hover:text-primary transition-colors">
+									<h3 className="mb-2 truncate text-center font-semibold text-foreground transition-colors group-hover:text-primary">
 										{institution.name}
 									</h3>
-									<div className="flex items-center justify-center gap-1.5 text-sm text-muted-foreground mb-3">
+									<div className="mb-3 flex items-center justify-center gap-1.5 text-muted-foreground text-sm">
 										<Trophy className="h-3.5 w-3.5" />
 										<span>
 											{institution.competitionCount} competition
@@ -147,9 +147,9 @@ export function OrganizerSection({
 											.slice(0, 3)
 											.map((cat) => (
 												<Badge
-													variant="secondary"
 													className="text-xs"
 													key={cat}
+													variant="secondary"
 												>
 													{cat}
 												</Badge>
@@ -170,56 +170,56 @@ export function OrganizerSection({
 			{(title || description) && (
 				<div className="flex items-center justify-between">
 					<div>
-						{title && <h2 className="text-lg font-semibold">{title}</h2>}
+						{title && <h2 className="font-semibold text-lg">{title}</h2>}
 						{description && (
-							<p className="text-sm text-muted-foreground">{description}</p>
+							<p className="text-muted-foreground text-sm">{description}</p>
 						)}
 					</div>
 					<Link
+						className="text-primary text-sm hover:underline"
 						href="/organizer"
-						className="text-sm text-primary hover:underline"
 					>
 						View all
 					</Link>
 				</div>
 			)}
 			{isLoading ? (
-				<div className="text-center py-12">
-					<p className="text-sm text-muted-foreground">Loading organizers...</p>
+				<div className="py-12 text-center">
+					<p className="text-muted-foreground text-sm">Loading organizers...</p>
 				</div>
 			) : (
 				<>
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+					<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
 						{institutions.map((institution) => (
 							<Link
 								href={`/organizer/${encodeURIComponent(institution.name)}`}
 								key={institution.name}
 							>
-								<Card className="h-full transition-all hover:shadow-md hover:border-primary/50">
+								<Card className="h-full transition-all hover:border-primary/50 hover:shadow-md">
 									<CardContent className="p-5">
 										<div className="flex items-start gap-4">
 											<div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
 												<Building2 className="h-6 w-6 text-primary" />
 											</div>
-											<div className="flex-1 min-w-0">
-												<h3 className="font-semibold text-foreground truncate">
+											<div className="min-w-0 flex-1">
+												<h3 className="truncate font-semibold text-foreground">
 													{institution.name}
 												</h3>
-												<div className="flex items-center gap-1.5 mt-1 text-sm text-muted-foreground">
+												<div className="mt-1 flex items-center gap-1.5 text-muted-foreground text-sm">
 													<Trophy className="h-3.5 w-3.5" />
 													<span>
 														{institution.competitionCount} competition
 														{institution.competitionCount !== 1 ? "s" : ""}
 													</span>
 												</div>
-												<div className="flex flex-wrap gap-1 mt-2">
+												<div className="mt-2 flex flex-wrap gap-1">
 													{Array.from(institution.categories)
 														.slice(0, 3)
 														.map((cat) => (
 															<Badge
-																variant="secondary"
 																className="text-xs"
 																key={cat}
+																variant="secondary"
 															>
 																{cat}
 															</Badge>
@@ -234,8 +234,8 @@ export function OrganizerSection({
 					</div>
 
 					{institutions.length === 0 && !isLoading && (
-						<div className="text-center py-12">
-							<Building2 className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+						<div className="py-12 text-center">
+							<Building2 className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
 							<p className="text-muted-foreground">No organizers found</p>
 						</div>
 					)}

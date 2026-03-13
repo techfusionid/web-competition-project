@@ -38,7 +38,9 @@ export function CompetitionDrawer({
 	const [showClaim, setShowClaim] = useState(false);
 
 	const handleShare = async () => {
-		if (!competition) return;
+		if (!competition) {
+			return;
+		}
 
 		const shareData = {
 			title: competition.title,
@@ -53,12 +55,14 @@ export function CompetitionDrawer({
 				await navigator.clipboard.writeText(competition.registrationUrl);
 				toast.success("Link berhasil disalin!");
 			}
-		} catch (err) {
+		} catch (_err) {
 			// User cancelled sharing
 		}
 	};
 
-	if (!competition) return null;
+	if (!competition) {
+		return null;
+	}
 
 	const levelLabels = LEVELS.reduce(
 		(acc, l) => {
@@ -75,13 +79,13 @@ export function CompetitionDrawer({
 			open={isOpen}
 			snapPoints={[0.6, 0.9, 1]}
 		>
-			<DrawerContent className="max-h-[96vh] pb-0 flex flex-col">
+			<DrawerContent className="flex max-h-[96vh] flex-col pb-0">
 				<DrawerTitle className="sr-only">{competition.title}</DrawerTitle>
 
 				{/* Single scroll area: poster then caption (Instagram-style) */}
-				<div className="flex-1 min-h-0 overflow-y-auto overscroll-contain pb-safe">
+				<div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pb-safe">
 					{/* Poster at top */}
-					<div className="relative aspect-[4/5] w-full overflow-hidden bg-secondary shrink-0">
+					<div className="relative aspect-[4/5] w-full shrink-0 overflow-hidden bg-secondary">
 						{competition.imageUrl ? (
 							<img
 								alt={competition.title}
@@ -90,21 +94,21 @@ export function CompetitionDrawer({
 							/>
 						) : (
 							<div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5">
-								<span className="text-6xl font-bold text-primary/30">
+								<span className="font-bold text-6xl text-primary/30">
 									{competition.title.charAt(0)}
 								</span>
 							</div>
 						)}
 
 						{/* Close button - overlay left */}
-						<DrawerClose className="absolute left-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm hover:bg-background focus:outline-none focus:ring-2 focus:ring-ring">
+						<DrawerClose className="absolute top-3 left-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full bg-background/80 backdrop-blur-sm hover:bg-background focus:outline-none focus:ring-2 focus:ring-ring">
 							<X className="h-4 w-4" />
 							<span className="sr-only">Tutup</span>
 						</DrawerClose>
 
 						{/* Share button - overlay right */}
 						<Button
-							className="absolute right-3 top-3 z-10 h-9 w-9 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
+							className="absolute top-3 right-3 z-10 h-9 w-9 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
 							onClick={handleShare}
 							size="icon"
 							variant="ghost"
@@ -118,36 +122,36 @@ export function CompetitionDrawer({
 						{/* Title + organizer (caption header) */}
 						<div className="space-y-1">
 							<div className="flex items-start justify-between gap-2">
-								<h2 className="text-base font-semibold text-foreground leading-tight pr-2">
+								<h2 className="pr-2 font-semibold text-base text-foreground leading-tight">
 									{competition.title}
 								</h2>
 							</div>
-							<p className="text-sm text-muted-foreground">
+							<p className="text-muted-foreground text-sm">
 								{competition.organizer}
 							</p>
 						</div>
 
 						{/* Description as caption */}
 						<div>
-							<p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
+							<p className="whitespace-pre-wrap text-muted-foreground text-sm leading-relaxed">
 								{competition.description}
 							</p>
 						</div>
 
 						{/* Tags */}
 						<div className="flex flex-wrap gap-1.5">
-							<span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+							<span className="rounded-full bg-primary/10 px-2 py-0.5 font-medium text-primary text-xs">
 								{competition.category}
 							</span>
 							{competition.level.slice(0, 2).map((l) => (
 								<span
-									className="rounded-full bg-secondary px-2 py-0.5 text-xs text-muted-foreground"
+									className="rounded-full bg-secondary px-2 py-0.5 text-muted-foreground text-xs"
 									key={l}
 								>
 									{levelLabels[l]}
 								</span>
 							))}
-							<span className="rounded-full bg-secondary px-2 py-0.5 text-xs capitalize text-muted-foreground">
+							<span className="rounded-full bg-secondary px-2 py-0.5 text-muted-foreground text-xs capitalize">
 								{competition.format}
 							</span>
 						</div>
@@ -181,8 +185,8 @@ export function CompetitionDrawer({
 						{/* Prize */}
 						{competition.prize && (
 							<div className="rounded-lg bg-primary/5 p-3">
-								<p className="text-xs text-muted-foreground">Hadiah</p>
-								<p className="text-sm font-medium text-foreground">
+								<p className="text-muted-foreground text-xs">Hadiah</p>
+								<p className="font-medium text-foreground text-sm">
 									{competition.prize}
 								</p>
 							</div>
@@ -190,7 +194,7 @@ export function CompetitionDrawer({
 
 						{/* CTA Button */}
 						<a
-							className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+							className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2.5 font-medium text-primary-foreground text-sm transition-colors hover:bg-primary/90"
 							href={competition.registrationUrl}
 							rel="noopener noreferrer"
 							target="_blank"

@@ -17,12 +17,12 @@ import { cn } from "@/lib/utils";
 
 const Form = FormProvider;
 
-type FormFieldContextValue<
+interface FormFieldContextValue<
 	TFieldValues extends FieldValues = FieldValues,
 	TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = {
+> {
 	name: TName;
-};
+}
 
 const FormFieldContext = React.createContext<FormFieldContextValue>(
 	{} as FormFieldContextValue
@@ -64,9 +64,9 @@ const useFormField = () => {
 	};
 };
 
-type FormItemContextValue = {
+interface FormItemContextValue {
 	id: string;
-};
+}
 
 const FormItemContext = React.createContext<FormItemContextValue>(
 	{} as FormItemContextValue
@@ -110,9 +110,7 @@ function FormControl({ ...props }: React.ComponentProps<typeof Slot>) {
 	return (
 		<Slot
 			aria-describedby={
-				!error
-					? `${formDescriptionId}`
-					: `${formDescriptionId} ${formMessageId}`
+				error ? `${formDescriptionId} ${formMessageId}` : `${formDescriptionId}`
 			}
 			aria-invalid={!!error}
 			data-slot="form-control"

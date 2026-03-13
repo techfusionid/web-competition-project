@@ -1,19 +1,19 @@
 "use client";
 
+import { Search } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { Search } from "lucide-react";
 
 export default function SettingsProfilePage() {
 	return (
 		<div className="space-y-6">
 			<div>
-				<h3 className="text-lg font-medium">Edit Profile</h3>
-				<p className="text-sm text-muted-foreground">
+				<h3 className="font-medium text-lg">Edit Profile</h3>
+				<p className="text-muted-foreground text-sm">
 					This is how others will see you on the site.
 				</p>
 			</div>
@@ -22,14 +22,14 @@ export default function SettingsProfilePage() {
 			{/* Avatar Section */}
 			<div className="flex items-center gap-x-6">
 				<Avatar className="h-20 w-20">
-					<AvatarImage src="https://github.com/shadcn.png" alt="@agnesdevita" />
+					<AvatarImage alt="@agnesdevita" src="https://github.com/shadcn.png" />
 					<AvatarFallback>AD</AvatarFallback>
 				</Avatar>
 				<div className="flex items-center gap-2">
-					<Button variant="outline" size="sm">
+					<Button size="sm" variant="outline">
 						Upload new picture
 					</Button>
-					<Button variant="ghost" size="sm" className="bg-muted/50">
+					<Button className="bg-muted/50" size="sm" variant="ghost">
 						Delete
 					</Button>
 				</div>
@@ -41,18 +41,18 @@ export default function SettingsProfilePage() {
 					<Label htmlFor="name">
 						Name <span className="text-red-500">*</span>
 					</Label>
-					<Input id="name" defaultValue="Agnes Devita Widjaja" />
+					<Input defaultValue="Agnes Devita Widjaja" id="name" />
 				</div>
 
 				<div className="grid gap-2">
 					<Label htmlFor="location">Location</Label>
 					<div className="relative">
-						<Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+						<Search className="absolute top-2.5 left-2.5 h-4 w-4 text-muted-foreground" />
 						<Input
-							id="location"
-							placeholder="Search location..."
 							className="pl-9"
 							defaultValue="Indonesia"
+							id="location"
+							placeholder="Search location..."
 						/>
 					</div>
 				</div>
@@ -60,14 +60,14 @@ export default function SettingsProfilePage() {
 				<div className="grid gap-2">
 					<div className="flex items-center justify-between">
 						<Label htmlFor="bio">Bio</Label>
-						<span className="text-xs text-muted-foreground">0/1024</span>
+						<span className="text-muted-foreground text-xs">0/1024</span>
 					</div>
 					<Textarea
+						className="min-h-[120px] resize-none"
 						id="bio"
 						placeholder="Brief description for your profile."
-						className="min-h-[120px] resize-none"
 					/>
-					<p className="text-xs text-muted-foreground">
+					<p className="text-muted-foreground text-xs">
 						Brief description for your profile.
 					</p>
 				</div>

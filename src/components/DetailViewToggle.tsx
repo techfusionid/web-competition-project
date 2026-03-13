@@ -1,13 +1,13 @@
 import { Check } from "lucide-react";
 import { useState } from "react";
+import { CenterViewIcon } from "@/components/icons/center-view-icon";
+import { SideViewIcon } from "@/components/icons/side-view-icon";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { CenterViewIcon } from "@/components/icons/center-view-icon";
-import { SideViewIcon } from "@/components/icons/side-view-icon";
 
 export type DetailViewMode = "dialog" | "sheet";
 
@@ -32,7 +32,7 @@ export function DetailViewToggle({
 			<DropdownMenuTrigger asChild>
 				<button
 					aria-label="Change view"
-					className="hover:bg-accent rounded-lg p-1 transition-colors"
+					className="rounded-lg p-1 transition-colors hover:bg-accent"
 					type="button"
 				>
 					{detailViewMode === "dialog" ? (

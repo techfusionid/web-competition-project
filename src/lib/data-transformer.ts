@@ -51,21 +51,29 @@ const levelMapping: Record<string, Competition["level"][number]> = {
 };
 
 function getStatus(deadline: Date | null | undefined): Competition["status"] {
-	if (!deadline) return "closed";
+	if (!deadline) {
+		return "closed";
+	}
 
 	const now = new Date();
 	const daysUntilDeadline = Math.ceil(
 		(deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
 	);
 
-	if (daysUntilDeadline < 0) return "closed";
-	if (daysUntilDeadline <= 7) return "closing-soon";
+	if (daysUntilDeadline < 0) {
+		return "closed";
+	}
+	if (daysUntilDeadline <= 7) {
+		return "closing-soon";
+	}
 	return "open";
 }
 
 function formatPrize(pricing: unknown): string {
 	// Handle various possible formats of pricing data from JSONB
-	if (!pricing) return "TBA";
+	if (!pricing) {
+		return "TBA";
+	}
 
 	// Drizzle JSONB can come back as the actual parsed value
 	let prices: number[] = [];
@@ -74,12 +82,12 @@ function formatPrize(pricing: unknown): string {
 	if (Array.isArray(pricing)) {
 		// Filter for valid numbers
 		for (const p of pricing) {
-			if (typeof p === "number" && !isNaN(p)) {
+			if (typeof p === "number" && !Number.isNaN(p)) {
 				prices.push(p);
 			} else if (typeof p === "string") {
 				// Handle string numbers like "50000"
 				const num = Number(p);
-				if (!isNaN(num)) {
+				if (!Number.isNaN(num)) {
 					prices.push(num);
 				}
 			}
@@ -92,7 +100,7 @@ function formatPrize(pricing: unknown): string {
 		!Array.isArray(pricing)
 	) {
 		for (const v of Object.values(pricing)) {
-			if (typeof v === "number" && !isNaN(v)) {
+			if (typeof v === "number" && !Number.isNaN(v)) {
 				prices.push(v);
 			}
 		}
@@ -110,21 +118,27 @@ function formatPrize(pricing: unknown): string {
 		}
 	}
 
-	if (prices.length === 0) return "TBA";
+	if (prices.length === 0) {
+		return "TBA";
+	}
 
 	const maxPrice = Math.max(...prices);
-	if (maxPrice >= 1000000000) {
-		return `Rp ${(maxPrice / 1000000000).toFixed(1)} Miliar`;
-	} else if (maxPrice >= 1000000) {
-		return `Rp ${(maxPrice / 1000000).toFixed(0)} Juta`;
-	} else if (maxPrice >= 1000) {
+	if (maxPrice >= 1_000_000_000) {
+		return `Rp ${(maxPrice / 1_000_000_000).toFixed(1)} Miliar`;
+	}
+	if (maxPrice >= 1_000_000) {
+		return `Rp ${(maxPrice / 1_000_000).toFixed(0)} Juta`;
+	}
+	if (maxPrice >= 1000) {
 		return `Rp ${(maxPrice / 1000).toFixed(0)} Ribu`;
 	}
 	return `Rp ${maxPrice.toLocaleString("id-ID")}`;
 }
 
 function normalizeLevels(levels: unknown): Competition["level"] {
-	if (!levels) return ["umum"];
+	if (!levels) {
+		return ["umum"];
+	}
 
 	const levelArray = Array.isArray(levels) ? levels : [levels];
 	const normalized: Competition["level"] = [];

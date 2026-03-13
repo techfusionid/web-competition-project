@@ -1,7 +1,7 @@
-import { db, competitions } from "./index";
-import { and, eq, ilike, sql, desc, gte, lte } from "drizzle-orm";
+import { and, desc, eq, ilike, sql } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
-import { CACHE_TAGS, CACHE_DURATIONS } from "@/lib/cache";
+import { CACHE_DURATIONS, CACHE_TAGS } from "@/lib/cache";
+import { competitions, db } from "./index";
 
 export interface FilterState {
 	category?: string;
@@ -153,7 +153,9 @@ export const getCompetitionsByCategoryCached = unstable_cache(
 // getCompetitionsByIds (no persistent cache - dynamic IDs)
 // ========================================
 export async function getCompetitionsByIds(ids: string[]) {
-	if (ids.length === 0) return [];
+	if (ids.length === 0) {
+		return [];
+	}
 
 	const results = await db
 		.select()

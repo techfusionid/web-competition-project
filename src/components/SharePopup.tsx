@@ -1,25 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import {
+	Check,
+	Copy,
+	Facebook,
+	Linkedin,
+	MessageCircle,
+	Send,
+	Twitter,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import {
 	Dialog,
 	DialogContent,
-	DialogTitle,
 	DialogDescription,
+	DialogTitle,
 } from "@/components/ui/dialog";
-import {
-	Copy,
-	Check,
-	Facebook,
-	Twitter,
-	MessageCircle,
-	Send,
-	Linkedin,
-	Mail,
-	Share2,
-} from "lucide-react";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { toast } from "sonner";
 
 interface SharePopupProps {
 	isOpen: boolean;
@@ -126,7 +124,7 @@ export function SharePopup({ isOpen, onClose, title, url }: SharePopupProps) {
 		: "w-full max-w-md border-0 bg-white dark:bg-gray-900 p-0 rounded-xl shadow-xl";
 
 	return (
-		<Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+		<Dialog onOpenChange={(open) => !open && onClose()} open={isOpen}>
 			<DialogContent className={contentClass}>
 				<VisuallyHidden>
 					<DialogTitle>Bagikan kompetisi</DialogTitle>
@@ -137,46 +135,46 @@ export function SharePopup({ isOpen, onClose, title, url }: SharePopupProps) {
 
 				<div className={isMobile ? "p-6" : "p-6"}>
 					{/* Header */}
-					<div className="text-center mb-6">
-						<h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+					<div className="mb-6 text-center">
+						<h2 className="font-semibold text-gray-900 text-lg dark:text-gray-100">
 							Bagikan kompetisi
 						</h2>
 					</div>
 
 					{/* Link Preview Section */}
-					<div className="mb-6 mx-auto max-w-[240px] rounded-2xl bg-gray-50 dark:bg-gray-800 p-4 border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:shadow-md hover:border-gray-300 dark:hover:border-gray-600 hover:bg-white dark:hover:bg-gray-800">
-						<h3 className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-1 truncate">
+					<div className="mx-auto mb-6 max-w-[240px] rounded-2xl border border-gray-200 bg-gray-50 p-4 transition-all duration-300 hover:border-gray-300 hover:bg-white hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600 dark:hover:bg-gray-800">
+						<h3 className="mb-1 truncate font-semibold text-gray-900 text-sm dark:text-gray-100">
 							{title}
 						</h3>
-						<p className="text-xs text-gray-500 dark:text-gray-400 mb-2 truncate">
+						<p className="mb-2 truncate text-gray-500 text-xs dark:text-gray-400">
 							{url}
 						</p>
-						<p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+						<p className="text-gray-600 text-xs leading-relaxed dark:text-gray-300">
 							Klik tombol di bawah untuk membagikan ke berbagai platform.
 						</p>
 					</div>
 
 					{/* Social Share Section */}
 					<div className="text-center">
-						<p className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-4">
+						<p className="mb-4 font-semibold text-gray-900 text-sm dark:text-gray-100">
 							Bagikan ke
 						</p>
-						<div className="overflow-x-auto -mx-6 px-6 pb-2">
-							<div className="flex gap-3 min-w-min justify-center">
+						<div className="-mx-6 overflow-x-auto px-6 pb-2">
+							<div className="flex min-w-min justify-center gap-3">
 								{shareOptions.map((option) => {
 									const Icon = option.icon;
 									return (
 										<button
+											className="group flex flex-shrink-0 flex-col items-center gap-1.5"
 											key={option.name}
 											onClick={option.onClick}
-											className="flex flex-col items-center gap-1.5 group flex-shrink-0"
 										>
 											<div
-												className={`${option.color} ${option.hoverColor} h-10 w-10 rounded-full flex items-center justify-center transition-all group-hover:scale-110 text-white`}
+												className={`${option.color} ${option.hoverColor} flex h-10 w-10 items-center justify-center rounded-full text-white transition-all group-hover:scale-110`}
 											>
 												<Icon className="h-4 w-4" />
 											</div>
-											<span className="text-xs text-gray-700 dark:text-gray-300 text-center whitespace-nowrap">
+											<span className="whitespace-nowrap text-center text-gray-700 text-xs dark:text-gray-300">
 												{option.name}
 											</span>
 										</button>

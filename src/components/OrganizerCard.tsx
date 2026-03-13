@@ -15,25 +15,25 @@ export function OrganizerCard({
 	href,
 }: OrganizerCardProps) {
 	return (
-		<Card className="group shadow-none overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm">
-			<Link href={href} className="block">
+		<Card className="group overflow-hidden border-border/50 bg-card/50 shadow-none backdrop-blur-sm">
+			<Link className="block" href={href}>
 				<CardContent>
 					{/* Image at top */}
-					<div className="h-12 w-12 rounded-lg overflow-hidden mb-4">
+					<div className="mb-4 h-12 w-12 overflow-hidden rounded-lg">
 						<img
-							src={image}
 							alt={title}
 							className="h-full w-full object-cover"
+							src={image}
 						/>
 					</div>
 
 					{/* Title */}
-					<h3 className="font-semibold text-foreground text-base mb-2">
+					<h3 className="mb-2 font-semibold text-base text-foreground">
 						{title}
 					</h3>
 
 					{/* Description */}
-					<p className="text-sm text-muted-foreground/70 mb-4 line-clamp-2">
+					<p className="mb-4 line-clamp-2 text-muted-foreground/70 text-sm">
 						{description}
 					</p>
 				</CardContent>

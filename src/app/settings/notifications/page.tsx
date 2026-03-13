@@ -1,7 +1,7 @@
 "use client";
 
-import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 
@@ -9,8 +9,8 @@ export default function SettingsNotificationsPage() {
 	return (
 		<div className="space-y-6">
 			<div>
-				<h3 className="text-lg font-medium">Email Notifications</h3>
-				<p className="text-sm text-muted-foreground">
+				<h3 className="font-medium text-lg">Email Notifications</h3>
+				<p className="text-muted-foreground text-sm">
 					Manage your email notification preferences.
 				</p>
 			</div>
@@ -19,16 +19,16 @@ export default function SettingsNotificationsPage() {
 			<div className="space-y-8">
 				{/* Engagement & Marketing Section */}
 				<div>
-					<h4 className="mb-4 text-sm font-medium text-muted-foreground uppercase tracking-wider">
+					<h4 className="mb-4 font-medium text-muted-foreground text-sm uppercase tracking-wider">
 						Engagement & Marketing
 					</h4>
 					<div className="space-y-4">
 						<div className="flex items-start space-x-3">
-							<Checkbox id="weekly_roundup" defaultChecked className="mt-1" />
+							<Checkbox className="mt-1" defaultChecked id="weekly_roundup" />
 							<div className="grid gap-1.5 leading-none">
 								<Label
+									className="font-medium text-base peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 									htmlFor="weekly_roundup"
-									className="text-base font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 								>
 									Weekly Roundup
 								</Label>
@@ -41,16 +41,16 @@ export default function SettingsNotificationsPage() {
 
 				{/* Personalization Section */}
 				<div>
-					<h4 className="mb-4 text-sm font-medium text-muted-foreground uppercase tracking-wider">
+					<h4 className="mb-4 font-medium text-muted-foreground text-sm uppercase tracking-wider">
 						Personalization
 					</h4>
 					<div className="space-y-4">
 						<div className="flex items-start space-x-3">
-							<Checkbox id="interest_tags" defaultChecked className="mt-1" />
+							<Checkbox className="mt-1" defaultChecked id="interest_tags" />
 							<div className="grid gap-1.5 leading-none">
 								<Label
+									className="font-medium text-base peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 									htmlFor="interest_tags"
-									className="text-base font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 								>
 									Interest Categories (Tags)
 								</Label>
@@ -58,11 +58,11 @@ export default function SettingsNotificationsPage() {
 						</div>
 
 						<div className="flex items-start space-x-3">
-							<Checkbox id="location_based" defaultChecked className="mt-1" />
+							<Checkbox className="mt-1" defaultChecked id="location_based" />
 							<div className="grid gap-1.5 leading-none">
 								<Label
+									className="font-medium text-base peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 									htmlFor="location_based"
-									className="text-base font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 								>
 									Location-based Recommendations
 								</Label>

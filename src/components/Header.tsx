@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, Info, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, BookOpen, Info } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -52,17 +52,17 @@ export function Header({ onHomeClick, sticky = false }: HeaderProps = {}) {
 					href="/"
 					onClick={handleHomeClick}
 				>
-					<img src="/logo.svg" alt="Competitions" className="h-7 w-auto" />
+					<img alt="Competitions" className="h-7 w-auto" src="/logo.svg" />
 				</Link>
 
-				<nav className="hidden items-center gap-1 md:flex md:ml-8">
+				<nav className="hidden items-center gap-1 md:ml-8 md:flex">
 					{navItems.map((item) => {
 						const Icon = item.icon;
 						const active = isActive(item.path);
 						return (
 							<Link href={item.path} key={item.path}>
 								<Button
-									className={`text-sm font-normal gap-1.5 ${active ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+									className={`gap-1.5 font-normal text-sm ${active ? "text-foreground" : "text-muted-foreground hover:text-foreground"}`}
 									size="sm"
 									variant="ghost"
 								>
@@ -80,7 +80,7 @@ export function Header({ onHomeClick, sticky = false }: HeaderProps = {}) {
 					</div>
 
 					<Link href="/discover">
-						<Button className="h-8 text-sm gap-1.5" size="sm" variant="ghost">
+						<Button className="h-8 gap-1.5 text-sm" size="sm" variant="ghost">
 							Discover
 							<ArrowUpRight className="h-3.5 w-3.5" />
 						</Button>

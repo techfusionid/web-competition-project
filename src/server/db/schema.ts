@@ -1,12 +1,12 @@
 import {
+	boolean,
+	date,
+	integer,
+	jsonb,
 	pgTable,
 	text,
-	integer,
-	boolean,
 	timestamp,
 	uuid,
-	jsonb,
-	date,
 } from "drizzle-orm/pg-core";
 
 export const competitions = pgTable("competitions", {

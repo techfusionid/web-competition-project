@@ -1,15 +1,14 @@
 import { ChevronDown, ChevronsRight, ChevronUp } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CopyButton } from "@/components/copy-button/copy-button";
 import { Button } from "@/components/ui/button";
 import {
 	Tooltip,
 	TooltipContent,
-	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { type Competition } from "@/types/competition";
+import type { Competition } from "@/types/competition";
 import { CompetitionDetailPanel } from "./CompetitionDetailPanel";
 import { type DetailViewMode, DetailViewToggle } from "./DetailViewToggle";
 
@@ -38,9 +37,18 @@ export function CompetitionSheet({
 }: CompetitionSheetProps) {
 	const [isClosing, setIsClosing] = useState(false);
 
+	const handleClose = useCallback(() => {
+		setIsClosing(true);
+		setTimeout(() => {
+			onClose();
+		}, 300); // Match the animation duration
+	}, [onClose]);
+
 	// Handle escape key to close and keyboard navigation
 	useEffect(() => {
-		if (!isOpen) return;
+		if (!isOpen) {
+			return;
+		}
 
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if (e.key === "Escape") {
@@ -54,11 +62,13 @@ export function CompetitionSheet({
 
 		window.addEventListener("keydown", handleKeyDown);
 		return () => window.removeEventListener("keydown", handleKeyDown);
-	}, [isOpen, hasPrevious, hasNext, onPrevious, onNext]);
+	}, [isOpen, hasPrevious, hasNext, onPrevious, onNext, handleClose]);
 
 	// Prevent body scroll when sheet is open
 	useEffect(() => {
-		if (!isOpen) return;
+		if (!isOpen) {
+			return;
+		}
 
 		document.body.style.overflow = "hidden";
 		return () => {
@@ -73,21 +83,18 @@ export function CompetitionSheet({
 		}
 	}, [isOpen]);
 
-	const handleClose = () => {
-		setIsClosing(true);
-		setTimeout(() => {
-			onClose();
-		}, 300); // Match the animation duration
-	};
-
 	const handleBackdropClick = () => {
 		handleClose();
 	};
 
 	// Don't render if closed and not in closing animation
-	if (!isOpen && !isClosing) return null;
+	if (!(isOpen || isClosing)) {
+		return null;
+	}
 	// Don't render if no competition
-	if (!competition && !isClosing) return null;
+	if (!(competition || isClosing)) {
+		return null;
+	}
 
 	return (
 		<>
@@ -103,14 +110,14 @@ export function CompetitionSheet({
 			{/* Sheet */}
 			<div
 				className={cn(
-					"fixed right-0 top-0 bottom-0 z-50 h-screen w-full rounded-none bg-card shadow-xl md:right-4 md:top-4 md:bottom-4 md:h-[calc(100vh-2rem)] md:rounded-xl md:max-w-xl",
+					"fixed top-0 right-0 bottom-0 z-50 h-screen w-full rounded-none bg-card shadow-xl md:top-4 md:right-4 md:bottom-4 md:h-[calc(100vh-2rem)] md:max-w-xl md:rounded-xl",
 					"transition-transform duration-300 ease-in-out",
 					isClosing ? "translate-x-full" : "translate-x-0"
 				)}
 			>
 				<div className="flex h-full flex-col">
 					{/* Header with close button, view toggle, and navigation */}
-					<div className="flex items-center justify-between p-3 border-b border-border">
+					<div className="flex items-center justify-between border-border border-b p-3">
 						{/* Left side: close, view toggle, and copy link buttons */}
 						<div className="flex items-center gap-2">
 							<Tooltip>

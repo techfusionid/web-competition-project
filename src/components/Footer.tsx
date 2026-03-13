@@ -52,13 +52,15 @@ export function Footer() {
 		},
 	];
 
-	const legalLinks = [
+	const _legalLinks = [
 		{ name: "Terms and Conditions", href: "/terms" },
 		{ name: "Privacy Policy", href: "/privacy" },
 	];
 
 	return (
 		<Footer7
+			copyright="Made by Techfusion for ambitious student"
+			description="One-stop platform to find the best competition and team for you."
 			logo={{
 				url: "/",
 				src: "/techfusion.png",
@@ -66,9 +68,7 @@ export function Footer() {
 				title: "Competitions",
 			}}
 			sections={sections}
-			description="One-stop platform to find the best competition and team for you."
 			socialLinks={socialLinks}
-			copyright="Made by Techfusion for ambitious student"
 			// legalLinks={legalLinks}
 		/>
 	);

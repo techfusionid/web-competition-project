@@ -1,14 +1,10 @@
 import {
-	Code2,
-	Trophy,
-	Lightbulb,
-	Palette,
-	Music,
-	Video,
-	PenTool,
 	Briefcase,
+	Code2,
 	Microscope,
-	Heart,
+	Music,
+	Palette,
+	Trophy,
 } from "lucide-react";
 import { CategoryCard } from "@/components/CategoryCard";
 import { OrganizerCard } from "@/components/OrganizerCard";
@@ -94,10 +90,10 @@ export default function DiscoverPage() {
 	return (
 		<>
 			{/* Header Section - Desktop */}
-			<section className="hidden md:block pt-12">
+			<section className="hidden pt-12 md:block">
 				<div className="container">
 					<div className="max-w-fit">
-						<h1 className="text-balance text-xl font-bold tracking-tight text-foreground md:text-2xl lg:text-4xl">
+						<h1 className="text-balance font-bold text-foreground text-xl tracking-tight md:text-2xl lg:text-4xl">
 							Discover Competitions
 						</h1>
 						<p className="mt-4 text-balance text-base text-muted-foreground md:text-lg">
@@ -109,11 +105,11 @@ export default function DiscoverPage() {
 			</section>
 
 			{/* Mobile Content with Sidebar Layout */}
-			<div className="md:hidden container py-8">
+			<div className="container py-8 md:hidden">
 				<div className="flex flex-col gap-8">
 					{/* Left - Header */}
 					<div>
-						<h1 className="text-3xl font-bold tracking-tight text-foreground">
+						<h1 className="font-bold text-3xl text-foreground tracking-tight">
 							Discover Competitions
 						</h1>
 						<p className="mt-3 text-base text-muted-foreground">
@@ -126,32 +122,32 @@ export default function DiscoverPage() {
 					<div className="space-y-8">
 						{/* Browse by Category Section */}
 						<section>
-							<h2 className="text-xl font-semibold text-foreground mb-4">
+							<h2 className="mb-4 font-semibold text-foreground text-xl">
 								Browse by Category
 							</h2>
-							<div className="flex overflow-x-auto gap-3 pb-2 snap-x snap-mandatory scrollbar-hide">
-								<div className="flex flex-col gap-3 min-w-max">
+							<div className="scrollbar-hide flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2">
+								<div className="flex min-w-max flex-col gap-3">
 									<div className="flex gap-3">
 										{categories.slice(0, 3).map((category) => (
 											<CategoryCard
-												key={category.title}
-												title={category.title}
-												icon={category.icon}
 												color={category.color}
 												count={category.count}
 												href={category.href}
+												icon={category.icon}
+												key={category.title}
+												title={category.title}
 											/>
 										))}
 									</div>
 									<div className="flex gap-3">
 										{categories.slice(3, 6).map((category) => (
 											<CategoryCard
-												key={category.title}
-												title={category.title}
-												icon={category.icon}
 												color={category.color}
 												count={category.count}
 												href={category.href}
+												icon={category.icon}
+												key={category.title}
+												title={category.title}
 											/>
 										))}
 									</div>
@@ -160,21 +156,21 @@ export default function DiscoverPage() {
 						</section>
 
 						{/* Separator Line */}
-						<div className="border-t border-border" />
+						<div className="border-border border-t" />
 
 						{/* Browse by Organizer Section */}
 						<section>
-							<h2 className="text-xl font-semibold text-foreground mb-4">
+							<h2 className="mb-4 font-semibold text-foreground text-xl">
 								Browse by Organizer
 							</h2>
 							<div className="grid grid-cols-1 gap-4">
 								{organizers.map((organizer) => (
 									<OrganizerCard
-										key={organizer.title}
-										title={organizer.title}
-										image={organizer.image}
 										description={organizer.description}
 										href={organizer.href}
+										image={organizer.image}
+										key={organizer.title}
+										title={organizer.title}
 									/>
 								))}
 							</div>
@@ -188,18 +184,18 @@ export default function DiscoverPage() {
 				{/* Browse by Category Section */}
 				<section className="py-8">
 					<div className="container">
-						<h2 className="text-xl font-semibold text-foreground mb-6">
+						<h2 className="mb-6 font-semibold text-foreground text-xl">
 							Browse by Category
 						</h2>
-						<div className="grid md:grid-cols-3 lg:grid-cols-5 gap-4">
+						<div className="grid gap-4 md:grid-cols-3 lg:grid-cols-5">
 							{categories.map((category) => (
 								<CategoryCard
-									key={category.title}
-									title={category.title}
-									icon={category.icon}
 									color={category.color}
 									count={category.count}
 									href={category.href}
+									icon={category.icon}
+									key={category.title}
+									title={category.title}
 								/>
 							))}
 						</div>
@@ -209,17 +205,17 @@ export default function DiscoverPage() {
 				{/* Browse by Organizer Section */}
 				<section className="py-4">
 					<div className="container">
-						<h2 className="text-xl font-semibold text-foreground mb-6">
+						<h2 className="mb-6 font-semibold text-foreground text-xl">
 							Browse by Organizer
 						</h2>
-						<div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+						<div className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:grid-cols-4">
 							{organizers.map((organizer) => (
 								<OrganizerCard
-									key={organizer.title}
-									title={organizer.title}
-									image={organizer.image}
 									description={organizer.description}
 									href={organizer.href}
+									image={organizer.image}
+									key={organizer.title}
+									title={organizer.title}
 								/>
 							))}
 						</div>

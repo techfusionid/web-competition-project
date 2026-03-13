@@ -20,7 +20,9 @@ export function PosterPopup({
 	isOpen,
 	onClose,
 }: PosterPopupProps) {
-	if (!competition) return null;
+	if (!competition) {
+		return null;
+	}
 
 	return (
 		<Dialog onOpenChange={(open) => !open && onClose()} open={isOpen}>
@@ -35,16 +37,16 @@ export function PosterPopup({
 						{competition.title} - Poster
 					</DialogTitle>
 					{/* Poster Image - Full size, clear display, optimized for mobile */}
-					<div className="relative h-full w-full overflow-hidden bg-secondary flex items-center justify-center">
+					<div className="relative flex h-full w-full items-center justify-center overflow-hidden bg-secondary">
 						{competition.imageUrl ? (
 							<img
 								alt={competition.title}
-								className="w-full h-full object-contain"
+								className="h-full w-full object-contain"
 								src={competition.imageUrl}
 							/>
 						) : (
 							<div className="flex aspect-[3/4] w-full items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5">
-								<span className="text-6xl font-bold text-primary/30">
+								<span className="font-bold text-6xl text-primary/30">
 									{competition.title.charAt(0)}
 								</span>
 							</div>

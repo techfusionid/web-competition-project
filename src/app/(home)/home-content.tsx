@@ -1,20 +1,20 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { fetchCompetitions } from "@/app/actions/competitions";
 import { CompetitionList } from "@/components/CompetitionList";
 import { Hero } from "@/components/Hero";
 import { SponsorSection } from "@/components/SponsorSection";
-import { fetchCompetitions } from "@/app/actions/competitions";
-import type { Competition } from "@/types/competition";
 import { useBookmarks } from "@/hooks/useBookmarks";
+import type { Competition } from "@/types/competition";
 
 export function HomeContent() {
 	const searchParams = useSearchParams();
 	const [searchQuery, setSearchQuery] = useState("");
 	const [resetTrigger, setResetTrigger] = useState(0);
 	const [competitions, setCompetitions] = useState<Competition[]>([]);
-	const [isLoading, setIsLoading] = useState(true);
+	const [_isLoading, setIsLoading] = useState(true);
 	const { bookmarks, toggleBookmark } = useBookmarks();
 
 	// Fetch competitions from database on mount
@@ -115,13 +115,13 @@ export function HomeContent() {
 
 			{/* Sponsor Section */}
 			<SponsorSection
-				sponsors={sponsors}
-				title="Supported by the best"
 				description="We're backed by incredible partners and sponsors who make this project possible."
-				variant="minimal"
-				storageKey="landing"
 				dismissible={false}
 				sponsorCtaLink="/advertise"
+				sponsors={sponsors}
+				storageKey="landing"
+				title="Supported by the best"
+				variant="minimal"
 			/>
 
 			<div id="competitions">

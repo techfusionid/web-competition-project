@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from "react-icons/fa";
 
 interface Footer7Props {
@@ -86,7 +86,7 @@ export const Footer7 = ({
 				<div className="flex w-full flex-col justify-between gap-10 lg:flex-row lg:items-start lg:text-left">
 					<div className="flex w-full flex-col lg:items-start">
 						{/* Logo */}
-						<div className="w-xs justify-between gap-6 flex flex-col lg:items-start">
+						<div className="flex w-xs flex-col justify-between gap-6 lg:items-start">
 							<div className="flex items-center gap-2 lg:justify-start">
 								<a href={logo.url}>
 									<img
@@ -96,9 +96,9 @@ export const Footer7 = ({
 										title={logo.title}
 									/>
 								</a>
-								<h2 className="text-xl font-semibold">{logo.title}</h2>
+								<h2 className="font-semibold text-xl">{logo.title}</h2>
 							</div>
-							<p className="max-w-[70%] text-sm text-muted-foreground">
+							<p className="max-w-[70%] text-muted-foreground text-sm">
 								{description}
 							</p>
 							<ul className="flex items-center space-x-6 text-muted-foreground">
@@ -112,11 +112,11 @@ export const Footer7 = ({
 							</ul>
 						</div>
 					</div>
-					<div className="grid w-full gap-4 grid-cols-3 lg:gap-2">
+					<div className="grid w-full grid-cols-3 gap-4 lg:gap-2">
 						{sections.map((section, sectionIdx) => (
 							<div key={sectionIdx}>
 								<h3 className="mb-4 font-bold">{section.title}</h3>
-								<ul className="space-y-3 text-sm text-muted-foreground">
+								<ul className="space-y-3 text-muted-foreground text-sm">
 									{section.links.map((link, linkIdx) => (
 										<li
 											className="font-medium hover:text-primary"
@@ -130,9 +130,9 @@ export const Footer7 = ({
 						))}
 					</div>
 				</div>
-				<div className="mt-8 flex flex-col justify-end gap-4 border-t pt-4 pb-[50px] text-xs font-medium text-muted-foreground md:flex-row md:items-center md:text-right">
+				<div className="mt-8 flex flex-col justify-end gap-4 border-t pt-4 pb-[50px] font-medium text-muted-foreground text-xs md:flex-row md:items-center md:text-right">
 					<p>{copyright}</p>
-					<ul className="flex flex-col gap-2 md:flex-row md:ml-4">
+					<ul className="flex flex-col gap-2 md:ml-4 md:flex-row">
 						{/*{legalLinks.map((link, idx) => (
               <li key={idx} className="hover:text-primary">
                 <a href={link.href}> {link.name}</a>

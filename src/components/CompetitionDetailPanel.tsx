@@ -1,6 +1,5 @@
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-import Image from "next/image";
 import {
 	BadgeCheck,
 	Calendar,
@@ -12,12 +11,12 @@ import {
 	Users,
 	X,
 } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import Image from "next/image";
+import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogPortal } from "@/components/ui/dialog";
+import { Dialog, DialogPortal } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
 import { type Competition, LEVELS } from "@/types/competition";
 import { ClaimCompetitionDialog } from "./ClaimCompetitionDialog";
 import { ReportCompetitionDialog } from "./ReportCompetitionDialog";
@@ -52,8 +51,8 @@ export function CompetitionDetailPanel({
 
 	if (!competition) {
 		return (
-			<div className="flex h-full items-center justify-center rounded-lg border border-dashed border-border bg-card/50 p-8">
-				<p className="text-sm text-muted-foreground text-center">
+			<div className="flex h-full items-center justify-center rounded-lg border border-border border-dashed bg-card/50 p-8">
+				<p className="text-center text-muted-foreground text-sm">
 					Pilih kompetisi untuk melihat detail
 				</p>
 			</div>
@@ -72,15 +71,15 @@ export function CompetitionDetailPanel({
 									<Image
 										alt={competition.title}
 										className="object-cover transition-transform duration-300 group-hover:scale-105"
-										src={competition.imageUrl}
 										fill
 										sizes="(max-width: 640px) 100vw, 320px"
+										src={competition.imageUrl}
 									/>
 								</div>
 								{/* Hover overlay with View Detail button */}
 								<div className="absolute inset-0 flex items-center justify-center rounded-lg bg-black/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
 									<Button
-										className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg"
+										className="bg-primary text-primary-foreground shadow-lg hover:bg-primary/90"
 										onClick={() => setShowPosterLightbox(true)}
 										size="sm"
 									>
@@ -91,7 +90,7 @@ export function CompetitionDetailPanel({
 							</>
 						) : (
 							<div className="flex aspect-[3/4] w-full items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-primary/5">
-								<span className="text-6xl font-bold text-primary/30">
+								<span className="font-bold text-6xl text-primary/30">
 									{competition.title.charAt(0)}
 								</span>
 							</div>
@@ -101,7 +100,7 @@ export function CompetitionDetailPanel({
 					{/* Close Button */}
 					{onClose && (
 						<Button
-							className="absolute left-3 top-3 h-9 w-9 rounded-lg bg-background/80 backdrop-blur-sm hover:bg-background"
+							className="absolute top-3 left-3 h-9 w-9 rounded-lg bg-background/80 backdrop-blur-sm hover:bg-background"
 							onClick={onClose}
 							size="icon"
 							variant="ghost"
@@ -112,7 +111,7 @@ export function CompetitionDetailPanel({
 
 					{/* Share Button */}
 					<Button
-						className="absolute right-3 top-3 h-9 w-9 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
+						className="absolute top-3 right-3 h-9 w-9 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
 						onClick={() => setShowShare(true)}
 						size="icon"
 						variant="ghost"
@@ -126,29 +125,29 @@ export function CompetitionDetailPanel({
 					{/* Header */}
 					<div className="space-y-2">
 						<div className="flex items-start justify-between gap-3">
-							<h2 className="text-2xl font-bold text-foreground leading-tight">
+							<h2 className="font-bold text-2xl text-foreground leading-tight">
 								{competition.title}
 							</h2>
 						</div>
-						<p className="text-sm text-muted-foreground">
+						<p className="text-muted-foreground text-sm">
 							{competition.organizer}
 						</p>
 					</div>
 
 					{/* Tags */}
 					<div className="flex flex-wrap gap-1.5">
-						<span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+						<span className="rounded-full bg-primary/10 px-2.5 py-0.5 font-medium text-primary text-xs">
 							{competition.category}
 						</span>
 						{competition.level.map((l) => (
 							<span
-								className="rounded-full bg-secondary px-2.5 py-0.5 text-xs text-muted-foreground"
+								className="rounded-full bg-secondary px-2.5 py-0.5 text-muted-foreground text-xs"
 								key={l}
 							>
 								{levelLabels[l]}
 							</span>
 						))}
-						<span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs capitalize text-muted-foreground">
+						<span className="rounded-full bg-secondary px-2.5 py-0.5 text-muted-foreground text-xs capitalize">
 							{competition.format}
 						</span>
 					</div>
@@ -156,8 +155,8 @@ export function CompetitionDetailPanel({
 					{/* Details - Boxed Style */}
 					<div className="grid gap-2 text-sm">
 						<div className="flex items-center justify-between gap-3 rounded-lg bg-muted/50 px-3 py-2.5">
-							<div className="flex items-center gap-3 flex-1">
-								<div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 shrink-0">
+							<div className="flex flex-1 items-center gap-3">
+								<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10">
 									<Calendar className="h-4 w-4 text-primary" />
 								</div>
 								<span className="text-foreground text-xs md:text-sm">
@@ -167,11 +166,11 @@ export function CompetitionDetailPanel({
 								</span>
 							</div>
 							{competition.location && (
-								<div className="flex items-center gap-3 flex-1 justify-end">
-									<span className="text-foreground text-xs md:text-sm text-right">
+								<div className="flex flex-1 items-center justify-end gap-3">
+									<span className="text-right text-foreground text-xs md:text-sm">
 										{competition.location}
 									</span>
-									<div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 shrink-0">
+									<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10">
 										<MapPin className="h-4 w-4 text-primary" />
 									</div>
 								</div>
@@ -192,8 +191,8 @@ export function CompetitionDetailPanel({
 					{/* Prize */}
 					{competition.prize && (
 						<div className="rounded-lg bg-primary/5 p-4">
-							<p className="text-xs text-muted-foreground">Hadiah</p>
-							<p className="text-sm font-medium text-foreground">
+							<p className="text-muted-foreground text-xs">Hadiah</p>
+							<p className="font-medium text-foreground text-sm">
 								{competition.prize}
 							</p>
 						</div>
@@ -201,18 +200,18 @@ export function CompetitionDetailPanel({
 
 					{/* Description */}
 					<div>
-						<p className="text-sm font-medium text-muted-foreground mb-1.5">
+						<p className="mb-1.5 font-medium text-muted-foreground text-sm">
 							About Competition
 						</p>
 						<Separator className="my-3" />
-						<p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+						<p className="whitespace-pre-line text-muted-foreground text-sm leading-relaxed">
 							{competition.description}
 						</p>
 					</div>
 
 					{/* CTA Button */}
 					<a
-						className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+						className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 font-medium text-primary-foreground text-sm transition-colors hover:bg-primary/90"
 						href={competition.registrationUrl}
 						rel="noopener noreferrer"
 						target="_blank"
@@ -267,7 +266,7 @@ export function CompetitionDetailPanel({
 					<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
 						<div className="relative max-h-[90vh] max-w-4xl">
 							<Button
-								className="absolute right-0 top-0 z-10 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
+								className="absolute top-0 right-0 z-10 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
 								onClick={() => setShowPosterLightbox(false)}
 								size="icon"
 								variant="ghost"
@@ -279,10 +278,10 @@ export function CompetitionDetailPanel({
 									<Image
 										alt={competition.title}
 										className="rounded-lg object-contain"
-										src={competition.imageUrl}
-										width={800}
 										height={600}
 										sizes="(max-width: 640px) 100vw, 80rem"
+										src={competition.imageUrl}
+										width={800}
 									/>
 								</div>
 							)}

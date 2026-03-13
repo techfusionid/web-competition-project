@@ -237,189 +237,187 @@ const tools: Tool[] = [
 
 export default function ResourcesPage() {
 	return (
-		<>
-			<main className="container py-8">
-				<div className="space-y-2 mb-8">
-					<h1 className="text-2xl font-bold text-foreground md:text-3xl">
-						Resources
-					</h1>
-					<p className="text-muted-foreground">
-						Collection of tools, accounts, and channels to help you organize
-						competitions more effectively.
-					</p>
+		<main className="container py-8">
+			<div className="mb-8 space-y-2">
+				<h1 className="font-bold text-2xl text-foreground md:text-3xl">
+					Resources
+				</h1>
+				<p className="text-muted-foreground">
+					Collection of tools, accounts, and channels to help you organize
+					competitions more effectively.
+				</p>
+			</div>
+
+			{/* Tools Section */}
+			<section className="mb-10">
+				<div className="mb-4 flex items-center gap-2">
+					<Wrench className="h-5 w-5 text-foreground" />
+					<h2 className="font-semibold text-foreground text-lg">
+						Tools for Competition Organizers
+					</h2>
 				</div>
 
-				{/* Tools Section */}
-				<section className="mb-10">
-					<div className="flex items-center gap-2 mb-4">
-						<Wrench className="h-5 w-5 text-foreground" />
-						<h2 className="text-lg font-semibold text-foreground">
-							Tools for Competition Organizers
-						</h2>
-					</div>
-
-					<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-						{tools.map((tool) => (
-							<Card
-								className="overflow-hidden group hover:shadow-md transition-shadow"
-								key={tool.id}
-							>
-								<CardContent className="p-4">
-									<div className="flex items-start gap-3">
-										<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-secondary p-2">
-											{/* eslint-disable-next-line @next/next/no-img-element */}
-											<img
-												alt={tool.name}
-												className="h-6 w-6 object-contain"
-												onError={(e) => {
-													e.currentTarget.src =
-														"https://placehold.co/24x24?text=" +
-														tool.name.charAt(0);
-												}}
-												src={tool.iconUrl}
-											/>
+				<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+					{tools.map((tool) => (
+						<Card
+							className="group overflow-hidden transition-shadow hover:shadow-md"
+							key={tool.id}
+						>
+							<CardContent className="p-4">
+								<div className="flex items-start gap-3">
+									<div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-secondary p-2">
+										{/* eslint-disable-next-line @next/next/no-img-element */}
+										<img
+											alt={tool.name}
+											className="h-6 w-6 object-contain"
+											onError={(e) => {
+												e.currentTarget.src =
+													"https://placehold.co/24x24?text=" +
+													tool.name.charAt(0);
+											}}
+											src={tool.iconUrl}
+										/>
+									</div>
+									<div className="min-w-0 flex-1">
+										<div className="flex items-center gap-2">
+											<h3 className="truncate font-medium text-foreground">
+												{tool.name}
+											</h3>
+											{tool.isFree && (
+												<span className="rounded-full bg-green-500/10 px-1.5 py-0.5 font-medium text-[10px] text-green-600">
+													Free
+												</span>
+											)}
 										</div>
-										<div className="flex-1 min-w-0">
-											<div className="flex items-center gap-2">
-												<h3 className="font-medium text-foreground truncate">
-													{tool.name}
-												</h3>
-												{tool.isFree && (
-													<span className="rounded-full bg-green-500/10 px-1.5 py-0.5 text-[10px] font-medium text-green-600">
-														Free
-													</span>
-												)}
-											</div>
-											<span className="text-xs text-muted-foreground">
-												{tool.category}
+										<span className="text-muted-foreground text-xs">
+											{tool.category}
+										</span>
+									</div>
+								</div>
+								<p className="mt-3 line-clamp-2 text-muted-foreground text-sm">
+									{tool.description}
+								</p>
+								<Button
+									className="mt-3 w-full"
+									onClick={() => window.open(tool.link, "_blank")}
+									size="sm"
+									variant="outline"
+								>
+									Visit
+									<ExternalLink className="ml-auto h-3 w-3" />
+								</Button>
+							</CardContent>
+						</Card>
+					))}
+				</div>
+			</section>
+
+			{/* Instagram Accounts Section */}
+			<section className="mb-10">
+				<div className="mb-4 flex items-center gap-2">
+					<Instagram className="h-5 w-5 text-foreground" />
+					<h2 className="font-semibold text-foreground text-lg">
+						Competition Instagram Accounts
+					</h2>
+				</div>
+
+				<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+					{instagramAccounts.map((account) => (
+						<Card className="overflow-hidden" key={account.id}>
+							<CardContent className="p-4">
+								<div className="flex items-start gap-3">
+									{/* eslint-disable-next-line @next/next/no-img-element */}
+									<img
+										alt={account.name}
+										className="h-12 w-12 rounded-full object-cover"
+										src={account.imageUrl}
+									/>
+									<div className="min-w-0 flex-1">
+										<h3 className="truncate font-medium text-foreground">
+											{account.name}
+										</h3>
+										<p className="text-muted-foreground text-sm">
+											{account.username}
+										</p>
+										<div className="mt-1 flex items-center gap-1">
+											<Users className="h-3 w-3 text-muted-foreground" />
+											<span className="text-muted-foreground text-xs">
+												{account.followers} followers
 											</span>
 										</div>
 									</div>
-									<p className="text-sm text-muted-foreground mt-3 line-clamp-2">
-										{tool.description}
-									</p>
-									<Button
-										className="w-full mt-3"
-										onClick={() => window.open(tool.link, "_blank")}
-										size="sm"
-										variant="outline"
-									>
-										Visit
-										<ExternalLink className="h-3 w-3 ml-auto" />
-									</Button>
-								</CardContent>
-							</Card>
-						))}
-					</div>
-				</section>
+								</div>
+								<p className="mt-3 line-clamp-2 text-muted-foreground text-sm">
+									{account.description}
+								</p>
+								<Button
+									className="mt-3 w-full"
+									onClick={() =>
+										window.open(
+											`https://instagram.com/${account.username.replace("@", "")}`,
+											"_blank"
+										)
+									}
+									size="sm"
+									variant="outline"
+								>
+									<Instagram className="mr-2 h-4 w-4" />
+									Visit
+									<ExternalLink className="ml-auto h-3 w-3" />
+								</Button>
+							</CardContent>
+						</Card>
+					))}
+				</div>
+			</section>
 
-				{/* Instagram Accounts Section */}
-				<section className="mb-10">
-					<div className="flex items-center gap-2 mb-4">
-						<Instagram className="h-5 w-5 text-foreground" />
-						<h2 className="text-lg font-semibold text-foreground">
-							Competition Instagram Accounts
-						</h2>
-					</div>
+			{/* WhatsApp Channels Section */}
+			<section>
+				<div className="mb-4 flex items-center gap-2">
+					<MessageCircle className="h-5 w-5 text-foreground" />
+					<h2 className="font-semibold text-foreground text-lg">
+						WhatsApp Channels
+					</h2>
+				</div>
 
-					<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-						{instagramAccounts.map((account) => (
-							<Card className="overflow-hidden" key={account.id}>
-								<CardContent className="p-4">
-									<div className="flex items-start gap-3">
-										{/* eslint-disable-next-line @next/next/no-img-element */}
-										<img
-											alt={account.name}
-											className="h-12 w-12 rounded-full object-cover"
-											src={account.imageUrl}
-										/>
-										<div className="flex-1 min-w-0">
-											<h3 className="font-medium text-foreground truncate">
-												{account.name}
-											</h3>
-											<p className="text-sm text-muted-foreground">
-												{account.username}
-											</p>
-											<div className="flex items-center gap-1 mt-1">
-												<Users className="h-3 w-3 text-muted-foreground" />
-												<span className="text-xs text-muted-foreground">
-													{account.followers} followers
-												</span>
-											</div>
+				<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+					{whatsAppChannels.map((channel) => (
+						<Card className="overflow-hidden" key={channel.id}>
+							<CardContent className="p-4">
+								<div className="flex items-start gap-3">
+									<div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-500/10">
+										<MessageCircle className="h-6 w-6 text-green-600" />
+									</div>
+									<div className="min-w-0 flex-1">
+										<h3 className="truncate font-medium text-foreground">
+											{channel.name}
+										</h3>
+										<div className="mt-1 flex items-center gap-1">
+											<Users className="h-3 w-3 text-muted-foreground" />
+											<span className="text-muted-foreground text-xs">
+												{channel.members} members
+											</span>
 										</div>
 									</div>
-									<p className="text-sm text-muted-foreground mt-3 line-clamp-2">
-										{account.description}
-									</p>
-									<Button
-										className="w-full mt-3"
-										onClick={() =>
-											window.open(
-												`https://instagram.com/${account.username.replace("@", "")}`,
-												"_blank"
-											)
-										}
-										size="sm"
-										variant="outline"
-									>
-										<Instagram className="h-4 w-4 mr-2" />
-										Visit
-										<ExternalLink className="h-3 w-3 ml-auto" />
-									</Button>
-								</CardContent>
-							</Card>
-						))}
-					</div>
-				</section>
-
-				{/* WhatsApp Channels Section */}
-				<section>
-					<div className="flex items-center gap-2 mb-4">
-						<MessageCircle className="h-5 w-5 text-foreground" />
-						<h2 className="text-lg font-semibold text-foreground">
-							WhatsApp Channels
-						</h2>
-					</div>
-
-					<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-						{whatsAppChannels.map((channel) => (
-							<Card className="overflow-hidden" key={channel.id}>
-								<CardContent className="p-4">
-									<div className="flex items-start gap-3">
-										<div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-500/10">
-											<MessageCircle className="h-6 w-6 text-green-600" />
-										</div>
-										<div className="flex-1 min-w-0">
-											<h3 className="font-medium text-foreground truncate">
-												{channel.name}
-											</h3>
-											<div className="flex items-center gap-1 mt-1">
-												<Users className="h-3 w-3 text-muted-foreground" />
-												<span className="text-xs text-muted-foreground">
-													{channel.members} members
-												</span>
-											</div>
-										</div>
-									</div>
-									<p className="text-sm text-muted-foreground mt-3 line-clamp-2">
-										{channel.description}
-									</p>
-									<Button
-										className="w-full mt-3"
-										onClick={() => window.open(channel.link, "_blank")}
-										size="sm"
-										variant="outline"
-									>
-										<MessageCircle className="h-4 w-4 mr-2" />
-										Join Channel
-										<ExternalLink className="h-3 w-3 ml-auto" />
-									</Button>
-								</CardContent>
-							</Card>
-						))}
-					</div>
-				</section>
-			</main>
-		</>
+								</div>
+								<p className="mt-3 line-clamp-2 text-muted-foreground text-sm">
+									{channel.description}
+								</p>
+								<Button
+									className="mt-3 w-full"
+									onClick={() => window.open(channel.link, "_blank")}
+									size="sm"
+									variant="outline"
+								>
+									<MessageCircle className="mr-2 h-4 w-4" />
+									Join Channel
+									<ExternalLink className="ml-auto h-3 w-3" />
+								</Button>
+							</CardContent>
+						</Card>
+					))}
+				</div>
+			</section>
+		</main>
 	);
 }

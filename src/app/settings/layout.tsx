@@ -1,8 +1,8 @@
 "use client";
 
-import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Separator } from "@/components/ui/separator";
 
 const sidebarNavItems = [
 	{
@@ -35,9 +35,9 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
 	const pathname = usePathname();
 
 	return (
-		<div className="container py-10 min-h-screen">
-			<div className="space-y-0.5 mb-8">
-				<h2 className="text-2xl font-bold tracking-tight">Settings</h2>
+		<div className="container min-h-screen py-10">
+			<div className="mb-8 space-y-0.5">
+				<h2 className="font-bold text-2xl tracking-tight">Settings</h2>
 				<p className="text-muted-foreground">
 					Manage your account settings and set e-mail preferences.
 				</p>
@@ -45,16 +45,16 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
 			<Separator className="my-6" />
 			<div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
 				<aside className="-mx-4 lg:w-1/5">
-					<nav className="flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1 overflow-x-auto px-4 pb-4 lg:pb-0">
+					<nav className="flex space-x-2 overflow-x-auto px-4 pb-4 lg:flex-col lg:space-x-0 lg:space-y-1 lg:pb-0">
 						{sidebarNavItems.map((item) => (
 							<Link
-								key={item.href}
-								href={item.href}
-								className={`justify-start rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground whitespace-nowrap ${
+								className={`justify-start whitespace-nowrap rounded-md px-3 py-2 font-medium text-sm hover:bg-accent hover:text-accent-foreground ${
 									pathname === item.href
-										? "bg-accent text-accent-foreground font-semibold"
+										? "bg-accent font-semibold text-accent-foreground"
 										: "text-muted-foreground"
 								}`}
+								href={item.href}
+								key={item.href}
 							>
 								{item.title}
 							</Link>

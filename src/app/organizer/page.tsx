@@ -39,29 +39,25 @@ export const metadata = {
 
 export default function OrganizersPage() {
 	return (
-		<>
-			<main className="container py-8">
-				<div className="mb-8">
-					<h1 className="text-3xl font-bold text-foreground mb-2">
-						Organizers
-					</h1>
-					<p className="text-muted-foreground">
-						Explore competitions by organizer institutions
-					</p>
-				</div>
+		<main className="container py-8">
+			<div className="mb-8">
+				<h1 className="mb-2 font-bold text-3xl text-foreground">Organizers</h1>
+				<p className="text-muted-foreground">
+					Explore competitions by organizer institutions
+				</p>
+			</div>
 
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-					{organizers.map((organizer) => (
-						<OrganizerCard
-							key={organizer.title}
-							title={organizer.title}
-							image={organizer.image}
-							description={organizer.description}
-							href={organizer.href}
-						/>
-					))}
-				</div>
-			</main>
-		</>
+			<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+				{organizers.map((organizer) => (
+					<OrganizerCard
+						description={organizer.description}
+						href={organizer.href}
+						image={organizer.image}
+						key={organizer.title}
+						title={organizer.title}
+					/>
+				))}
+			</div>
+		</main>
 	);
 }

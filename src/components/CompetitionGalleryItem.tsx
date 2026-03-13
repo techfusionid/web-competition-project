@@ -40,7 +40,7 @@ export function CompetitionGalleryItem({
 			<div className="p-1.5">
 				<h3
 					className={cn(
-						"line-clamp-2 text-[10px] font-medium leading-tight transition-colors",
+						"line-clamp-2 font-medium text-[10px] leading-tight transition-colors",
 						isSelected
 							? "text-primary"
 							: "text-foreground group-hover:text-primary"

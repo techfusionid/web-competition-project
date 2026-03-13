@@ -4,11 +4,11 @@ import { useCallback, useRef, useState } from "react";
 
 export type CopyState = "idle" | "done" | "error";
 
-export type UseCopyToClipboardOptions = {
+export interface UseCopyToClipboardOptions {
 	onCopySuccess?: (text: string) => void;
 	onCopyError?: (error: Error) => void;
 	resetDelay?: number;
-};
+}
 
 export function useCopyToClipboard({
 	onCopySuccess,

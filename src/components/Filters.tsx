@@ -1,4 +1,4 @@
-import { ChevronDown, X } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -57,11 +57,11 @@ export function Filters({
 
 	return (
 		<div className="rounded-lg border border-border bg-card p-4">
-			<div className="flex items-center justify-between mb-3">
-				<h3 className="text-sm font-semibold text-foreground">Filter</h3>
+			<div className="mb-3 flex items-center justify-between">
+				<h3 className="font-semibold text-foreground text-sm">Filter</h3>
 				{hasActiveFilters && (
 					<button
-						className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+						className="text-muted-foreground text-xs transition-colors hover:text-foreground"
 						onClick={onClearFilters}
 					>
 						Reset
@@ -84,7 +84,7 @@ export function Filters({
 						</Button>
 					</PopoverTrigger>
 					<PopoverContent align="start" className="w-48 p-3">
-						<div className="space-y-2 max-h-60 overflow-y-auto">
+						<div className="max-h-60 space-y-2 overflow-y-auto">
 							{CATEGORIES.map((cat) => (
 								<div className="flex items-center space-x-2" key={cat}>
 									<Checkbox
@@ -107,7 +107,7 @@ export function Filters({
 										}}
 									/>
 									<Label
-										className="text-sm text-muted-foreground cursor-pointer"
+										className="cursor-pointer text-muted-foreground text-sm"
 										htmlFor={`cat-${cat}`}
 									>
 										{cat}
@@ -153,7 +153,7 @@ export function Filters({
 										}}
 									/>
 									<Label
-										className="text-sm text-muted-foreground cursor-pointer"
+										className="cursor-pointer text-muted-foreground text-sm"
 										htmlFor={`lvl-${lvl.value}`}
 									>
 										{lvl.label}
@@ -191,7 +191,7 @@ export function Filters({
 										}}
 									/>
 									<Label
-										className="text-sm text-muted-foreground cursor-pointer"
+										className="cursor-pointer text-muted-foreground text-sm"
 										htmlFor={`format-${opt.value}`}
 									>
 										{opt.label}
@@ -232,7 +232,7 @@ export function Filters({
 										}}
 									/>
 									<Label
-										className="text-sm text-muted-foreground cursor-pointer"
+										className="cursor-pointer text-muted-foreground text-sm"
 										htmlFor={`part-${opt.value}`}
 									>
 										{opt.label}

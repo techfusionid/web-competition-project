@@ -9,11 +9,10 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import type { Competition } from "@/types/competition";
 import { CompetitionCard } from "./CompetitionCard";
 import { CompetitionCardPoster } from "./CompetitionCardPoster";
-import { CompetitionDetailPanel } from "./CompetitionDetailPanel";
 import { CompetitionDialog } from "./CompetitionDialog";
 import { CompetitionDrawer } from "./CompetitionDrawer";
 import { CompetitionSheet } from "./CompetitionSheet";
-import { type DetailViewMode, DetailViewToggle } from "./DetailViewToggle";
+import type { DetailViewMode } from "./DetailViewToggle";
 import { type FilterState, Filters } from "./Filters";
 import { PosterPopup } from "./PosterPopup";
 import { SearchBar } from "./SearchBar";
@@ -42,7 +41,9 @@ const VIEW_MODE_KEY = "competitions-view-mode";
 const DETAIL_VIEW_MODE_KEY = "competitions-detail-view-mode";
 
 function getInitialViewMode(isMobile: boolean): ViewMode {
-	if (typeof window === "undefined") return isMobile ? "poster" : "card";
+	if (typeof window === "undefined") {
+		return isMobile ? "poster" : "card";
+	}
 	const stored = localStorage.getItem(VIEW_MODE_KEY);
 	if (stored === "card" || stored === "poster") {
 		return stored;
@@ -61,7 +62,7 @@ export function CompetitionList({
 }: CompetitionListProps) {
 	const isMobile = useIsMobile();
 	const [filters, setFilters] = useState<FilterState>(defaultFilters);
-	const [sortBy, setSortBy] = useState<SortOption>("deadline");
+	const [sortBy, _setSortBy] = useState<SortOption>("deadline");
 	const [showFilters, setShowFilters] = useState(false);
 	const [viewMode, setViewMode] = useState<ViewMode>("card");
 	const [detailViewMode, setDetailViewMode] =
@@ -104,7 +105,7 @@ export function CompetitionList({
 		setSelectedIndex(null);
 		setDialogIndex(null);
 		setVisibleCount(20);
-	}, [searchQuery, filters]);
+	}, []);
 
 	// Reset view when resetTrigger changes (e.g., when clicking home/logo)
 	useEffect(() => {
@@ -132,7 +133,9 @@ export function CompetitionList({
 					comp.description.toLowerCase().includes(query) ||
 					comp.organizer.toLowerCase().includes(query) ||
 					comp.category.toLowerCase().includes(query);
-				if (!matchesSearch) return false;
+				if (!matchesSearch) {
+					return false;
+				}
 			}
 
 			if (
@@ -187,7 +190,7 @@ export function CompetitionList({
 
 	const handleLoadMore = useCallback(() => {
 		setVisibleCount((prev) => prev + ITEMS_PER_PAGE);
-	}, [ITEMS_PER_PAGE]);
+	}, []);
 
 	const clearFilters = () => setFilters(defaultFilters);
 
@@ -244,7 +247,7 @@ export function CompetitionList({
 							/>
 						</div>
 						<div className="flex items-center justify-between">
-							<p className="text-xs text-muted-foreground">
+							<p className="text-muted-foreground text-xs">
 								{filteredCompetitions.length} competition
 								{filteredCompetitions.length !== 1 ? "s" : ""}
 							</p>
@@ -256,8 +259,8 @@ export function CompetitionList({
 					</div>
 
 					{filteredCompetitions.length === 0 ? (
-						<div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-border py-16">
-							<p className="text-sm font-medium text-muted-foreground">
+						<div className="flex flex-col items-center justify-center rounded-lg border border-border border-dashed py-16">
+							<p className="font-medium text-muted-foreground text-sm">
 								No competitions match
 							</p>
 							<Button
@@ -283,7 +286,7 @@ export function CompetitionList({
 								<CarouselContent className="-ml-3">
 									{visibleCompetitions.map((competition, index) => (
 										<CarouselItem
-											className="pl-3 basis-[80%] sm:basis-[65%]"
+											className="basis-[80%] pl-3 sm:basis-[65%]"
 											key={competition.id}
 										>
 											{viewMode === "card" ? (
@@ -304,8 +307,8 @@ export function CompetitionList({
 										</CarouselItem>
 									))}
 									{hasMore && (
-										<CarouselItem className="pl-3 basis-[80%] sm:basis-[65%]">
-											<div className="flex h-full min-h-[200px] items-center justify-center rounded-lg border border-dashed border-border bg-muted/30">
+										<CarouselItem className="basis-[80%] pl-3 sm:basis-[65%]">
+											<div className="flex h-full min-h-[200px] items-center justify-center rounded-lg border border-border border-dashed bg-muted/30">
 												<Button
 													onClick={handleLoadMore}
 													size="sm"
@@ -366,7 +369,7 @@ export function CompetitionList({
 							onFiltersChange={setFilters}
 						/>
 					</div>
-					<div className="flex items-center justify-end gap-3 flex-wrap">
+					<div className="flex flex-wrap items-center justify-end gap-3">
 						<ViewToggle
 							onViewModeChange={handleViewModeChange}
 							viewMode={viewMode}
@@ -375,8 +378,8 @@ export function CompetitionList({
 				</div>
 
 				{filteredCompetitions.length === 0 ? (
-					<div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-border py-16">
-						<p className="text-sm font-medium text-muted-foreground">
+					<div className="flex flex-col items-center justify-center rounded-lg border border-border border-dashed py-16">
+						<p className="font-medium text-muted-foreground text-sm">
 							No competitions match
 						</p>
 						<Button
@@ -391,7 +394,7 @@ export function CompetitionList({
 				) : viewMode === "card" ? (
 					/* Normal Card Grid View */
 					<>
-						<div className="grid gap-4 grid-cols-2 md:grid-cols-3">
+						<div className="grid grid-cols-2 gap-4 md:grid-cols-3">
 							{visibleCompetitions.map((competition, index) => (
 								<CompetitionCard
 									competition={competition}
@@ -412,7 +415,7 @@ export function CompetitionList({
 				) : (
 					/* Normal Poster Grid View - Landing page keeps poster format */
 					<>
-						<div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+						<div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
 							{visibleCompetitions.map((competition, index) => (
 								<CompetitionCardPoster
 									competition={competition}

@@ -1,4 +1,3 @@
-import { Agentation } from "agentation";
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { Amplitude } from "@/amplitude";
@@ -71,19 +70,15 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
 	return (
 		<html
+			className={cn("font-sans", greedStandard.variable)}
 			lang="en"
 			suppressHydrationWarning
-			className={cn("font-sans", greedStandard.variable)}
 		>
 			<head>
-				<link href="/favicon.ico" rel="icon" sizes="32x32"></link>
-				<link href="/icon.svg" rel="icon" type="image/svg+xml"></link>
-				<link
-					href="/apple-icon.png"
-					rel="apple-touch-icon"
-					sizes="180x180"
-				></link>
-				<link href="/manifest.json" rel="manifest"></link>
+				<link href="/favicon.ico" rel="icon" sizes="32x32" />
+				<link href="/icon.svg" rel="icon" type="image/svg+xml" />
+				<link href="/apple-icon.png" rel="apple-touch-icon" sizes="180x180" />
+				<link href="/manifest.json" rel="manifest" />
 			</head>
 			<body className="font-sans antialiased">
 				<Amplitude />
@@ -101,7 +96,6 @@ export default function RootLayout({
 						</PostHogProvider>
 					</TooltipProvider>
 				</ThemeProvider>
-				{process.env.NODE_ENV === "development" && <Agentation />}
 			</body>
 		</html>
 	);

@@ -13,11 +13,11 @@ import {
 	Trophy as TrophyIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { Card, CardContent } from "@/components/ui/card";
+import { useEffect, useMemo, useState } from "react";
 import { fetchCompetitions } from "@/app/actions/competitions";
-import { CATEGORIES, type Competition } from "@/types/competition";
+import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { useEffect, useState, useMemo } from "react";
+import { CATEGORIES, type Competition } from "@/types/competition";
 
 // Map categories to icons and colors
 const categoryConfig: Record<
@@ -89,7 +89,7 @@ const categoryConfig: Record<
 	},
 };
 
-const categoryDescriptions: Record<string, string> = {
+const _categoryDescriptions: Record<string, string> = {
 	Technology:
 		"Technology competitions, programming, and digital innovation to sharpen your technical skills.",
 	Business:
@@ -180,36 +180,36 @@ export function CategorySection({
 				{(title || description) && (
 					<div className="flex items-center justify-between">
 						<div>
-							{title && <h2 className="text-lg font-semibold">{title}</h2>}
+							{title && <h2 className="font-semibold text-lg">{title}</h2>}
 							{description && (
-								<p className="text-sm text-muted-foreground">{description}</p>
+								<p className="text-muted-foreground text-sm">{description}</p>
 							)}
 						</div>
 						<Link
+							className="text-primary text-sm hover:underline"
 							href="/category"
-							className="text-sm text-primary hover:underline"
 						>
 							View all
 						</Link>
 					</div>
 				)}
 				{isLoading ? (
-					<div className="text-center py-8">
-						<p className="text-sm text-muted-foreground">
+					<div className="py-8 text-center">
+						<p className="text-muted-foreground text-sm">
 							Loading categories...
 						</p>
 					</div>
 				) : (
-					<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+					<div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
 						{categories.map((category) => {
 							const Icon = CategoryIcon(category.name);
 							return (
 								<Link
+									className="group"
 									href={`/category/${encodeURIComponent(category.name)}`}
 									key={category.name}
-									className="group"
 								>
-									<div className="flex flex-col items-center gap-2 p-4 rounded-lg border border-border bg-card/50 hover:bg-card transition-all hover:border-primary/50">
+									<div className="flex flex-col items-center gap-2 rounded-lg border border-border bg-card/50 p-4 transition-all hover:border-primary/50 hover:bg-card">
 										<div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
 											<Icon
 												className={cn(
@@ -219,11 +219,11 @@ export function CategorySection({
 											/>
 										</div>
 										<div className="text-center">
-											<h3 className="text-sm font-medium group-hover:text-primary transition-colors">
+											<h3 className="font-medium text-sm transition-colors group-hover:text-primary">
 												{category.name}
 											</h3>
 											{showCount && (
-												<p className="text-xs text-muted-foreground">
+												<p className="text-muted-foreground text-xs">
 													{category.count}
 												</p>
 											)}
@@ -244,36 +244,36 @@ export function CategorySection({
 				{(title || description) && (
 					<div className="flex items-center justify-between">
 						<div>
-							{title && <h2 className="text-lg font-semibold">{title}</h2>}
+							{title && <h2 className="font-semibold text-lg">{title}</h2>}
 							{description && (
-								<p className="text-sm text-muted-foreground">{description}</p>
+								<p className="text-muted-foreground text-sm">{description}</p>
 							)}
 						</div>
 						<Link
+							className="text-primary text-sm hover:underline"
 							href="/category"
-							className="text-sm text-primary hover:underline"
 						>
 							View all
 						</Link>
 					</div>
 				)}
 				{isLoading ? (
-					<div className="text-center py-8">
-						<p className="text-sm text-muted-foreground">
+					<div className="py-8 text-center">
+						<p className="text-muted-foreground text-sm">
 							Loading categories...
 						</p>
 					</div>
 				) : (
-					<div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+					<div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
 						{categories.map((category) => {
 							const Icon = CategoryIcon(category.name);
 							return (
 								<Link
+									className="group"
 									href={`/category/${encodeURIComponent(category.name)}`}
 									key={category.name}
-									className="group"
 								>
-									<div className="relative overflow-hidden rounded-xl border border-border bg-card transition-all hover:shadow-lg hover:border-primary/50">
+									<div className="relative overflow-hidden rounded-xl border border-border bg-card transition-all hover:border-primary/50 hover:shadow-lg">
 										<div
 											className={cn(
 												"absolute inset-0 bg-gradient-to-br",
@@ -281,16 +281,16 @@ export function CategorySection({
 											)}
 										/>
 										<div className="relative p-6">
-											<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-background/80 backdrop-blur mb-4">
+											<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-background/80 backdrop-blur">
 												<Icon
 													className={cn("h-6 w-6", category.config.color)}
 												/>
 											</div>
-											<h3 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
+											<h3 className="mb-1 font-semibold text-foreground transition-colors group-hover:text-primary">
 												{category.name}
 											</h3>
 											{showCount && (
-												<p className="text-sm text-muted-foreground">
+												<p className="text-muted-foreground text-sm">
 													{category.count} competition
 													{category.count !== 1 ? "s" : ""}
 												</p>
@@ -312,64 +312,62 @@ export function CategorySection({
 			{(title || description) && (
 				<div className="flex items-center justify-between">
 					<div>
-						{title && <h2 className="text-lg font-semibold">{title}</h2>}
+						{title && <h2 className="font-semibold text-lg">{title}</h2>}
 						{description && (
-							<p className="text-sm text-muted-foreground">{description}</p>
+							<p className="text-muted-foreground text-sm">{description}</p>
 						)}
 					</div>
 					<Link
+						className="text-primary text-sm hover:underline"
 						href="/category"
-						className="text-sm text-primary hover:underline"
 					>
 						View all
 					</Link>
 				</div>
 			)}
 			{isLoading ? (
-				<div className="text-center py-12">
-					<p className="text-sm text-muted-foreground">Loading categories...</p>
+				<div className="py-12 text-center">
+					<p className="text-muted-foreground text-sm">Loading categories...</p>
 				</div>
 			) : (
-				<>
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-						{categories.map((category) => {
-							const Icon = CategoryIcon(category.name);
-							return (
-								<Link
-									href={`/category/${encodeURIComponent(category.name)}`}
-									key={category.name}
-								>
-									<Card className="h-full transition-all hover:shadow-md hover:border-primary/50">
-										<CardContent className="p-5">
-											<div className="flex items-center gap-4">
-												<div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-secondary">
-													<Icon
-														className={cn(
-															"h-6 w-6",
-															categoryConfig[category.name]?.color ||
-																"text-primary"
-														)}
-													/>
-												</div>
-												<div className="flex-1 min-w-0">
-													<h3 className="font-semibold text-foreground">
-														{category.name}
-													</h3>
-													{showCount && (
-														<p className="text-sm text-muted-foreground">
-															{category.count} competition
-															{category.count !== 1 ? "s" : ""}
-														</p>
+				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+					{categories.map((category) => {
+						const Icon = CategoryIcon(category.name);
+						return (
+							<Link
+								href={`/category/${encodeURIComponent(category.name)}`}
+								key={category.name}
+							>
+								<Card className="h-full transition-all hover:border-primary/50 hover:shadow-md">
+									<CardContent className="p-5">
+										<div className="flex items-center gap-4">
+											<div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-secondary">
+												<Icon
+													className={cn(
+														"h-6 w-6",
+														categoryConfig[category.name]?.color ||
+															"text-primary"
 													)}
-												</div>
+												/>
 											</div>
-										</CardContent>
-									</Card>
-								</Link>
-							);
-						})}
-					</div>
-				</>
+											<div className="min-w-0 flex-1">
+												<h3 className="font-semibold text-foreground">
+													{category.name}
+												</h3>
+												{showCount && (
+													<p className="text-muted-foreground text-sm">
+														{category.count} competition
+														{category.count !== 1 ? "s" : ""}
+													</p>
+												)}
+											</div>
+										</div>
+									</CardContent>
+								</Card>
+							</Link>
+						);
+					})}
+				</div>
 			)}
 		</section>
 	);

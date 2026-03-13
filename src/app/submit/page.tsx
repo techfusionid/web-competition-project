@@ -95,316 +95,305 @@ export default function SubmitPage() {
 	};
 
 	return (
-		<>
-			<main className="py-8 md:py-12">
-				<div className="container">
-					<div className="mx-auto max-w-2xl">
-						<div className="mb-8 text-center">
-							<h1 className="text-2xl font-semibold text-foreground md:text-3xl">
-								Submit Competition
-							</h1>
-							<p className="mt-2 text-sm text-muted-foreground">
-								Help students across Indonesia discover new competitions
-							</p>
-						</div>
-
-						<Form {...form}>
-							<form
-								className="space-y-6"
-								onSubmit={form.handleSubmit(onSubmit)}
-							>
-								<FormField
-									control={form.control}
-									name="title"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Competition Name</FormLabel>
-											<FormControl>
-												<Input placeholder="e.g., Gemastik XVII" {...field} />
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-
-								<FormField
-									control={form.control}
-									name="organizer"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Organizer</FormLabel>
-											<FormControl>
-												<Input
-													placeholder="e.g., Ministry of Education"
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-
-								<FormField
-									control={form.control}
-									name="description"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Description</FormLabel>
-											<FormControl>
-												<Textarea
-													className="min-h-[100px] resize-none"
-													placeholder="Describe this competition..."
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-
-								<div className="grid gap-4 sm:grid-cols-2">
-									<FormField
-										control={form.control}
-										name="category"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Category</FormLabel>
-												<Select
-													onValueChange={field.onChange}
-													value={field.value}
-												>
-													<FormControl>
-														<SelectTrigger>
-															<SelectValue placeholder="Select category" />
-														</SelectTrigger>
-													</FormControl>
-													<SelectContent>
-														{CATEGORIES.map((cat) => (
-															<SelectItem key={cat} value={cat}>
-																{cat}
-															</SelectItem>
-														))}
-													</SelectContent>
-												</Select>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-
-									<FormField
-										control={form.control}
-										name="level"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Level</FormLabel>
-												<Select
-													onValueChange={field.onChange}
-													value={field.value}
-												>
-													<FormControl>
-														<SelectTrigger>
-															<SelectValue placeholder="Select level" />
-														</SelectTrigger>
-													</FormControl>
-													<SelectContent>
-														{LEVELS.map((lvl) => (
-															<SelectItem key={lvl.value} value={lvl.value}>
-																{lvl.label}
-															</SelectItem>
-														))}
-													</SelectContent>
-												</Select>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-								</div>
-
-								<div className="grid gap-4 sm:grid-cols-2">
-									<FormField
-										control={form.control}
-										name="format"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Format</FormLabel>
-												<Select
-													onValueChange={field.onChange}
-													value={field.value}
-												>
-													<FormControl>
-														<SelectTrigger>
-															<SelectValue placeholder="Select format" />
-														</SelectTrigger>
-													</FormControl>
-													<SelectContent>
-														<SelectItem value="online">Online</SelectItem>
-														<SelectItem value="offline">Offline</SelectItem>
-														<SelectItem value="hybrid">Hybrid</SelectItem>
-													</SelectContent>
-												</Select>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-
-									<FormField
-										control={form.control}
-										name="participationType"
-										render={({ field }) => (
-											<FormItem>
-												<FormLabel>Participation Type</FormLabel>
-												<Select
-													onValueChange={field.onChange}
-													value={field.value}
-												>
-													<FormControl>
-														<SelectTrigger>
-															<SelectValue placeholder="Select type" />
-														</SelectTrigger>
-													</FormControl>
-													<SelectContent>
-														<SelectItem value="individual">
-															Individual
-														</SelectItem>
-														<SelectItem value="team">Team</SelectItem>
-													</SelectContent>
-												</Select>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-								</div>
-
-								<div className="grid gap-4 sm:grid-cols-2">
-									<FormField
-										control={form.control}
-										name="registrationStart"
-										render={({ field }) => (
-											<FormItem className="flex flex-col">
-												<FormLabel>Registration Start</FormLabel>
-												<Popover>
-													<PopoverTrigger asChild>
-														<FormControl>
-															<Button
-																className={cn(
-																	"w-full justify-start text-left font-normal",
-																	!field.value && "text-muted-foreground"
-																)}
-																variant="outline"
-															>
-																<CalendarIcon className="mr-2 h-4 w-4" />
-																{field.value ? (
-																	format(field.value, "d MMM yyyy")
-																) : (
-																	<span>Pick a date</span>
-																)}
-															</Button>
-														</FormControl>
-													</PopoverTrigger>
-													<PopoverContent align="start" className="w-auto p-0">
-														<Calendar
-															className={cn("p-3 pointer-events-auto")}
-															initialFocus
-															mode="single"
-															onSelect={field.onChange}
-															selected={field.value}
-														/>
-													</PopoverContent>
-												</Popover>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-
-									<FormField
-										control={form.control}
-										name="registrationEnd"
-										render={({ field }) => (
-											<FormItem className="flex flex-col">
-												<FormLabel>Registration End</FormLabel>
-												<Popover>
-													<PopoverTrigger asChild>
-														<FormControl>
-															<Button
-																className={cn(
-																	"w-full justify-start text-left font-normal",
-																	!field.value && "text-muted-foreground"
-																)}
-																variant="outline"
-															>
-																<CalendarIcon className="mr-2 h-4 w-4" />
-																{field.value ? (
-																	format(field.value, "d MMM yyyy")
-																) : (
-																	<span>Pick a date</span>
-																)}
-															</Button>
-														</FormControl>
-													</PopoverTrigger>
-													<PopoverContent align="start" className="w-auto p-0">
-														<Calendar
-															className={cn("p-3 pointer-events-auto")}
-															disabled={(date) => {
-																const startDate =
-																	form.getValues("registrationStart");
-																return startDate ? date < startDate : false;
-															}}
-															initialFocus
-															mode="single"
-															onSelect={field.onChange}
-															selected={field.value}
-														/>
-													</PopoverContent>
-												</Popover>
-												<FormMessage />
-											</FormItem>
-										)}
-									/>
-								</div>
-
-								<FormField
-									control={form.control}
-									name="registrationUrl"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Registration Link</FormLabel>
-											<FormControl>
-												<Input placeholder="https://..." {...field} />
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-
-								<FormField
-									control={form.control}
-									name="prize"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Prize</FormLabel>
-											<FormControl>
-												<Input
-													placeholder="e.g., Total Rp 50 Million"
-													{...field}
-												/>
-											</FormControl>
-											<FormMessage />
-										</FormItem>
-									)}
-								/>
-
-								<Button
-									className="w-full"
-									disabled={isSubmitting}
-									type="submit"
-								>
-									{isSubmitting ? "Sending..." : "Submit Competition"}
-								</Button>
-							</form>
-						</Form>
+		<main className="py-8 md:py-12">
+			<div className="container">
+				<div className="mx-auto max-w-2xl">
+					<div className="mb-8 text-center">
+						<h1 className="font-semibold text-2xl text-foreground md:text-3xl">
+							Submit Competition
+						</h1>
+						<p className="mt-2 text-muted-foreground text-sm">
+							Help students across Indonesia discover new competitions
+						</p>
 					</div>
+
+					<Form {...form}>
+						<form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+							<FormField
+								control={form.control}
+								name="title"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Competition Name</FormLabel>
+										<FormControl>
+											<Input placeholder="e.g., Gemastik XVII" {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name="organizer"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Organizer</FormLabel>
+										<FormControl>
+											<Input
+												placeholder="e.g., Ministry of Education"
+												{...field}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name="description"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Description</FormLabel>
+										<FormControl>
+											<Textarea
+												className="min-h-[100px] resize-none"
+												placeholder="Describe this competition..."
+												{...field}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<div className="grid gap-4 sm:grid-cols-2">
+								<FormField
+									control={form.control}
+									name="category"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Category</FormLabel>
+											<Select
+												onValueChange={field.onChange}
+												value={field.value}
+											>
+												<FormControl>
+													<SelectTrigger>
+														<SelectValue placeholder="Select category" />
+													</SelectTrigger>
+												</FormControl>
+												<SelectContent>
+													{CATEGORIES.map((cat) => (
+														<SelectItem key={cat} value={cat}>
+															{cat}
+														</SelectItem>
+													))}
+												</SelectContent>
+											</Select>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+
+								<FormField
+									control={form.control}
+									name="level"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Level</FormLabel>
+											<Select
+												onValueChange={field.onChange}
+												value={field.value}
+											>
+												<FormControl>
+													<SelectTrigger>
+														<SelectValue placeholder="Select level" />
+													</SelectTrigger>
+												</FormControl>
+												<SelectContent>
+													{LEVELS.map((lvl) => (
+														<SelectItem key={lvl.value} value={lvl.value}>
+															{lvl.label}
+														</SelectItem>
+													))}
+												</SelectContent>
+											</Select>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</div>
+
+							<div className="grid gap-4 sm:grid-cols-2">
+								<FormField
+									control={form.control}
+									name="format"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Format</FormLabel>
+											<Select
+												onValueChange={field.onChange}
+												value={field.value}
+											>
+												<FormControl>
+													<SelectTrigger>
+														<SelectValue placeholder="Select format" />
+													</SelectTrigger>
+												</FormControl>
+												<SelectContent>
+													<SelectItem value="online">Online</SelectItem>
+													<SelectItem value="offline">Offline</SelectItem>
+													<SelectItem value="hybrid">Hybrid</SelectItem>
+												</SelectContent>
+											</Select>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+
+								<FormField
+									control={form.control}
+									name="participationType"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Participation Type</FormLabel>
+											<Select
+												onValueChange={field.onChange}
+												value={field.value}
+											>
+												<FormControl>
+													<SelectTrigger>
+														<SelectValue placeholder="Select type" />
+													</SelectTrigger>
+												</FormControl>
+												<SelectContent>
+													<SelectItem value="individual">Individual</SelectItem>
+													<SelectItem value="team">Team</SelectItem>
+												</SelectContent>
+											</Select>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</div>
+
+							<div className="grid gap-4 sm:grid-cols-2">
+								<FormField
+									control={form.control}
+									name="registrationStart"
+									render={({ field }) => (
+										<FormItem className="flex flex-col">
+											<FormLabel>Registration Start</FormLabel>
+											<Popover>
+												<PopoverTrigger asChild>
+													<FormControl>
+														<Button
+															className={cn(
+																"w-full justify-start text-left font-normal",
+																!field.value && "text-muted-foreground"
+															)}
+															variant="outline"
+														>
+															<CalendarIcon className="mr-2 h-4 w-4" />
+															{field.value ? (
+																format(field.value, "d MMM yyyy")
+															) : (
+																<span>Pick a date</span>
+															)}
+														</Button>
+													</FormControl>
+												</PopoverTrigger>
+												<PopoverContent align="start" className="w-auto p-0">
+													<Calendar
+														className={cn("pointer-events-auto p-3")}
+														initialFocus
+														mode="single"
+														onSelect={field.onChange}
+														selected={field.value}
+													/>
+												</PopoverContent>
+											</Popover>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+
+								<FormField
+									control={form.control}
+									name="registrationEnd"
+									render={({ field }) => (
+										<FormItem className="flex flex-col">
+											<FormLabel>Registration End</FormLabel>
+											<Popover>
+												<PopoverTrigger asChild>
+													<FormControl>
+														<Button
+															className={cn(
+																"w-full justify-start text-left font-normal",
+																!field.value && "text-muted-foreground"
+															)}
+															variant="outline"
+														>
+															<CalendarIcon className="mr-2 h-4 w-4" />
+															{field.value ? (
+																format(field.value, "d MMM yyyy")
+															) : (
+																<span>Pick a date</span>
+															)}
+														</Button>
+													</FormControl>
+												</PopoverTrigger>
+												<PopoverContent align="start" className="w-auto p-0">
+													<Calendar
+														className={cn("pointer-events-auto p-3")}
+														disabled={(date) => {
+															const startDate =
+																form.getValues("registrationStart");
+															return startDate ? date < startDate : false;
+														}}
+														initialFocus
+														mode="single"
+														onSelect={field.onChange}
+														selected={field.value}
+													/>
+												</PopoverContent>
+											</Popover>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</div>
+
+							<FormField
+								control={form.control}
+								name="registrationUrl"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Registration Link</FormLabel>
+										<FormControl>
+											<Input placeholder="https://..." {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<FormField
+								control={form.control}
+								name="prize"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Prize</FormLabel>
+										<FormControl>
+											<Input
+												placeholder="e.g., Total Rp 50 Million"
+												{...field}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+							<Button className="w-full" disabled={isSubmitting} type="submit">
+								{isSubmitting ? "Sending..." : "Submit Competition"}
+							</Button>
+						</form>
+					</Form>
 				</div>
-			</main>
-		</>
+			</div>
+		</main>
 	);
 }

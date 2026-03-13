@@ -12,25 +12,23 @@ import {
 	Music,
 	Palette,
 	PenTool,
-	Plus,
 	Rss,
 	Trophy,
 	X,
 } from "lucide-react";
-import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
-import { useCallback, useMemo, useState, useEffect } from "react";
+import { useParams } from "next/navigation";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { fetchCompetitionsByCategory } from "@/app/actions/competitions";
 import { CompetitionCard } from "@/components/CompetitionCard";
 import { CompetitionCardPoster } from "@/components/CompetitionCardPoster";
 import { CompetitionDialog } from "@/components/CompetitionDialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { fetchCompetitionsByCategory } from "@/app/actions/competitions";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { cn } from "@/lib/utils";
-import { CATEGORY_MAPPING } from "@/types/competition";
 import type { Competition } from "@/types/competition";
+import { CATEGORY_MAPPING } from "@/types/competition";
 
 type ViewMode = "poster" | "cardList";
 
@@ -172,7 +170,9 @@ export default function CategoryDetailPage() {
 	}, [allCategoryCompetitions]);
 
 	const categoryCompetitions = useMemo(() => {
-		if (!selectedType) return allCategoryCompetitions;
+		if (!selectedType) {
+			return allCategoryCompetitions;
+		}
 		return allCategoryCompetitions.filter((comp) =>
 			comp.tags?.includes(selectedType)
 		);
@@ -218,14 +218,14 @@ export default function CategoryDetailPage() {
 				{/* Hero Banner with Image */}
 				<div className="w-full pt-8 pb-8">
 					<div className="container">
-						<div className="relative h-48 md:h-64 overflow-hidden rounded-2xl">
+						<div className="relative h-48 overflow-hidden rounded-2xl md:h-64">
 							<img
+								alt={categoryName}
+								className="absolute inset-0 h-full w-full object-cover"
 								src={
 									config.image ||
 									"https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200&h=300&fit=crop"
 								}
-								alt={categoryName}
-								className="absolute inset-0 h-full w-full object-cover"
 							/>
 						</div>
 					</div>
@@ -236,14 +236,14 @@ export default function CategoryDetailPage() {
 					<div className="container">
 						<div className="flex flex-col items-start">
 							{/* Category Icon Badge */}
-							<div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-card border-4 border-background shadow-xl -mt-14 mb-3 relative z-10">
+							<div className="relative z-10 -mt-14 mb-3 flex h-20 w-20 items-center justify-center rounded-2xl border-4 border-background bg-card shadow-xl">
 								<CategoryIcon className={`h-10 w-10 ${config.color}`} />
 							</div>
 
-							<h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+							<h1 className="mb-2 font-bold text-3xl text-foreground md:text-4xl">
 								{categoryName}
 							</h1>
-							<p className="text-base text-muted-foreground max-w-2xl">
+							<p className="max-w-2xl text-base text-muted-foreground">
 								{categoryDescriptions[categoryName] ||
 									"Explore competitions in this category."}
 							</p>
@@ -252,18 +252,18 @@ export default function CategoryDetailPage() {
 				</div>
 			</div>
 
-			<main className="flex-1 container">
+			<main className="container flex-1">
 				{/* Competition Type Filter */}
 				{categoryTags.length > 0 && (
 					<div className="mb-6">
-						<p className="text-sm font-medium text-muted-foreground mb-3">
+						<p className="mb-3 font-medium text-muted-foreground text-sm">
 							Filter by Tag
 						</p>
 						<div className="flex flex-wrap items-center gap-2">
 							{categoryTags.map((tag) => (
 								<Badge
 									className={cn(
-										"cursor-pointer transition-colors hover:bg-primary hover:text-primary-foreground py-1 text-sm",
+										"cursor-pointer py-1 text-sm transition-colors hover:bg-primary hover:text-primary-foreground",
 										selectedType === tag && "bg-primary text-primary-foreground"
 									)}
 									key={tag}
@@ -287,17 +287,17 @@ export default function CategoryDetailPage() {
 					</div>
 				)}
 
-				<div className="pb-8 grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6">
+				<div className="grid grid-cols-1 gap-6 pb-8 lg:grid-cols-[1fr_280px]">
 					{/* Main Content */}
 					<div>
 						{/* Header with View Toggle */}
-						<div className="flex items-center justify-between mb-6">
-							<h2 className="text-xl font-bold text-foreground">
+						<div className="mb-6 flex items-center justify-between">
+							<h2 className="font-bold text-foreground text-xl">
 								Competitions ({isLoading ? "..." : categoryCompetitions.length})
 							</h2>
 							<div className="flex items-center gap-2">
 								<Button
-									className="shrink-0 h-8 w-8"
+									className="h-8 w-8 shrink-0"
 									size="icon"
 									variant="outline"
 								>
@@ -326,12 +326,12 @@ export default function CategoryDetailPage() {
 
 						{/* Competition Grid */}
 						{isLoading ? (
-							<div className="text-center py-12">
+							<div className="py-12 text-center">
 								<p className="text-muted-foreground">Loading competitions...</p>
 							</div>
 						) : categoryCompetitions.length > 0 ? (
 							viewMode === "poster" ? (
-								<div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+								<div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
 									{categoryCompetitions.map((competition, index) => (
 										<CompetitionCardPoster
 											competition={competition}
@@ -343,7 +343,7 @@ export default function CategoryDetailPage() {
 									))}
 								</div>
 							) : (
-								<div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+								<div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
 									{categoryCompetitions.map((competition, index) => (
 										<CompetitionCard
 											competition={competition}
@@ -354,8 +354,8 @@ export default function CategoryDetailPage() {
 								</div>
 							)
 						) : (
-							<div className="text-center py-12">
-								<Trophy className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+							<div className="py-12 text-center">
+								<Trophy className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
 								<p className="text-muted-foreground">
 									No competitions in this category yet
 								</p>
@@ -366,7 +366,7 @@ export default function CategoryDetailPage() {
 					{/* Sidebar with Calendar */}
 					<div className="hidden lg:block">
 						<div className="sticky top-20 rounded-lg border border-border bg-card p-4">
-							<h3 className="text-sm font-semibold text-foreground mb-3">
+							<h3 className="mb-3 font-semibold text-foreground text-sm">
 								Deadline Calendar
 							</h3>
 							<Calendar
@@ -384,7 +384,7 @@ export default function CategoryDetailPage() {
 								}}
 								selected={competitionDates}
 							/>
-							<p className="text-xs text-muted-foreground mt-3">
+							<p className="mt-3 text-muted-foreground text-xs">
 								Marked dates show competition deadlines
 							</p>
 						</div>

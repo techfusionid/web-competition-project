@@ -1,20 +1,20 @@
 "use server";
 
-import {
-	getAllCompetitionsCached,
-	getCompetitionById,
-	getCompetitionsByFilter,
-	getCompetitionsByOrganizer,
-	getCompetitionsByCategory,
-	getCompetitionsByIds,
-	getAllOrganizersCached,
-	getAllCategoriesCached,
-	type FilterState,
-} from "@/server/db/queries";
-import { dbToCompetition, dbToCompetitions } from "@/lib/data-transformer";
-import type { Competition } from "@/types/competition";
 import { revalidateTag } from "next/cache";
 import { CACHE_TAGS } from "@/lib/cache";
+import { dbToCompetition, dbToCompetitions } from "@/lib/data-transformer";
+import {
+	type FilterState,
+	getAllCategoriesCached,
+	getAllCompetitionsCached,
+	getAllOrganizersCached,
+	getCompetitionById,
+	getCompetitionsByCategory,
+	getCompetitionsByFilter,
+	getCompetitionsByIds,
+	getCompetitionsByOrganizer,
+} from "@/server/db/queries";
+import type { Competition } from "@/types/competition";
 
 export async function fetchCompetitions(
 	filters?: FilterState

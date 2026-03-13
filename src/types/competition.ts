@@ -67,4 +67,10 @@ export const CATEGORY_MAPPING: Record<string, string> = {
 // Reverse mapping from Indonesian to English
 export const CATEGORY_MAPPING_REVERSE: Record<string, string> = Object.entries(
 	CATEGORY_MAPPING
-).reduce((acc, [en, id]) => ({ ...acc, [id]: en }), {});
+).reduce(
+	(acc, [en, id]) => {
+		acc[id] = en;
+		return acc;
+	},
+	{} as Record<string, string>
+);
