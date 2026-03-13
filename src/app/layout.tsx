@@ -70,11 +70,19 @@ export default function RootLayout({
 	children,
 }: Readonly<{ children: React.ReactNode }>) {
 	return (
-		<html lang="en" suppressHydrationWarning className={cn("font-sans", greedStandard.variable)}>
+		<html
+			lang="en"
+			suppressHydrationWarning
+			className={cn("font-sans", greedStandard.variable)}
+		>
 			<head>
 				<link href="/favicon.ico" rel="icon" sizes="32x32"></link>
 				<link href="/icon.svg" rel="icon" type="image/svg+xml"></link>
-				<link href="/apple-icon.png" rel="apple-touch-icon" sizes="180x180"></link>
+				<link
+					href="/apple-icon.png"
+					rel="apple-touch-icon"
+					sizes="180x180"
+				></link>
 				<link href="/manifest.json" rel="manifest"></link>
 			</head>
 			<body className="font-sans antialiased">

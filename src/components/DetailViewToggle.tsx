@@ -1,12 +1,13 @@
-import { Check, Maximize2, Sidebar } from "lucide-react";
+import { Check } from "lucide-react";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { CenterViewIcon } from "@/components/icons/center-view-icon";
+import { SideViewIcon } from "@/components/icons/side-view-icon";
 
 export type DetailViewMode = "dialog" | "sheet";
 
@@ -29,18 +30,17 @@ export function DetailViewToggle({
 	return (
 		<DropdownMenu onOpenChange={setOpen} open={open}>
 			<DropdownMenuTrigger asChild>
-				<Button
+				<button
 					aria-label="Change view"
-					className="h-8 w-8 rounded-full"
-					size="icon"
-					variant="ghost"
+					className="hover:bg-accent rounded-lg p-1 transition-colors"
+					type="button"
 				>
 					{detailViewMode === "dialog" ? (
-						<Maximize2 className="h-4 w-4" />
+						<CenterViewIcon className="h-6 w-6 text-primary" />
 					) : (
-						<Sidebar className="h-4 w-4" />
+						<SideViewIcon className="h-6 w-6 text-primary" />
 					)}
-				</Button>
+				</button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="end" className="w-40">
 				<DropdownMenuItem
@@ -48,7 +48,7 @@ export function DetailViewToggle({
 					onClick={() => handleSelect("dialog")}
 				>
 					<span className="flex items-center gap-2">
-						<Maximize2 className="h-4 w-4" />
+						<CenterViewIcon className="h-12 w-12 text-primary" />
 						<span>Center View</span>
 					</span>
 					{detailViewMode === "dialog" && (
@@ -60,7 +60,7 @@ export function DetailViewToggle({
 					onClick={() => handleSelect("sheet")}
 				>
 					<span className="flex items-center gap-2">
-						<Sidebar className="h-4 w-4" />
+						<SideViewIcon className="h-12 w-12 text-primary" />
 						<span>Side View</span>
 					</span>
 					{detailViewMode === "sheet" && (

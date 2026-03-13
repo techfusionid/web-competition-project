@@ -210,8 +210,8 @@
 @layer utilities {
 	.container {
 		@apply mx-auto w-full px-4 sm:px-6 lg:px-8;
-		/* Match Tailwind's max-w-7xl (80rem / 1280px) */
-		max-width: 80rem;
+		/* Reduced from 80rem (1280px) to 72rem (1152px) for more compact layout */
+		max-width: 72rem;
 	}
 
 	.scrollbar-hide {

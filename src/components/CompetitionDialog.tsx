@@ -1,5 +1,6 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { format } from "date-fns";
+import Image from "next/image";
 import {
 	BadgeCheck,
 	Calendar,
@@ -12,7 +13,7 @@ import {
 	Users,
 	X,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -67,6 +68,32 @@ export function CompetitionDialog({
 	// Minimum swipe distance (in px)
 	const minSwipeDistance = 50;
 
+	// Memoize level labels to avoid recreating on every render
+	const levelLabels = useMemo(
+		() =>
+			LEVELS.reduce(
+				(acc, l) => {
+					acc[l.value] = l.label;
+					return acc;
+				},
+				{} as Record<string, string>
+			),
+		[]
+	);
+
+	// Memoize share data to avoid recreating
+	const shareData = useMemo(
+		() =>
+			competition
+				? {
+						title: competition.title,
+						text: `View competition "${competition.title}" on Competitions!`,
+						url: competition.registrationUrl,
+					}
+				: null,
+		[competition]
+	);
+
 	// Keyboard navigation (arrows: left/previous, right/next)
 	useEffect(() => {
 		if (!isOpen) return;
@@ -83,22 +110,22 @@ export function CompetitionDialog({
 		return () => window.removeEventListener("keydown", handleKeyDown);
 	}, [isOpen, hasPrevious, hasNext, onPrevious, onNext]);
 
-	const onTouchStart = (e: React.TouchEvent) => {
+	const onTouchStart = useCallback((e: React.TouchEvent) => {
 		setTouchEnd(null);
 		setTouchStart({
 			x: e.targetTouches[0].clientX,
 			y: e.targetTouches[0].clientY,
 		});
-	};
+	}, []);
 
-	const onTouchMove = (e: React.TouchEvent) => {
+	const onTouchMove = useCallback((e: React.TouchEvent) => {
 		setTouchEnd({
 			x: e.targetTouches[0].clientX,
 			y: e.targetTouches[0].clientY,
 		});
-	};
+	}, []);
 
-	const onTouchEnd = () => {
+	const onTouchEnd = useCallback(() => {
 		if (!touchStart || !touchEnd) return;
 
 		const dx = touchStart.x - touchEnd.x;
@@ -115,38 +142,32 @@ export function CompetitionDialog({
 		} else if (isRightSwipe && hasPrevious) {
 			onPrevious();
 		}
-	};
+	}, [
+		touchStart,
+		touchEnd,
+		minSwipeDistance,
+		hasNext,
+		hasPrevious,
+		onNext,
+		onPrevious,
+	]);
 
-	const handleShare = async () => {
-		if (!competition) return;
-
-		const shareData = {
-			title: competition.title,
-			text: `View competition "${competition.title}" on Competitions!`,
-			url: competition.registrationUrl,
-		};
+	const handleShare = useCallback(async () => {
+		if (!shareData) return;
 
 		try {
 			if (navigator.share) {
 				await navigator.share(shareData);
 			} else {
-				await navigator.clipboard.writeText(competition.registrationUrl);
+				await navigator.clipboard.writeText(shareData.url);
 				toast.success("Link copied successfully!");
 			}
 		} catch (err) {
 			// User cancelled sharing
 		}
-	};
+	}, [shareData]);
 
 	if (!competition) return null;
-
-	const levelLabels = LEVELS.reduce(
-		(acc, l) => {
-			acc[l.value] = l.label;
-			return acc;
-		},
-		{} as Record<string, string>
-	);
 
 	return (
 		<Dialog onOpenChange={(open) => !open && onClose()} open={isOpen}>
@@ -179,16 +200,16 @@ export function CompetitionDialog({
 
 					{/* Top-left: left/right arrows to switch competition */}
 					{hasPrevious || hasNext ? (
-						<div className="absolute left-2 top-2 z-10 flex flex-row items-center gap-0.5">
+						<div className="absolute left-2 top-2 z-10 flex items-center gap-1 max-w-[calc(100%-6rem)]">
 							{hasPrevious && (
 								<Tooltip>
 									<TooltipTrigger asChild>
 										<Button
 											aria-label="Previous competition"
-											className="h-6 w-6 rounded-full bg-background/80 backdrop-blur-sm p-0 hover:bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+											className="h-8 w-8 shrink-0 rounded-lg p-0"
 											onClick={onPrevious}
 											size="icon"
-											variant="ghost"
+											variant="secondary"
 										>
 											<ChevronLeft className="h-3.5 w-3.5" />
 										</Button>
@@ -201,10 +222,10 @@ export function CompetitionDialog({
 									<TooltipTrigger asChild>
 										<Button
 											aria-label="Next competition"
-											className="h-6 w-6 rounded-full bg-background/80 backdrop-blur-sm p-0 hover:bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+											className="h-8 w-8 shrink-0 rounded-lg p-0"
 											onClick={onNext}
 											size="icon"
-											variant="ghost"
+											variant="secondary"
 										>
 											<ChevronRight className="h-3.5 w-3.5" />
 										</Button>
@@ -243,10 +264,13 @@ export function CompetitionDialog({
 							onTouchStart={onTouchStart}
 						>
 							{competition.imageUrl ? (
-								<img
+								<Image
 									alt={competition.title}
-									className="h-full w-full object-cover"
+									className="object-cover"
 									src={competition.imageUrl}
+									fill
+									sizes="(max-width: 640px) 92vw, (max-width: 768px) 340px, 48rem"
+									priority
 								/>
 							) : (
 								<div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5">

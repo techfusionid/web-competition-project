@@ -103,21 +103,21 @@ export function CompetitionSheet({
 			{/* Sheet */}
 			<div
 				className={cn(
-					"fixed right-0 top-0 z-50 h-screen w-full max-w-2xl bg-background shadow-xl",
+					"fixed right-0 top-0 bottom-0 z-50 h-screen w-full rounded-none bg-card shadow-xl md:right-4 md:top-4 md:bottom-4 md:h-[calc(100vh-2rem)] md:rounded-xl md:max-w-xl",
 					"transition-transform duration-300 ease-in-out",
 					isClosing ? "translate-x-full" : "translate-x-0"
 				)}
 			>
 				<div className="flex h-full flex-col">
 					{/* Header with close button, view toggle, and navigation */}
-					<div className="flex items-center justify-between border-b p-3">
+					<div className="flex items-center justify-between p-3 border-b border-border">
 						{/* Left side: close, view toggle, and copy link buttons */}
 						<div className="flex items-center gap-2">
 							<Tooltip>
 								<TooltipTrigger asChild>
 									<Button
 										aria-label="Close"
-										className="h-8 w-8 rounded-full"
+										className="h-8 w-8 rounded-lg"
 										onClick={handleClose}
 										size="icon"
 										variant="ghost"
@@ -135,10 +135,10 @@ export function CompetitionSheet({
 							)}
 							{competition && (
 								<CopyButton
-									className="h-8 rounded-full px-3"
+									className="h-8 rounded-lg px-3"
 									size="sm"
 									text={competition.registrationUrl}
-									variant="secondary"
+									variant="ghost"
 								>
 									Copy Link
 								</CopyButton>
@@ -147,16 +147,16 @@ export function CompetitionSheet({
 
 						{/* Right side: navigation buttons */}
 						{hasPrevious || hasNext ? (
-							<div className="flex items-center gap-0.5">
+							<div className="flex items-center gap-1">
 								{hasPrevious && onPrevious && (
 									<Tooltip>
 										<TooltipTrigger asChild>
 											<Button
 												aria-label="Previous competition"
-												className="h-7 w-7 rounded-full bg-background/80 backdrop-blur-sm p-0 hover:bg-background"
+												className="h-8 w-8 rounded-lg p-0"
 												onClick={onPrevious}
 												size="icon"
-												variant="ghost"
+												variant="secondary"
 											>
 												<ChevronUp className="h-4 w-4" />
 											</Button>
@@ -169,10 +169,10 @@ export function CompetitionSheet({
 										<TooltipTrigger asChild>
 											<Button
 												aria-label="Next competition"
-												className="h-7 w-7 rounded-full bg-background/80 backdrop-blur-sm p-0 hover:bg-background"
+												className="h-8 w-8 rounded-lg p-0"
 												onClick={onNext}
 												size="icon"
-												variant="ghost"
+												variant="secondary"
 											>
 												<ChevronDown className="h-4 w-4" />
 											</Button>

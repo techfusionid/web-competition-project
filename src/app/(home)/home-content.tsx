@@ -121,7 +121,7 @@ export function HomeContent() {
 				variant="minimal"
 				storageKey="landing"
 				dismissible={false}
-				sponsorCtaLink="mailto:sponsor@example.com"
+				sponsorCtaLink="/advertise"
 			/>
 
 			<div id="competitions">

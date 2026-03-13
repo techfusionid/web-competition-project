@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
+import Image from "next/image";
 import {
 	BadgeCheck,
 	Calendar,
@@ -11,10 +12,11 @@ import {
 	Users,
 	X,
 } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogPortal } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { type Competition, LEVELS } from "@/types/competition";
 import { ClaimCompetitionDialog } from "./ClaimCompetitionDialog";
@@ -35,12 +37,17 @@ export function CompetitionDetailPanel({
 	const [showShare, setShowShare] = useState(false);
 	const [showPosterLightbox, setShowPosterLightbox] = useState(false);
 
-	const levelLabels = LEVELS.reduce(
-		(acc, l) => {
-			acc[l.value] = l.label;
-			return acc;
-		},
-		{} as Record<string, string>
+	// Memoize level labels to avoid recreating on every render
+	const levelLabels = useMemo(
+		() =>
+			LEVELS.reduce(
+				(acc, l) => {
+					acc[l.value] = l.label;
+					return acc;
+				},
+				{} as Record<string, string>
+			),
+		[]
 	);
 
 	if (!competition) {
@@ -54,18 +61,22 @@ export function CompetitionDetailPanel({
 	}
 
 	return (
-		<ScrollArea className="h-full rounded-lg border border-border bg-card">
+		<ScrollArea className="h-full">
 			<div className="p-0">
 				{/* Poster Image with hover effect */}
-				<div className="relative w-full overflow-hidden bg-card px-4 py-4">
+				<div className="relative w-full px-4 py-4">
 					<div className="group relative mx-auto w-full max-w-xs">
 						{competition.imageUrl ? (
 							<>
-								<img
-									alt={competition.title}
-									className="h-auto w-full rounded-lg transition-all duration-300 group-hover:scale-105"
-									src={competition.imageUrl}
-								/>
+								<div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg">
+									<Image
+										alt={competition.title}
+										className="object-cover transition-transform duration-300 group-hover:scale-105"
+										src={competition.imageUrl}
+										fill
+										sizes="(max-width: 640px) 100vw, 320px"
+									/>
+								</div>
 								{/* Hover overlay with View Detail button */}
 								<div className="absolute inset-0 flex items-center justify-center rounded-lg bg-black/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
 									<Button
@@ -79,7 +90,7 @@ export function CompetitionDetailPanel({
 								</div>
 							</>
 						) : (
-							<div className="flex aspect-[16/9] w-full items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-primary/5">
+							<div className="flex aspect-[3/4] w-full items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-primary/5">
 								<span className="text-6xl font-bold text-primary/30">
 									{competition.title.charAt(0)}
 								</span>
@@ -90,7 +101,7 @@ export function CompetitionDetailPanel({
 					{/* Close Button */}
 					{onClose && (
 						<Button
-							className="absolute left-3 top-3 h-9 w-9 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
+							className="absolute left-3 top-3 h-9 w-9 rounded-lg bg-background/80 backdrop-blur-sm hover:bg-background"
 							onClick={onClose}
 							size="icon"
 							variant="ghost"
@@ -144,24 +155,28 @@ export function CompetitionDetailPanel({
 
 					{/* Details - Boxed Style */}
 					<div className="grid gap-2 text-sm">
-						<div className="flex items-center gap-3 rounded-lg bg-muted/50 px-3 py-2.5">
-							<div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
-								<Calendar className="h-4 w-4 text-primary" />
-							</div>
-							<span className="text-foreground">
-								{competition.startDate
-									? `${format(competition.startDate, "d MMMM", { locale: id })} - ${format(competition.deadline, "d MMMM yyyy", { locale: id })}`
-									: `Deadline: ${format(competition.deadline, "d MMMM yyyy", { locale: id })}`}
-							</span>
-						</div>
-						{competition.location && (
-							<div className="flex items-center gap-3 rounded-lg bg-muted/50 px-3 py-2.5">
-								<div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
-									<MapPin className="h-4 w-4 text-primary" />
+						<div className="flex items-center justify-between gap-3 rounded-lg bg-muted/50 px-3 py-2.5">
+							<div className="flex items-center gap-3 flex-1">
+								<div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 shrink-0">
+									<Calendar className="h-4 w-4 text-primary" />
 								</div>
-								<span className="text-foreground">{competition.location}</span>
+								<span className="text-foreground text-xs md:text-sm">
+									{competition.startDate
+										? `${format(competition.startDate, "d MMMM", { locale: id })} - ${format(competition.deadline, "d MMMM yyyy", { locale: id })}`
+										: `Deadline: ${format(competition.deadline, "d MMMM yyyy", { locale: id })}`}
+								</span>
 							</div>
-						)}
+							{competition.location && (
+								<div className="flex items-center gap-3 flex-1 justify-end">
+									<span className="text-foreground text-xs md:text-sm text-right">
+										{competition.location}
+									</span>
+									<div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 shrink-0">
+										<MapPin className="h-4 w-4 text-primary" />
+									</div>
+								</div>
+							)}
+						</div>
 						<div className="flex items-center gap-3 rounded-lg bg-muted/50 px-3 py-2.5">
 							<div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
 								<Users className="h-4 w-4 text-primary" />
@@ -186,9 +201,10 @@ export function CompetitionDetailPanel({
 
 					{/* Description */}
 					<div>
-						<p className="text-xs font-medium text-muted-foreground mb-1.5">
-							Deskripsi
+						<p className="text-sm font-medium text-muted-foreground mb-1.5">
+							About Competition
 						</p>
+						<Separator className="my-3" />
 						<p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
 							{competition.description}
 						</p>
@@ -259,11 +275,16 @@ export function CompetitionDetailPanel({
 								<X className="h-5 w-5" />
 							</Button>
 							{competition.imageUrl && (
-								<img
-									alt={competition.title}
-									className="h-auto max-h-[90vh] w-auto rounded-lg object-contain"
-									src={competition.imageUrl}
-								/>
+								<div className="relative h-auto max-h-[90vh] w-auto">
+									<Image
+										alt={competition.title}
+										className="rounded-lg object-contain"
+										src={competition.imageUrl}
+										width={800}
+										height={600}
+										sizes="(max-width: 640px) 100vw, 80rem"
+									/>
+								</div>
 							)}
 						</div>
 					</div>

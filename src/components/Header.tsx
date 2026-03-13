@@ -52,11 +52,7 @@ export function Header({ onHomeClick, sticky = false }: HeaderProps = {}) {
 					href="/"
 					onClick={handleHomeClick}
 				>
-					<img
-						src="/logo.svg"
-						alt="Competitions"
-						className="h-7 w-auto"
-					/>
+					<img src="/logo.svg" alt="Competitions" className="h-7 w-auto" />
 				</Link>
 
 				<nav className="hidden items-center gap-1 md:flex md:ml-8">

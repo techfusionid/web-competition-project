@@ -1,5 +1,7 @@
 import { db, competitions } from "./index";
 import { and, eq, ilike, sql, desc, gte, lte } from "drizzle-orm";
+import { unstable_cache } from "next/cache";
+import { CACHE_TAGS, CACHE_DURATIONS } from "@/lib/cache";
 
 export interface FilterState {
 	category?: string;
@@ -10,6 +12,9 @@ export interface FilterState {
 	status?: string;
 }
 
+// ========================================
+// getAllCompetitions
+// ========================================
 export async function getAllCompetitions() {
 	const allCompetitions = await db
 		.select()
@@ -18,6 +23,18 @@ export async function getAllCompetitions() {
 	return allCompetitions;
 }
 
+export const getAllCompetitionsCached = unstable_cache(
+	getAllCompetitions,
+	["all-competitions"],
+	{
+		revalidate: CACHE_DURATIONS.MEDIUM,
+		tags: [CACHE_TAGS.ALL_COMPETITIONS],
+	}
+);
+
+// ========================================
+// getCompetitionById
+// ========================================
 export async function getCompetitionById(id: string) {
 	const [competition] = await db
 		.select()
@@ -27,6 +44,18 @@ export async function getCompetitionById(id: string) {
 	return competition || null;
 }
 
+export const getCompetitionByIdCached = unstable_cache(
+	getCompetitionById,
+	["competition-by-id"],
+	{
+		revalidate: CACHE_DURATIONS.LONG,
+		tags: [CACHE_TAGS.ALL_COMPETITIONS],
+	}
+);
+
+// ========================================
+// getCompetitionsByFilter
+// ========================================
 export async function getCompetitionsByFilter(filter: FilterState) {
 	const conditions = [];
 
@@ -65,9 +94,19 @@ export async function getCompetitionsByFilter(filter: FilterState) {
 	return results;
 }
 
+export const getCompetitionsByFilterCached = unstable_cache(
+	async (filter: FilterState) => getCompetitionsByFilter(filter),
+	["competitions-by-filter"],
+	{
+		revalidate: CACHE_DURATIONS.SHORT,
+		tags: [CACHE_TAGS.ALL_COMPETITIONS],
+	}
+);
+
+// ========================================
+// getCompetitionsByOrganizer
+// ========================================
 export async function getCompetitionsByOrganizer(organizerName: string) {
-	// Organizer is stored as JSONB object like {name: "Organizer Name", ...}
-	// Use JSONB querying to check if organizer name matches
 	const results = await db
 		.select()
 		.from(competitions)
@@ -79,6 +118,18 @@ export async function getCompetitionsByOrganizer(organizerName: string) {
 	return results;
 }
 
+export const getCompetitionsByOrganizerCached = unstable_cache(
+	async (organizerName: string) => getCompetitionsByOrganizer(organizerName),
+	["competitions-by-organizer"],
+	{
+		revalidate: CACHE_DURATIONS.MEDIUM,
+		tags: [CACHE_TAGS.ALL_COMPETITIONS],
+	}
+);
+
+// ========================================
+// getCompetitionsByCategory
+// ========================================
 export async function getCompetitionsByCategory(category: string) {
 	const results = await db
 		.select()
@@ -89,6 +140,18 @@ export async function getCompetitionsByCategory(category: string) {
 	return results;
 }
 
+export const getCompetitionsByCategoryCached = unstable_cache(
+	async (category: string) => getCompetitionsByCategory(category),
+	["competitions-by-category"],
+	{
+		revalidate: CACHE_DURATIONS.MEDIUM,
+		tags: [CACHE_TAGS.ALL_COMPETITIONS],
+	}
+);
+
+// ========================================
+// getCompetitionsByIds (no persistent cache - dynamic IDs)
+// ========================================
 export async function getCompetitionsByIds(ids: string[]) {
 	if (ids.length === 0) return [];
 
@@ -100,6 +163,9 @@ export async function getCompetitionsByIds(ids: string[]) {
 	return results;
 }
 
+// ========================================
+// getAllOrganizers
+// ========================================
 interface Organizer {
 	name: string;
 	competitionCount: number;
@@ -120,7 +186,6 @@ export async function getAllOrganizers(): Promise<Organizer[]> {
 	>();
 
 	allCompetitions.forEach((competition) => {
-		// Organizer is stored as JSONB array like ["Organizer Name"]
 		const org = competition.organizer as unknown;
 		let name = null;
 
@@ -156,6 +221,18 @@ export async function getAllOrganizers(): Promise<Organizer[]> {
 	);
 }
 
+export const getAllOrganizersCached = unstable_cache(
+	getAllOrganizers,
+	["all-organizers"],
+	{
+		revalidate: CACHE_DURATIONS.LONG,
+		tags: [CACHE_TAGS.ALL_ORGANIZERS],
+	}
+);
+
+// ========================================
+// getAllCategories
+// ========================================
 export async function getAllCategories(): Promise<string[]> {
 	const allCompetitions = await db
 		.select({
@@ -167,7 +244,6 @@ export async function getAllCategories(): Promise<string[]> {
 	const categorySet = new Set<string>();
 	allCompetitions.forEach((competition) => {
 		if (competition.category) {
-			// Map Indonesian categories to English for display
 			const categoryMapping: Record<string, string> = {
 				"Akademik & Sains": "Science",
 				"Teknologi & IT": "Technology",
@@ -188,3 +264,12 @@ export async function getAllCategories(): Promise<string[]> {
 
 	return Array.from(categorySet).sort();
 }
+
+export const getAllCategoriesCached = unstable_cache(
+	getAllCategories,
+	["all-categories"],
+	{
+		revalidate: CACHE_DURATIONS.LONG,
+		tags: [CACHE_TAGS.ALL_CATEGORIES],
+	}
+);

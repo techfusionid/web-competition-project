@@ -8,17 +8,21 @@ button become a sponsor jadi outline dan tambahkan arrow kanan lucide react nant
 
 *setup logo, og images dan persiapan marketing lainnya
 
-kecilin lebar web competition dan buat supaya card nya jadi makin panjang dan grid column nya 3
+kecilin lebar layout web competition dan buat supaya card nya jadi makin panjang dan grid column nya 3
 
-optimalkan mekanisme poster disini supaya tidak terlalu berat
+dan pada view card tampilkan dalam 3 columnn saya
 
-pada view poster tampilkan dalam 4 column
+pada view poster tampilkan dalam 4 column saja
+
+optimalkan mekanisme gambar poster disini supaya tidak terlalu berat di fetch
 
 navbar klo di page tersebut tulisannya jadi bold tpi klo di bukan di salah satu variant shadcn 
 
 kecilin lebar report event
 
 bikin marketing 
+
+icon center view pake center-view.svg dan side center view pake icon side-view.svg tapi warnanya masih  full hitam sih, bisa sesuaikan dong supaya match dgn warna brand identity di global.css 
 
 ---
 

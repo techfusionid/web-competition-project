@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import Image from "next/image";
 import {
 	BadgeCheck,
 	Bookmark,
@@ -85,13 +86,16 @@ export function CompetitionCardPoster({
 				onPointerLeave={handlePointerUp}
 				onPointerUp={handlePointerUp}
 			>
-				{/* Poster Image - 3:4 aspect ratio */}
+				{/* Poster Image */}
 				<div className="relative aspect-[3/4] w-full overflow-hidden bg-secondary">
 					{competition.imageUrl ? (
-						<img
+						<Image
 							alt={competition.title}
-							className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+							className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
 							src={competition.imageUrl}
+							fill
+							sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+							loading="lazy"
 						/>
 					) : (
 						<div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-primary/20 to-primary/5">

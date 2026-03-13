@@ -19,10 +19,10 @@ export function Footer() {
 		},
 		{
 			title: "Quick Links",
-         links: [
-            { name: "Contact Us", href: "/" },
+			links: [
+				{ name: "Contact Us", href: "/" },
 				{ name: "About Us", href: "/about-us" },
-            { name: "Advertise", href: "/advertise" },
+				{ name: "Advertise", href: "/advertise" },
 			],
 		},
 		{
