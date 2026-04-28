@@ -70,6 +70,24 @@ interface SponsorSectionProps {
 
 const STORAGE_KEY_PREFIX = "sponsor-section-visible";
 
+// Hoisted outside component to avoid recreation on each render
+function SponsorTooltip({ sponsor }: { sponsor: Sponsor }) {
+	return (
+		<TooltipContent
+			arrowClassName="bg-slate-900 dark:bg-slate-50 fill-slate-900 dark:fill-slate-50 border-r border-b border-slate-700 dark:border-slate-200"
+			className="fade-in-0 zoom-in-95 animate-in rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white shadow-xl backdrop-blur-sm dark:border-slate-200 dark:bg-slate-50 dark:text-slate-900"
+			side="bottom"
+			sideOffset={8}
+		>
+			{sponsor.description && (
+				<p className="text-center text-slate-300 text-xs dark:text-slate-600">
+					{sponsor.description}
+				</p>
+			)}
+		</TooltipContent>
+	);
+}
+
 export function SponsorSection({
 	sponsors,
 	title = "Our Sponsors",
@@ -125,28 +143,6 @@ export function SponsorSection({
 		);
 	}
 
-	// Common tooltip content component
-	const SponsorTooltip = ({ sponsor }: { sponsor: Sponsor }) => (
-		<TooltipContent
-			arrowClassName="bg-slate-900 dark:bg-slate-50 fill-slate-900 dark:fill-slate-50 border-r border-b border-slate-700 dark:border-slate-200"
-			className="fade-in-0 zoom-in-95 max-w-48 animate-in rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white shadow-xl backdrop-blur-sm dark:border-slate-200 dark:bg-slate-50 dark:text-slate-900"
-			side="bottom"
-			sideOffset={8}
-		>
-			<p className="text-center font-medium text-sm">{sponsor.name}</p>
-			{sponsor.description && (
-				<p className="mt-1 line-clamp-2 text-center text-slate-300 text-xs dark:text-slate-600">
-					{sponsor.description}
-				</p>
-			)}
-			{sponsor.website && (
-				<span className="mt-1.5 inline-flex w-full items-center justify-center gap-1 text-sky-400 text-xs dark:text-sky-600">
-					Visit <ExternalLink className="h-3 w-3" />
-				</span>
-			)}
-		</TooltipContent>
-	);
-
 	const content = (() => {
 		if (variant === "minimal") {
 			return (
@@ -179,7 +175,7 @@ export function SponsorSection({
 									<Tooltip key={sponsor.id}>
 										<TooltipTrigger asChild>
 											<a
-												className="group flex flex-col items-center justify-center p-4 transition-colors duration-200 hover:bg-muted/50"
+												className="group flex cursor-pointer flex-col items-center justify-center p-4 transition-colors duration-200 hover:bg-muted/50"
 												href={sponsor.website || "#"}
 												rel={
 													sponsor.website ? "noopener noreferrer" : undefined
@@ -189,10 +185,11 @@ export function SponsorSection({
 												{/* Logo */}
 												<div className="flex h-10 w-full items-center justify-center">
 													{sponsor.logo.startsWith("http") ||
-													sponsor.logo.startsWith("data:") ? (
+													sponsor.logo.startsWith("data:") ||
+													sponsor.logo.startsWith("/") ? (
 														<img
 															alt={sponsor.name}
-															className="h-8 w-auto max-w-[60px] object-contain transition-transform duration-200 group-hover:scale-105"
+															className="h-8 w-auto max-w-[60px] cursor-pointer object-contain grayscale transition-transform duration-200 group-hover:scale-105"
 															src={sponsor.logo}
 														/>
 													) : (
@@ -262,7 +259,7 @@ export function SponsorSection({
 									<Tooltip key={sponsor.id}>
 										<TooltipTrigger asChild>
 											<a
-												className="group flex flex-col items-center justify-center p-4 transition-colors duration-200 hover:bg-muted/50"
+												className="group flex cursor-pointer flex-col items-center justify-center p-4 transition-colors duration-200 hover:bg-muted/50"
 												href={sponsor.website || "#"}
 												rel={
 													sponsor.website ? "noopener noreferrer" : undefined
@@ -272,10 +269,11 @@ export function SponsorSection({
 												{/* Logo */}
 												<div className="mb-2 flex h-10 w-full items-center justify-center">
 													{sponsor.logo.startsWith("http") ||
-													sponsor.logo.startsWith("data:") ? (
+													sponsor.logo.startsWith("data:") ||
+													sponsor.logo.startsWith("/") ? (
 														<img
 															alt={sponsor.name}
-															className="h-8 w-auto max-w-[80px] object-contain transition-transform duration-200 group-hover:scale-105"
+															className="h-8 w-auto max-w-[80px] cursor-pointer object-contain grayscale transition-transform duration-200 group-hover:scale-105"
 															src={sponsor.logo}
 														/>
 													) : (
@@ -377,7 +375,7 @@ export function SponsorSection({
 												<Tooltip key={sponsor.id}>
 													<TooltipTrigger asChild>
 														<a
-															className="group flex flex-col items-center justify-center p-6 transition-colors duration-200 hover:bg-muted/50 md:p-8"
+															className="group flex cursor-pointer flex-col items-center justify-center p-6 transition-colors duration-200 hover:bg-muted/50 md:p-8"
 															href={sponsor.website || "#"}
 															rel={
 																sponsor.website
@@ -387,12 +385,13 @@ export function SponsorSection({
 															target={sponsor.website ? "_blank" : undefined}
 														>
 															{/* Logo */}
-															<div className="mb-3 flex h-16 w-full items-center justify-center md:h-20">
+															<div className="mb-3 flex h-20 w-full items-center justify-center md:h-24">
 																{sponsor.logo.startsWith("http") ||
-																sponsor.logo.startsWith("data:") ? (
+																sponsor.logo.startsWith("data:") ||
+																sponsor.logo.startsWith("/") ? (
 																	<img
 																		alt={sponsor.name}
-																		className="h-12 w-auto max-w-[120px] object-contain transition-transform duration-200 group-hover:scale-105 md:h-16"
+																		className="h-14 w-auto max-w-[120px] cursor-pointer rounded-xl object-contain grayscale transition-transform duration-200 group-hover:scale-105 md:h-18"
 																		src={sponsor.logo}
 																	/>
 																) : (

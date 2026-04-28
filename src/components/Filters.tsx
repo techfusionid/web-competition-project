@@ -22,6 +22,22 @@ export interface FilterState {
 	participationType: ParticipationType | "all";
 }
 
+const formatOptions: { value: CompetitionFormat | "all"; label: string }[] = [
+	{ value: "all", label: "All" },
+	{ value: "online", label: "Online" },
+	{ value: "offline", label: "Offline" },
+	{ value: "hybrid", label: "Hybrid" },
+];
+
+const participationOptions: {
+	value: ParticipationType | "all";
+	label: string;
+}[] = [
+	{ value: "all", label: "All" },
+	{ value: "individual", label: "Individual" },
+	{ value: "team", label: "Team" },
+];
+
 interface FiltersProps {
 	filters: FilterState;
 	onFiltersChange: (filters: FilterState) => void;
@@ -38,22 +54,6 @@ export function Filters({
 		filters.levels.length > 0 ||
 		filters.format !== "all" ||
 		filters.participationType !== "all";
-
-	const formatOptions: { value: CompetitionFormat | "all"; label: string }[] = [
-		{ value: "all", label: "All" },
-		{ value: "online", label: "Online" },
-		{ value: "offline", label: "Offline" },
-		{ value: "hybrid", label: "Hybrid" },
-	];
-
-	const participationOptions: {
-		value: ParticipationType | "all";
-		label: string;
-	}[] = [
-		{ value: "all", label: "All" },
-		{ value: "individual", label: "Individual" },
-		{ value: "team", label: "Team" },
-	];
 
 	return (
 		<div className="rounded-lg border border-border bg-card p-4">

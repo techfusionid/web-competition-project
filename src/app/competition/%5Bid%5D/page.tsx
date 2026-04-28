@@ -76,15 +76,20 @@ export default function CompetitionDetailPage() {
 
 	const bookmarked = isBookmarked(competition.id);
 
+	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "";
+	const shareUrl = siteUrl
+		? `${siteUrl}/competition/${competition.id}`
+		: window.location.href;
+
 	const handleShare = async () => {
 		try {
 			await navigator.share({
 				title: competition.title,
 				text: competition.description,
-				url: window.location.href,
+				url: shareUrl,
 			});
 		} catch {
-			navigator.clipboard.writeText(window.location.href);
+			navigator.clipboard.writeText(shareUrl);
 			toast.success("Link disalin! Link kompetisi telah disalin ke clipboard.");
 		}
 	};

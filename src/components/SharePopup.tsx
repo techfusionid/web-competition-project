@@ -1,16 +1,8 @@
 "use client";
 
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import {
-	Check,
-	Copy,
-	Facebook,
-	Linkedin,
-	MessageCircle,
-	Send,
-	Twitter,
-} from "lucide-react";
 import { useEffect, useState } from "react";
+import { SocialIcon } from "react-social-icons/component";
 import { toast } from "sonner";
 import {
 	Dialog,
@@ -55,67 +47,46 @@ export function SharePopup({ isOpen, onClose, title, url }: SharePopupProps) {
 	const shareOptions = [
 		{
 			name: "Salin",
-			icon: copied ? Check : Copy,
+			icon: copied ? "copy" : "link",
 			color: "bg-gray-200 dark:bg-gray-700",
 			hoverColor: "hover:bg-gray-300 dark:hover:bg-gray-600",
 			onClick: handleCopyLink,
+			isCopy: true,
 		},
 		{
 			name: "X",
-			icon: Twitter,
+			url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`,
 			color: "bg-black",
 			hoverColor: "hover:bg-gray-800",
-			onClick: () => {
-				const text = encodeURIComponent(title);
-				const shareUrl = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(url)}`;
-				window.open(shareUrl, "_blank", "width=600,height=400");
-				onClose();
-			},
+			network: "x",
 		},
 		{
 			name: "Facebook",
-			icon: Facebook,
+			url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
 			color: "bg-[#1877F2]",
 			hoverColor: "hover:bg-[#166FE5]",
-			onClick: () => {
-				const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
-				window.open(shareUrl, "_blank", "width=600,height=400");
-				onClose();
-			},
+			network: "facebook",
 		},
 		{
 			name: "WhatsApp",
-			icon: MessageCircle,
+			url: `https://wa.me/?text=${encodeURIComponent(`${title}\n${url}`)}`,
 			color: "bg-[#25D366]",
 			hoverColor: "hover:bg-[#20BA5C]",
-			onClick: () => {
-				const text = encodeURIComponent(`${title}\n${url}`);
-				const shareUrl = `https://wa.me/?text=${text}`;
-				window.open(shareUrl, "_blank", "width=600,height=400");
-				onClose();
-			},
+			network: "whatsapp",
 		},
 		{
 			name: "LinkedIn",
-			icon: Linkedin,
+			url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
 			color: "bg-[#0A66C2]",
 			hoverColor: "hover:bg-[#095195]",
-			onClick: () => {
-				const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
-				window.open(shareUrl, "_blank", "width=600,height=400");
-				onClose();
-			},
+			network: "linkedin",
 		},
 		{
 			name: "Telegram",
-			icon: Send,
+			url: `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`,
 			color: "bg-[#0088cc]",
 			hoverColor: "hover:bg-[#0077b3]",
-			onClick: () => {
-				const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`;
-				window.open(shareUrl, "_blank", "width=600,height=400");
-				onClose();
-			},
+			network: "telegram",
 		},
 	];
 
@@ -161,25 +132,60 @@ export function SharePopup({ isOpen, onClose, title, url }: SharePopupProps) {
 						</p>
 						<div className="-mx-6 overflow-x-auto px-6 pb-2">
 							<div className="flex min-w-min justify-center gap-3">
-								{shareOptions.map((option) => {
-									const Icon = option.icon;
-									return (
-										<button
-											className="group flex flex-shrink-0 flex-col items-center gap-1.5"
-											key={option.name}
-											onClick={option.onClick}
-										>
+								{shareOptions.map((option) => (
+									<button
+										className="group flex flex-shrink-0 flex-col items-center gap-1.5"
+										key={option.name}
+										onClick={() => {
+											if (option.isCopy) {
+												option.onClick?.();
+											} else if (option.url) {
+												window.open(
+													option.url,
+													"_blank",
+													"width=600,height=400"
+												);
+												onClose();
+											}
+										}}
+									>
+										{option.isCopy ? (
 											<div
-												className={`${option.color} ${option.hoverColor} flex h-10 w-10 items-center justify-center rounded-full text-white transition-all group-hover:scale-110`}
+												className={`${option.color} ${option.hoverColor} flex h-10 w-10 items-center justify-center rounded-full text-gray-700 transition-all group-hover:scale-110 dark:text-gray-200`}
 											>
-												<Icon className="h-4 w-4" />
+												{copied ? (
+													<svg
+														className="h-4 w-4"
+														fill="none"
+														stroke="currentColor"
+														strokeWidth={2}
+														viewBox="0 0 24 24"
+													>
+														<path d="M5 13l4 4L19 7" />
+													</svg>
+												) : (
+													<svg
+														className="h-4 w-4"
+														fill="none"
+														stroke="currentColor"
+														strokeWidth={2}
+														viewBox="0 0 24 24"
+													>
+														<path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+													</svg>
+												)}
 											</div>
-											<span className="whitespace-nowrap text-center text-gray-700 text-xs dark:text-gray-300">
-												{option.name}
-											</span>
-										</button>
-									);
-								})}
+										) : (
+											<SocialIcon
+												network={option.network}
+												style={{ height: 40, width: 40 }}
+											/>
+										)}
+										<span className="whitespace-nowrap text-center text-gray-700 text-xs dark:text-gray-300">
+											{option.name}
+										</span>
+									</button>
+								))}
 							</div>
 						</div>
 					</div>

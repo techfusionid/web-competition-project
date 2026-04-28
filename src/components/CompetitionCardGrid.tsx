@@ -26,19 +26,19 @@ export function CompetitionCard({
 
 	const shareUrl =
 		typeof window !== "undefined"
-			? `${window.location.origin}/competition/${competition.id}`
+			? `${process.env.NEXT_PUBLIC_SITE_URL || window.location.origin}/competition/${competition.id}`
 			: "";
 
 	return (
 		<>
 			<div
-				className="group relative flex min-h-[200px] cursor-pointer flex-col rounded-lg border border-border bg-secondary/15 p-3 ring-6 ring-background ring-inset transition-all hover:border-primary/50 md:p-4"
+				className="group relative flex cursor-pointer flex-col rounded-lg border border-border bg-secondary/15 ring-6 ring-background ring-inset transition-all hover:border-primary/50 md:p-4"
 				onClick={onClick}
 			>
 				{/* Header - Title, Organizer, Status (default), Share */}
-				<div className="flex items-start justify-between gap-2">
+				<div className="flex items-start justify-between">
 					<div className="min-w-0 flex-1">
-						<h3 className="truncate font-semibold text-base text-foreground transition-colors group-hover:text-primary md:text-lg">
+						<h3 className="truncate font-semibold text-base text-foreground tracking-wide transition-colors group-hover:text-primary md:text-lg">
 							{competition.title}
 						</h3>
 						<button

@@ -1,6 +1,5 @@
-import { ChevronDown, ChevronsRight, ChevronUp } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { CopyButton } from "@/components/copy-button/copy-button";
+import { CopyButton } from "@/components/copy-button";
 import { Button } from "@/components/ui/button";
 import {
 	Tooltip,
@@ -9,7 +8,7 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import type { Competition } from "@/types/competition";
-import { CompetitionDetailPanel } from "./CompetitionDetailPanel";
+import { CompetitionDetailContent } from "./CompetitionDetailContent";
 import { type DetailViewMode, DetailViewToggle } from "./DetailViewToggle";
 
 interface CompetitionSheetProps {
@@ -41,10 +40,9 @@ export function CompetitionSheet({
 		setIsClosing(true);
 		setTimeout(() => {
 			onClose();
-		}, 300); // Match the animation duration
+		}, 300);
 	}, [onClose]);
 
-	// Handle escape key to close and keyboard navigation
 	useEffect(() => {
 		if (!isOpen) {
 			return;
@@ -64,19 +62,16 @@ export function CompetitionSheet({
 		return () => window.removeEventListener("keydown", handleKeyDown);
 	}, [isOpen, hasPrevious, hasNext, onPrevious, onNext, handleClose]);
 
-	// Prevent body scroll when sheet is open
 	useEffect(() => {
 		if (!isOpen) {
 			return;
 		}
-
 		document.body.style.overflow = "hidden";
 		return () => {
 			document.body.style.overflow = "";
 		};
 	}, [isOpen]);
 
-	// Reset closing state when opening
 	useEffect(() => {
 		if (isOpen) {
 			setIsClosing(false);
@@ -87,11 +82,9 @@ export function CompetitionSheet({
 		handleClose();
 	};
 
-	// Don't render if closed and not in closing animation
 	if (!(isOpen || isClosing)) {
 		return null;
 	}
-	// Don't render if no competition
 	if (!(competition || isClosing)) {
 		return null;
 	}
@@ -116,9 +109,8 @@ export function CompetitionSheet({
 				)}
 			>
 				<div className="flex h-full flex-col">
-					{/* Header with close button, view toggle, and navigation */}
+					{/* Header */}
 					<div className="flex items-center justify-between border-border border-b p-3">
-						{/* Left side: close, view toggle, and copy link buttons */}
 						<div className="flex items-center gap-2">
 							<Tooltip>
 								<TooltipTrigger asChild>
@@ -129,7 +121,15 @@ export function CompetitionSheet({
 										size="icon"
 										variant="ghost"
 									>
-										<ChevronsRight className="h-4 w-4" />
+										<svg
+											className="h-4 w-4"
+											fill="none"
+											stroke="currentColor"
+											strokeWidth={2}
+											viewBox="0 0 24 24"
+										>
+											<path d="M9 18l6-6-6-6" />
+										</svg>
 									</Button>
 								</TooltipTrigger>
 								<TooltipContent>Close</TooltipContent>
@@ -152,7 +152,7 @@ export function CompetitionSheet({
 							)}
 						</div>
 
-						{/* Right side: navigation buttons */}
+						{/* Navigation */}
 						{hasPrevious || hasNext ? (
 							<div className="flex items-center gap-1">
 								{hasPrevious && onPrevious && (
@@ -165,7 +165,15 @@ export function CompetitionSheet({
 												size="icon"
 												variant="secondary"
 											>
-												<ChevronUp className="h-4 w-4" />
+												<svg
+													className="h-4 w-4"
+													fill="none"
+													stroke="currentColor"
+													strokeWidth={2}
+													viewBox="0 0 24 24"
+												>
+													<path d="M18 15l-6-6-6 6" />
+												</svg>
 											</Button>
 										</TooltipTrigger>
 										<TooltipContent>Previous</TooltipContent>
@@ -181,7 +189,15 @@ export function CompetitionSheet({
 												size="icon"
 												variant="secondary"
 											>
-												<ChevronDown className="h-4 w-4" />
+												<svg
+													className="h-4 w-4"
+													fill="none"
+													stroke="currentColor"
+													strokeWidth={2}
+													viewBox="0 0 24 24"
+												>
+													<path d="M6 9l6 6 6-6" />
+												</svg>
 											</Button>
 										</TooltipTrigger>
 										<TooltipContent>Next</TooltipContent>
@@ -193,7 +209,13 @@ export function CompetitionSheet({
 
 					{/* Content */}
 					<div className="flex-1 overflow-hidden">
-						<CompetitionDetailPanel competition={competition} />
+						{competition && (
+							<CompetitionDetailContent
+								competition={competition}
+								onClose={handleClose}
+								variant="sheet"
+							/>
+						)}
 					</div>
 				</div>
 			</div>

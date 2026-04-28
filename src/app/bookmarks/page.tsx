@@ -4,7 +4,7 @@ import { Bookmark } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { fetchCompetitionsByIds } from "@/app/actions/competitions";
-import { CompetitionCard } from "@/components/CompetitionCard";
+import { CompetitionCard } from "@/components/CompetitionCardGrid";
 import { Button } from "@/components/ui/button";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import type { Competition } from "@/types/competition";

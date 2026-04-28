@@ -10,7 +10,7 @@ import {
 	Users,
 	X,
 } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -64,12 +64,16 @@ export function CompetitionDrawer({
 		return null;
 	}
 
-	const levelLabels = LEVELS.reduce(
-		(acc, l) => {
-			acc[l.value] = l.label;
-			return acc;
-		},
-		{} as Record<string, string>
+	const levelLabels = useMemo(
+		() =>
+			LEVELS.reduce(
+				(acc, l) => {
+					acc[l.value] = l.label;
+					return acc;
+				},
+				{} as Record<string, string>
+			),
+		[]
 	);
 
 	return (

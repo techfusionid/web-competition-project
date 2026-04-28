@@ -1,24 +1,26 @@
 ## phase 1
 
-pada grid sponsor tambahkan tooltip yg berisi deskripsi brand tiap kali di hover
-
 footer kiri tambahkan widget producthunt dan theme toggle di list sosial media,
-
-button become a sponsor jadi outline dan tambahkan arrow kanan lucide react nanti mengarah ke halaman advertise
 
 *setup logo, og images dan persiapan marketing lainnya
 
-kecilin lebar layout web competition dan buat supaya card nya jadi makin panjang dan grid column nya 3
+gedein fonts navbar dan perbaiki fonts nya supaya make inter
 
-dan pada view card tampilkan dalam 3 columnn saya
+sesuaikan ui ux poster gambar view
 
-pada view poster tampilkan dalam 4 column saja
+sesuaikan ui ux card gambar view
 
-optimalkan mekanisme gambar poster disini supaya tidak terlalu berat di fetch
+sesuaikan ui ux pop up share 
+
+buat supaya switch view dari center view dan side view jadi seamless
+
+sesuaikan informasi page dari navbar
 
 navbar klo di page tersebut tulisannya jadi bold tpi klo di bukan di salah satu variant shadcn 
 
-kecilin lebar report event
+ganti icon categories
+
+*sesuaikan mekanisme categories ini supaya masih cooming soon
 
 bikin marketing 
 
@@ -36,3 +38,15 @@ icon center view pake center-view.svg dan side center view pake icon side-view.s
 ---
 
 ## phase 3
+
+
+
+bagaimana saya supaya dapat update? kami berencana untuk menambahkan newsletter sehingga bisa ngasih update personal ke kontak kamu, namun saat ini masih blum, jadi bisa follow channel wa nya jaa untuk update lomba lebih cepat
+
+bagaimana data lomba ini didapat? lomba ini didapat dari scrapping instagram dalam beberapa hari sekali
+
+apakah platform ini gratis? ya web ini sepenuhnya gratis untuk digunakan, tidak perlu login, tidak ada, dan aplikasinya smooth untuk digunakan 
+
+apakah saya bisa menambahkan lomba di web ini? untuk saat ini masih belum, masih cuman automate competition scrapping dan 
+
+bagaimana saya bisa berkontribusi? website landingpage ini public di github, dan terbuka jika mau contribute improve nambah fitur atau solve bugs, pun dengan feedback kalian bisa improve web kami 

@@ -1,4 +1,4 @@
-import { Instagram, Linkedin } from "lucide-react";
+import { Instagram, Linkedin, Mail } from "lucide-react";
 import { Footer7 } from "@/components/ui/footer-7";
 
 const WhatsAppIcon = ({ className }: { className?: string }) => (
@@ -18,18 +18,21 @@ export function Footer() {
 			],
 		},
 		{
-			title: "Quick Links",
+			title: "Contact",
 			links: [
-				{ name: "Contact Us", href: "/" },
-				{ name: "About Us", href: "/about-us" },
-				{ name: "Advertise", href: "/advertise" },
+				{
+					name: "WhatsApp",
+					href: "https://wa.me/6281234567890",
+					external: true,
+				},
+				{ name: "Email", href: "mailto:hello@techfusion.id", external: true },
 			],
 		},
 		{
-			title: "Legal",
+			title: "Quick Links",
 			links: [
-				{ name: "Terms", href: "/terms" },
-				{ name: "Privacy", href: "/privacy" },
+				{ name: "About Us", href: "/about-us" },
+				{ name: "Advertise", href: "/advertise" },
 			],
 		},
 	];
@@ -49,6 +52,11 @@ export function Footer() {
 			icon: <WhatsAppIcon className="size-5" />,
 			href: "https://wa.me/6281234567890",
 			label: "WhatsApp",
+		},
+		{
+			icon: <Mail className="size-5" />,
+			href: "mailto:hello@techfusion.id",
+			label: "Email",
 		},
 	];
 

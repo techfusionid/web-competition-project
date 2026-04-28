@@ -68,3 +68,8 @@ logs/security/
 
 .agents
 .claude
+# Moat task system
+.moat/
+
+# Claude Code configuration
+.claude/

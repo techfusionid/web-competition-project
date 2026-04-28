@@ -15,8 +15,8 @@ export function OrganizerCard({
 	href,
 }: OrganizerCardProps) {
 	return (
-		<Card className="group overflow-hidden border-border/50 bg-card/50 shadow-none backdrop-blur-sm">
-			<Link className="block" href={href}>
+		<Link href={href}>
+			<Card className="group cursor-pointer overflow-hidden border-border/50 bg-card/50 shadow-none backdrop-blur-sm transition-all hover:border-primary/50 hover:shadow-md">
 				<CardContent>
 					{/* Image at top */}
 					<div className="mb-4 h-12 w-12 overflow-hidden rounded-lg">
@@ -33,11 +33,11 @@ export function OrganizerCard({
 					</h3>
 
 					{/* Description */}
-					<p className="mb-4 line-clamp-2 text-muted-foreground/70 text-sm">
+					<p className="line-clamp-2 text-muted-foreground/70 text-sm">
 						{description}
 					</p>
 				</CardContent>
-			</Link>
-		</Card>
+			</Card>
+		</Link>
 	);
 }

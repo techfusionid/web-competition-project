@@ -5,29 +5,27 @@ const organizers = [
 		title: "ITB",
 		image:
 			"https://upload.wikimedia.org/wikipedia/id/9/95/Logo_Institut_Teknologi_Bandung.png",
-		description:
-			"Institut Teknologi Bandung - Innovation and technology competitions",
+		description: "Coming soon",
 		href: "/organizer/itb",
 	},
 	{
 		title: "UI",
 		image:
 			"https://upload.wikimedia.org/wikipedia/id/thumb/0/0f/Makara_of_Universitas_Indonesia.svg/250px-Makara_of_Universitas_Indonesia.svg.png",
-		description:
-			"Universitas Indonesia - Leading academic and research competitions",
+		description: "Coming soon",
 		href: "/organizer/ui",
 	},
 	{
 		title: "Google",
 		image:
 			"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN1HgAOQZBf48TI55AvzbnfV0IFrCCrX6ldg&s",
-		description: "Google developer challenges and tech competitions",
+		description: "Coming soon",
 		href: "/organizer/google",
 	},
 	{
 		title: "UGM",
 		image: "https://innopa.org/wp-content/uploads/logo-ugm.png",
-		description: "Universitas Gadjah Mada - Prestigious national competitions",
+		description: "Coming soon",
 		href: "/organizer/ugm",
 	},
 ];

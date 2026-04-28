@@ -7,11 +7,11 @@ import {
 } from "@/components/ui/carousel";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { Competition } from "@/types/competition";
-import { CompetitionCard } from "./CompetitionCard";
+import { CompetitionCard } from "./CompetitionCardGrid";
 import { CompetitionCardPoster } from "./CompetitionCardPoster";
-import { CompetitionDialog } from "./CompetitionDialog";
+import { CompetitionDialog } from "./CompetitionCenterDialog";
 import { CompetitionDrawer } from "./CompetitionDrawer";
-import { CompetitionSheet } from "./CompetitionSheet";
+import { CompetitionSheet } from "./CompetitionSideSheet";
 import type { DetailViewMode } from "./DetailViewToggle";
 import { type FilterState, Filters } from "./Filters";
 import { PosterPopup } from "./PosterPopup";
@@ -39,6 +39,7 @@ type SortOption = "deadline" | "name";
 
 const VIEW_MODE_KEY = "competitions-view-mode";
 const DETAIL_VIEW_MODE_KEY = "competitions-detail-view-mode";
+const ITEMS_PER_PAGE = 20;
 
 function getInitialViewMode(isMobile: boolean): ViewMode {
 	if (typeof window === "undefined") {
@@ -72,8 +73,6 @@ export function CompetitionList({
 	const [posterPopupIndex, setPosterPopupIndex] = useState<number | null>(null);
 	const [visibleCount, setVisibleCount] = useState(20);
 
-	const ITEMS_PER_PAGE = 20;
-
 	// Update view mode when it changes and persist to localStorage
 	const handleViewModeChange = useCallback((mode: ViewMode) => {
 		setViewMode(mode);
@@ -81,10 +80,31 @@ export function CompetitionList({
 	}, []);
 
 	// Update detail view mode when it changes and persist to localStorage
-	const handleDetailViewModeChange = useCallback((mode: DetailViewMode) => {
-		setDetailViewMode(mode);
-		localStorage.setItem(DETAIL_VIEW_MODE_KEY, mode);
-	}, []);
+	const handleDetailViewModeChange = useCallback(
+		(mode: DetailViewMode) => {
+			// When switching from dialog to sheet, transfer dialogIndex to selectedIndex
+			if (
+				detailViewMode === "dialog" &&
+				mode === "sheet" &&
+				dialogIndex !== null
+			) {
+				setSelectedIndex(dialogIndex);
+				setDialogIndex(null);
+			}
+			// When switching from sheet to dialog, transfer selectedIndex to dialogIndex
+			else if (
+				detailViewMode === "sheet" &&
+				mode === "dialog" &&
+				selectedIndex !== null
+			) {
+				setDialogIndex(selectedIndex);
+				setSelectedIndex(null);
+			}
+			setDetailViewMode(mode);
+			localStorage.setItem(DETAIL_VIEW_MODE_KEY, mode);
+		},
+		[detailViewMode, dialogIndex, selectedIndex]
+	);
 
 	// Initialize detail view mode on mount from localStorage
 	useEffect(() => {
@@ -170,7 +190,7 @@ export function CompetitionList({
 			switch (sortBy) {
 				case "deadline":
 					return (
-						new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
+						new Date(b.deadline).getTime() - new Date(a.deadline).getTime()
 					);
 				case "name":
 					return a.title.localeCompare(b.title);
@@ -298,10 +318,8 @@ export function CompetitionList({
 											) : (
 												<CompetitionCardPoster
 													competition={competition}
-													isBookmarked={bookmarks.includes(competition.id)}
 													onClick={() => handleItemClick(index)}
 													onLongPress={() => setPosterPopupIndex(index)}
-													onToggleBookmark={onToggleBookmark}
 												/>
 											)}
 										</CarouselItem>
@@ -419,7 +437,6 @@ export function CompetitionList({
 							{visibleCompetitions.map((competition, index) => (
 								<CompetitionCardPoster
 									competition={competition}
-									isBookmarked={bookmarks.includes(competition.id)}
 									key={competition.id}
 									onClick={() => handleItemClick(index)}
 									onLongPress={() => {
@@ -430,7 +447,6 @@ export function CompetitionList({
 											setDialogIndex(index);
 										}
 									}}
-									onToggleBookmark={onToggleBookmark}
 								/>
 							))}
 						</div>

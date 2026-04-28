@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchCompetitions } from "@/app/actions/competitions";
-import { CompetitionDialog } from "@/components/CompetitionDialog";
+import { CompetitionDialog } from "@/components/CompetitionCenterDialog";
 import { Button } from "@/components/ui/button";
 import type { Competition } from "@/types/competition";
 

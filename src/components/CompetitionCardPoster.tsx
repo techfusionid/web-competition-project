@@ -1,13 +1,7 @@
 import { format } from "date-fns";
-import {
-	BadgeCheck,
-	Bookmark,
-	Calendar,
-	ChevronDown,
-	Flag,
-} from "lucide-react";
+import { BadgeCheck, Calendar, ChevronDown, Flag } from "lucide-react";
 import Image from "next/image";
-import { useCallback, useRef } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -15,13 +9,10 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
 import type { Competition } from "@/types/competition";
 
 interface CompetitionCardPosterProps {
 	competition: Competition;
-	isBookmarked: boolean;
-	onToggleBookmark: (id: string) => void;
 	onClick: () => void;
 	onLongPress?: () => void;
 	/** Dipanggil ketika penyelenggara memilih "Klaim" dari kartu */
@@ -34,8 +25,6 @@ const LONG_PRESS_DURATION = 500;
 
 export function CompetitionCardPoster({
 	competition,
-	isBookmarked,
-	onToggleBookmark,
 	onClick,
 	onLongPress,
 	onClaim,
@@ -69,12 +58,12 @@ export function CompetitionCardPoster({
 		}
 	}, [onClick]);
 
-	const formatDateRange = () => {
+	const formatDateRange = useMemo(() => {
 		if (competition.startDate) {
 			return `${format(competition.startDate, "d MMM")} - ${format(competition.deadline, "d MMM yyyy")}`;
 		}
 		return format(competition.deadline, "d MMM yyyy");
-	};
+	}, [competition.startDate, competition.deadline]);
 
 	return (
 		<div
@@ -104,22 +93,6 @@ export function CompetitionCardPoster({
 					</div>
 				)}
 
-				{/* Bookmark Button - Top Left */}
-				<Button
-					className={cn(
-						"h-8 w-8 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background",
-						isBookmarked && "text-foreground"
-					)}
-					onClick={(e) => {
-						e.stopPropagation();
-						onToggleBookmark(competition.id);
-					}}
-					size="icon"
-					variant="ghost"
-				>
-					<Bookmark className={cn("h-4 w-4", isBookmarked && "fill-current")} />
-				</Button>
-
 				{/* Hover Overlay - deadline, category, format, status (no level, no participant type). On touch always visible */}
 				<div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 opacity-0 transition-all duration-300 md:group-hover:opacity-100 [@media(hover:none)]:opacity-100">
 					<div className="translate-y-4 transform space-y-3 text-white transition-transform duration-300 md:group-hover:translate-y-0 [@media(hover:none)]:translate-y-0">
@@ -137,7 +110,7 @@ export function CompetitionCardPoster({
 						<div className="flex flex-wrap items-center gap-3 text-white/90 text-xs">
 							<div className="flex items-center gap-1.5">
 								<Calendar className="h-4 w-4" />
-								<span className="font-medium">{formatDateRange()}</span>
+								<span className="font-medium">{formatDateRange}</span>
 							</div>
 						</div>
 
@@ -200,7 +173,7 @@ export function CompetitionCardPoster({
 				</div>
 				<div className="flex items-center gap-1.5 text-muted-foreground text-xs">
 					<Calendar className="h-3.5 w-3.5" />
-					<span className="font-medium">{formatDateRange()}</span>
+					<span className="font-medium">{formatDateRange}</span>
 				</div>
 			</div>
 		</div>
