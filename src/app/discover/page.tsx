@@ -9,6 +9,12 @@ import {
 import { CategoryCard } from "@/components/CategoryCard";
 import { OrganizerCard } from "@/components/OrganizerCard";
 
+export const metadata = {
+	title: "Discover Competitions - Browse by Category & Organizer",
+	description:
+		"Explore the best competitions across Indonesia. Browse by category like Technology, Business, Design, or by organizer institution.",
+};
+
 const categories = [
 	{
 		title: "Technology",
@@ -93,9 +99,9 @@ export default function DiscoverPage() {
 			<section className="hidden pt-12 md:block">
 				<div className="container">
 					<div className="max-w-fit">
-						<h1 className="text-balance font-bold text-foreground text-xl tracking-tight md:text-2xl lg:text-4xl">
+						<h2 className="text-balance font-bold text-foreground text-xl tracking-tight md:text-2xl lg:text-4xl">
 							Discover Competitions
-						</h1>
+						</h2>
 						<p className="mt-4 text-balance text-base text-muted-foreground md:text-lg">
 							Explore the best competitions across Indonesia and browse by
 							category.
@@ -109,9 +115,9 @@ export default function DiscoverPage() {
 				<div className="flex flex-col gap-8">
 					{/* Left - Header */}
 					<div>
-						<h1 className="font-bold text-3xl text-foreground tracking-tight">
+						<h2 className="font-bold text-3xl text-foreground tracking-tight">
 							Discover Competitions
-						</h1>
+						</h2>
 						<p className="mt-3 text-base text-muted-foreground">
 							Explore the best competitions across Indonesia and browse by
 							category or organizer.
