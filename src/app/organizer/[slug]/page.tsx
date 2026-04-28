@@ -38,7 +38,7 @@ export default function InstitutionDetailPage() {
 
 	return (
 		<main className="container py-8">
-			<Link href="/institution">
+			<Link href="/organizer">
 				<Button className="mb-6 -ml-2" size="sm" variant="ghost">
 					<ArrowLeft className="mr-2 h-4 w-4" />
 					Kembali ke Institusi

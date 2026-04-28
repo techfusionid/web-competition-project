@@ -13,7 +13,7 @@ export function Footer() {
 			title: "Resources",
 			links: [
 				{ name: "Resources", href: "/resources" },
-				{ name: "Categories", href: "/categories" },
+				{ name: "Categories", href: "/category" },
 				{ name: "Organizer", href: "/organizer" },
 			],
 		},

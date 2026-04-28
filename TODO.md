@@ -38,15 +38,3 @@ icon center view pake center-view.svg dan side center view pake icon side-view.s
 ---
 
 ## phase 3
-
-
-
-bagaimana saya supaya dapat update? kami berencana untuk menambahkan newsletter sehingga bisa ngasih update personal ke kontak kamu, namun saat ini masih blum, jadi bisa follow channel wa nya jaa untuk update lomba lebih cepat
-
-bagaimana data lomba ini didapat? lomba ini didapat dari scrapping instagram dalam beberapa hari sekali
-
-apakah platform ini gratis? ya web ini sepenuhnya gratis untuk digunakan, tidak perlu login, tidak ada, dan aplikasinya smooth untuk digunakan 
-
-apakah saya bisa menambahkan lomba di web ini? untuk saat ini masih belum, masih cuman automate competition scrapping dan 
-
-bagaimana saya bisa berkontribusi? website landingpage ini public di github, dan terbuka jika mau contribute improve nambah fitur atau solve bugs, pun dengan feedback kalian bisa improve web kami 

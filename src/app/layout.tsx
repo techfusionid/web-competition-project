@@ -17,10 +17,13 @@ const greedStandard = localFont({
 	display: "swap",
 });
 
+const BASE_URL = "https://competition.techfusion.id";
+
 export const metadata: Metadata = {
 	title: {
-		default: "Competitions - Discover & Join Exciting Competitions",
-		template: "%s | Competitions",
+		default:
+			"Competition.TechFusion.id - Discover & Join Exciting Competitions",
+		template: "%s | Competition.TechFusion.id",
 	} as const,
 	description:
 		"Discover and join competitions across various categories including Technology, Business, Science, Design, Arts, and more. Find your next competition and showcase your skills.",
@@ -33,31 +36,43 @@ export const metadata: Metadata = {
 		"business competitions",
 		"design competitions",
 	],
-	authors: [{ name: "Competitions" }],
+	authors: [{ name: "TechFusion.id" }],
 	manifest: "/manifest.json",
 	appleWebApp: {
 		capable: true,
 		statusBarStyle: "black-translucent",
-		title: "Web Competition",
+		title: "Competition.TechFusion.id",
 	},
 	openGraph: {
 		type: "website",
 		locale: "en_US",
-		url: "https://competitions.com",
-		siteName: "Competitions",
-		title: "Competitions - Discover & Join Exciting Competitions",
+		url: BASE_URL,
+		siteName: "Competition.TechFusion.id",
+		title: "Competition.TechFusion.id - Discover & Join Exciting Competitions",
 		description:
 			"Discover and join competitions across various categories including Technology, Business, Science, Design, Arts, and more.",
+		images: [
+			{
+				url: `${BASE_URL}/og-image.jpg`,
+				width: 1200,
+				height: 630,
+				alt: "Competition.TechFusion.id",
+			},
+		],
 	},
 	twitter: {
 		card: "summary_large_image",
-		title: "Competitions - Discover & Join Exciting Competitions",
+		title: "Competition.TechFusion.id - Discover & Join Exciting Competitions",
 		description:
 			"Discover and join competitions across various categories including Technology, Business, Science, Design, Arts, and more.",
+		images: [`${BASE_URL}/og-image.jpg`],
 	},
 	robots: {
 		index: true,
 		follow: true,
+	},
+	alternates: {
+		canonical: BASE_URL,
 	},
 };
 
@@ -79,6 +94,32 @@ export default function RootLayout({
 				<link href="/icon.svg" rel="icon" type="image/svg+xml" />
 				<link href="/apple-icon.png" rel="apple-touch-icon" sizes="180x180" />
 				<link href="/manifest.json" rel="manifest" />
+				<script
+					dangerouslySetInnerHTML={{
+						__html: JSON.stringify({
+							"@context": "https://schema.org",
+							"@type": "WebSite",
+							name: "Competition.TechFusion.id",
+							description:
+								"Discover and join competitions across various categories including Technology, Business, Science, Design, Arts, and more.",
+							url: BASE_URL,
+							publisher: {
+								"@type": "Organization",
+								name: "TechFusion.id",
+								url: BASE_URL,
+							},
+							potentialAction: {
+								"@type": "SearchAction",
+								target: {
+									"@type": "EntryPoint",
+									urlTemplate: `${BASE_URL}/discover?q={search_term_string}`,
+								},
+								"query-input": "required name=search_term_string",
+							},
+						}),
+					}}
+					type="application/ld+json"
+				/>
 			</head>
 			<body className="font-sans antialiased">
 				<Amplitude />

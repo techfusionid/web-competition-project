@@ -1,7 +1,7 @@
 "use client";
 
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
 import { fetchCompetitions } from "@/app/actions/competitions";
 import { CompetitionList } from "@/components/CompetitionList";
 import { Hero } from "@/components/Hero";
@@ -9,7 +9,7 @@ import { SponsorSection } from "@/components/SponsorSection";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import type { Competition } from "@/types/competition";
 
-export default function Home() {
+function HomeContent() {
 	const searchParams = useSearchParams();
 	const [searchQuery, setSearchQuery] = useState("");
 	const [resetTrigger, setResetTrigger] = useState(0);
@@ -135,5 +135,21 @@ export default function Home() {
 				/>
 			</div>
 		</div>
+	);
+}
+
+function LoadingFallback() {
+	return (
+		<div className="flex min-h-screen items-center justify-center">
+			<div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+		</div>
+	);
+}
+
+export default function HomePage() {
+	return (
+		<Suspense fallback={<LoadingFallback />}>
+			<HomeContent />
+		</Suspense>
 	);
 }

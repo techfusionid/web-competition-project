@@ -1,6 +1,7 @@
 {
-  "name": "MyWebSite",
-  "short_name": "MySite",
+  "name": "Competition.TechFusion.id",
+  "short_name": "Competitions",
+  "start_url": "https://competition.techfusion.id",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",

@@ -17,6 +17,9 @@
     "enabled": true,
     "rules": {
       "recommended": false,
+      "security": {
+        "noDangerouslySetInnerHtml": "off"
+      },
       "correctness": {
         "noUnusedVariables": "off",
         "useImageSize": "off",
