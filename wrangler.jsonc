@@ -26,6 +26,15 @@
          "service": "web-competition-project",
       },
    ],
+   "secrets_store_secrets": [
+      {
+         // Cloudflare Secrets Store binding
+         // Docs: https://developers.cloudflare.com/secrets-store/integrations/workers/
+         "binding": "SECRETS_STORE",
+         "store_id": "923639bd67b74b318ee571269fdae85d",
+         "secret_name": "DATABASE_URL",
+      },
+   ],
    "observability": {
       "enabled": true,
    },
