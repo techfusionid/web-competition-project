@@ -1,7 +1,7 @@
-import { and, desc, eq, ilike, sql } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 import { CACHE_DURATIONS, CACHE_TAGS } from "@/lib/cache";
-import { competitions, getDb } from "./index";
+import { getSupabase } from "./index";
+import type { CompetitionRecord } from "./types";
 
 export interface FilterState {
 	category?: string;
@@ -15,12 +15,14 @@ export interface FilterState {
 // ========================================
 // getAllCompetitions
 // ========================================
-export async function getAllCompetitions() {
-	const allCompetitions = await getDb()
-		.select()
-		.from(competitions)
-		.orderBy(desc(competitions.createdAt));
-	return allCompetitions;
+export async function getAllCompetitions(): Promise<CompetitionRecord[]> {
+	const { data, error } = await getSupabase()
+		.from("competitions")
+		.select("*")
+		.order("createdAt", { ascending: false });
+
+	if (error) throw error;
+	return data as CompetitionRecord[];
 }
 
 export const getAllCompetitionsCached = unstable_cache(
@@ -35,13 +37,19 @@ export const getAllCompetitionsCached = unstable_cache(
 // ========================================
 // getCompetitionById
 // ========================================
-export async function getCompetitionById(id: string) {
-	const [competition] = await getDb()
-		.select()
-		.from(competitions)
-		.where(eq(competitions.id, id))
-		.limit(1);
-	return competition || null;
+export async function getCompetitionById(
+	id: string
+): Promise<CompetitionRecord | null> {
+	const { data, error } = await getSupabase()
+		.from("competitions")
+		.select("*")
+		.eq("id", id)
+		.limit(1)
+		.single();
+
+	if (error && error.code !== "PGRST116") return null; // PGRST116 = no rows found
+	if (error) throw error;
+	return data as CompetitionRecord;
 }
 
 export const getCompetitionByIdCached = unstable_cache(
@@ -56,42 +64,37 @@ export const getCompetitionByIdCached = unstable_cache(
 // ========================================
 // getCompetitionsByFilter
 // ========================================
-export async function getCompetitionsByFilter(filter: FilterState) {
-	const conditions = [];
+export async function getCompetitionsByFilter(
+	filter: FilterState
+): Promise<CompetitionRecord[]> {
+	let query = getSupabase().from("competitions").select("*");
 
 	if (filter.category) {
-		conditions.push(ilike(competitions.categories, filter.category));
+		query = query.ilike("categories", filter.category);
 	}
 
 	if (filter.format) {
-		conditions.push(eq(competitions.format, filter.format as any));
+		query = query.eq("format", filter.format);
 	}
 
 	if (filter.participationType) {
-		conditions.push(
-			eq(competitions.participationType, filter.participationType as any)
-		);
+		query = query.eq("participationType", filter.participationType);
 	}
 
 	if (filter.status) {
-		conditions.push(eq(competitions.status, filter.status as any));
+		query = query.eq("status", filter.status);
 	}
 
 	if (filter.search) {
-		conditions.push(
-			sql`${competitions.title} ILIKE ${`%${filter.search}%`} OR ${competitions.description} ILIKE ${`%${filter.search}%`}`
+		query = query.or(
+			`title.ilike.%${filter.search}%,description.ilike.%${filter.search}%`
 		);
 	}
 
-	const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+	const { data, error } = await query.order("createdAt", { ascending: false });
 
-	const results = await getDb()
-		.select()
-		.from(competitions)
-		.where(whereClause)
-		.orderBy(desc(competitions.createdAt));
-
-	return results;
+	if (error) throw error;
+	return data as CompetitionRecord[];
 }
 
 export const getCompetitionsByFilterCached = unstable_cache(
@@ -106,16 +109,18 @@ export const getCompetitionsByFilterCached = unstable_cache(
 // ========================================
 // getCompetitionsByOrganizer
 // ========================================
-export async function getCompetitionsByOrganizer(organizerName: string) {
-	const results = await getDb()
-		.select()
-		.from(competitions)
-		.where(
-			sql`(${competitions.organizer}->>'name') ILIKE ${`%${organizerName}%`}`
-		)
-		.orderBy(desc(competitions.createdAt));
+export async function getCompetitionsByOrganizer(
+	organizerName: string
+): Promise<CompetitionRecord[]> {
+	// Use text filter for JSONB organizer->>'name' search
+	const { data, error } = await getSupabase()
+		.from("competitions")
+		.select("*")
+		.text(`organizer->>'name' ilike '%${organizerName}%'`)
+		.order("createdAt", { ascending: false });
 
-	return results;
+	if (error) throw error;
+	return data as CompetitionRecord[];
 }
 
 export const getCompetitionsByOrganizerCached = unstable_cache(
@@ -130,14 +135,17 @@ export const getCompetitionsByOrganizerCached = unstable_cache(
 // ========================================
 // getCompetitionsByCategory
 // ========================================
-export async function getCompetitionsByCategory(category: string) {
-	const results = await getDb()
-		.select()
-		.from(competitions)
-		.where(ilike(competitions.categories, category))
-		.orderBy(desc(competitions.createdAt));
+export async function getCompetitionsByCategory(
+	category: string
+): Promise<CompetitionRecord[]> {
+	const { data, error } = await getSupabase()
+		.from("competitions")
+		.select("*")
+		.ilike("categories", category)
+		.order("createdAt", { ascending: false });
 
-	return results;
+	if (error) throw error;
+	return data as CompetitionRecord[];
 }
 
 export const getCompetitionsByCategoryCached = unstable_cache(
@@ -152,17 +160,20 @@ export const getCompetitionsByCategoryCached = unstable_cache(
 // ========================================
 // getCompetitionsByIds (no persistent cache - dynamic IDs)
 // ========================================
-export async function getCompetitionsByIds(ids: string[]) {
+export async function getCompetitionsByIds(
+	ids: string[]
+): Promise<CompetitionRecord[]> {
 	if (ids.length === 0) {
 		return [];
 	}
 
-	const results = await getDb()
-		.select()
-		.from(competitions)
-		.where(sql`${competitions.id} = ANY(${ids})`);
+	const { data, error } = await getSupabase()
+		.from("competitions")
+		.select("*")
+		.in("id", ids);
 
-	return results;
+	if (error) throw error;
+	return data as CompetitionRecord[];
 }
 
 // ========================================
@@ -175,48 +186,49 @@ interface Organizer {
 }
 
 export async function getAllOrganizers(): Promise<Organizer[]> {
-	const allCompetitions = await getDb()
-		.select({
-			organizer: competitions.organizer,
-			category: competitions.categories,
-		})
-		.from(competitions);
+	const { data, error } = await getSupabase()
+		.from("competitions")
+		.select("organizer, categories");
+
+	if (error) throw error;
 
 	const organizerMap = new Map<
 		string,
 		{ name: string; competitionCount: number; categories: Set<string> }
 	>();
 
-	allCompetitions.forEach((competition) => {
-		const org = competition.organizer as unknown;
-		let name = null;
+	(data as { organizer: unknown; categories: string | null }[]).forEach(
+		(competition) => {
+			const org = competition.organizer as unknown;
+			let name: string | null = null;
 
-		if (Array.isArray(org) && org.length > 0 && typeof org[0] === "string") {
-			name = org[0];
-		} else if (typeof org === "object" && org !== null && "name" in org) {
-			name = (org as { name: string }).name;
-		} else if (typeof org === "string") {
-			name = org;
-		}
+			if (Array.isArray(org) && org.length > 0 && typeof org[0] === "string") {
+				name = org[0] as string;
+			} else if (typeof org === "object" && org !== null && "name" in org) {
+				name = (org as { name: string }).name;
+			} else if (typeof org === "string") {
+				name = org;
+			}
 
-		if (name) {
-			if (organizerMap.has(name)) {
-				const existing = organizerMap.get(name)!;
-				existing.competitionCount += 1;
-				if (competition.category) {
-					existing.categories.add(competition.category);
+			if (name) {
+				if (organizerMap.has(name)) {
+					const existing = organizerMap.get(name)!;
+					existing.competitionCount += 1;
+					if (competition.categories) {
+						existing.categories.add(competition.categories);
+					}
+				} else {
+					organizerMap.set(name, {
+						name,
+						competitionCount: 1,
+						categories: new Set(
+							competition.categories ? [competition.categories] : []
+						),
+					});
 				}
-			} else {
-				organizerMap.set(name, {
-					name,
-					competitionCount: 1,
-					categories: new Set(
-						competition.category ? [competition.category] : []
-					),
-				});
 			}
 		}
-	});
+	);
 
 	return Array.from(organizerMap.values()).sort(
 		(a, b) => b.competitionCount - a.competitionCount
@@ -236,16 +248,16 @@ export const getAllOrganizersCached = unstable_cache(
 // getAllCategories
 // ========================================
 export async function getAllCategories(): Promise<string[]> {
-	const allCompetitions = await getDb()
-		.select({
-			category: competitions.categories,
-		})
-		.from(competitions)
-		.where(sql`${competitions.categories} IS NOT NULL`);
+	const { data, error } = await getSupabase()
+		.from("competitions")
+		.select("categories")
+		.not("categories", "is", null);
+
+	if (error) throw error;
 
 	const categorySet = new Set<string>();
-	allCompetitions.forEach((competition) => {
-		if (competition.category) {
+	(data as { categories: string | null }[]).forEach((competition) => {
+		if (competition.categories) {
 			const categoryMapping: Record<string, string> = {
 				"Akademik & Sains": "Science",
 				"Teknologi & IT": "Technology",
@@ -259,7 +271,7 @@ export async function getAllCategories(): Promise<string[]> {
 				Lainnya: "Other",
 			};
 			categorySet.add(
-				categoryMapping[competition.category] || competition.category
+				categoryMapping[competition.categories] || competition.categories
 			);
 		}
 	});

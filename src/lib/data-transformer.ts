@@ -1,7 +1,5 @@
-import type { competitions } from "@/server/db/schema";
+import type { CompetitionRecord } from "@/server/db/types";
 import type { Competition } from "@/types/competition";
-
-type DbCompetition = typeof competitions.$inferSelect;
 
 // Map Indonesian categories to English
 const categoryMapping: Record<string, string> = {
@@ -77,7 +75,7 @@ function formatPrize(pricing: unknown): string {
 		return "TBA";
 	}
 
-	// Drizzle JSONB can come back as the actual parsed value
+	// JSONB can come back as the actual parsed value
 	let prices: number[] = [];
 
 	// If it's already an array
@@ -171,7 +169,7 @@ function normalizeLevels(levels: unknown): Competition["level"] {
 	return normalized.length > 0 ? normalized : ["umum"];
 }
 
-export function dbToCompetition(dbRecord: DbCompetition): Competition {
+export function dbToCompetition(dbRecord: CompetitionRecord): Competition {
 	// Handle organizer - it can be an array like ["Name"] or an object with properties
 	let organizerName = "Unknown Organizer";
 	if (dbRecord.organizer) {
@@ -219,6 +217,6 @@ export function dbToCompetition(dbRecord: DbCompetition): Competition {
 	};
 }
 
-export function dbToCompetitions(dbRecords: DbCompetition[]): Competition[] {
+export function dbToCompetitions(dbRecords: CompetitionRecord[]): Competition[] {
 	return dbRecords.map(dbToCompetition);
 }

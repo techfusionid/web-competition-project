@@ -1,18 +1,17 @@
-import postgres from "postgres";
-import { drizzle } from "drizzle-orm/postgres-js";
-import * as schema from "./schema";
+import { createClient } from "@supabase/supabase-js";
 
-let _db: ReturnType<typeof drizzle<typeof schema>> | null = null;
+let _supabase: ReturnType<typeof createClient> | null = null;
 
-export function getDb() {
-	if (!_db) {
-		const sql = postgres(process.env.DATABASE_URL!, {
-			ssl: "require",
-			connect_timeout: 10,
-		});
-		_db = drizzle(sql, { schema });
+export function getSupabase() {
+	if (!_supabase) {
+		const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+		const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+		if (!url || !key) {
+			throw new Error(
+				"Missing Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY must be set"
+			);
+		}
+		_supabase = createClient(url, key);
 	}
-	return _db;
+	return _supabase;
 }
-
-export * from "./schema";
