@@ -64,9 +64,9 @@
     *
     * Regular environment variables (non-sensitive):
     */
-   // "vars": {
-   //   "DATABASE_URL": "postgresql://postgres.zwncybxdydkcercrtotx:**M@j4U_T@kMundur123!**@aws-1-ap-southeast-1.compute-1.supabase.com:5432/postgres",
-   //   "NEXT_PUBLIC_POSTHOG_HOST": "https://us.i.posthog.com",
-   //   "NEXT_PUBLIC_POSTHOG_KEY": "phc_ivp2ivcQ11M8MZl3ry1cptFjmTGxBwnSUkR2Ry9ELsJ"
-   // },
+   "vars": {
+      "DATABASE_URL": "postgresql://postgres.zwncybxdydkcercrtotx:**M@j4U_T@kMundur123!**@aws-1-ap-southeast-1.compute-1.supabase.com:5432/postgres",
+      "NEXT_PUBLIC_POSTHOG_HOST": "https://us.i.posthog.com",
+      "NEXT_PUBLIC_POSTHOG_KEY": "phc_ivp2ivcQ11M8MZl3ry1cptFjmTGxBwnSUkR2Ry9ELsJ",
+   },
 }
