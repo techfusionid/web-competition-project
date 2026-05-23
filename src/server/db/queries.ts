@@ -112,11 +112,11 @@ export const getCompetitionsByFilterCached = unstable_cache(
 export async function getCompetitionsByOrganizer(
 	organizerName: string
 ): Promise<CompetitionRecord[]> {
-	// Use text filter for JSONB organizer->>'name' search
+	// Use filter for JSONB organizer->>'name' search
 	const { data, error } = await getSupabase()
 		.from("competitions")
 		.select("*")
-		.text(`organizer->>'name' ilike '%${organizerName}%'`)
+		.filter(`organizer->>name`, "ilike", `%${organizerName}%`)
 		.order("createdAt", { ascending: false });
 
 	if (error) throw error;
