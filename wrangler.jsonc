@@ -32,6 +32,7 @@
   "routes": [
     {
       "pattern": "competition.techfusion.id",
+      "zone_name": "techfusion.id",
       "custom_domain": true,
     },
     {
