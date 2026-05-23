@@ -62,11 +62,15 @@ export const competitions = pgTable("competitions", {
 	// contact: jsonb().$type<Array<{ name: string; phone: string }>>(),
 	location: text(),
 	whatsappChannel: boolean(),
-	instagram: text(),
+	socialMedia: jsonb().$type<{
+		instagram?: string;
+		linkedin?: string;
+		tiktok?: string;
+		twitter?: string;
+		facebook?: string;
+		website?: string;
+	}>(),
 	createdAt: timestamp().notNull().defaultNow(),
 	updatedAt: timestamp().notNull().defaultNow(),
 	url: text(),
 });
-
-export type Competition = typeof competitions.$inferSelect;
-export type NewCompetition = typeof competitions.$inferInsert;

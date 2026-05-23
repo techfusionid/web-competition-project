@@ -12117,15 +12117,7 @@ declare abstract class VectorizeIndex {
 	public query(
 		vector: VectorFloatArray | number[],
 		options?: VectorizeQueryOptions
-	): Promise<VectorizeMatches>;
-	/**
-	 * Insert a list of vectors into the index dataset. If a provided id exists, an error will be thrown.
-	 * @param vectors List of vectors that will be inserted.
-	 * @returns A promise that resolves with the ids & count of records that were successfully processed.
-	 */
-	public insert(vectors: VectorizeVector[]): Promise<VectorizeVectorMutation>;
-	/**
-	 * Upsert a list of vectors into the index dataset. If a provided id exists, it will be replaced with the new values.
+		
 	 * @param vectors List of vectors that will be upserted.
 	 * @returns A promise that resolves with the ids & count of records that were successfully processed.
 	 */
@@ -12173,15 +12165,7 @@ declare abstract class Vectorize {
 	public queryById(
 		vectorId: string,
 		options?: VectorizeQueryOptions
-	): Promise<VectorizeMatches>;
-	/**
-	 * Insert a list of vectors into the index dataset. If a provided id exists, an error will be thrown.
-	 * @param vectors List of vectors that will be inserted.
-	 * @returns A promise that resolves with a unique identifier of a mutation containing the insert changeset.
-	 */
-	public insert(vectors: VectorizeVector[]): Promise<VectorizeAsyncMutation>;
-	/**
-	 * Upsert a list of vectors into the index dataset. If a provided id exists, it will be replaced with the new values.
+		
 	 * @param vectors List of vectors that will be upserted.
 	 * @returns A promise that resolves with a unique identifier of a mutation containing the upsert changeset.
 	 */
