@@ -1,5 +1,7 @@
-import type { Competition as DbCompetition } from "@/server/db/schema";
+import type { competitions } from "@/server/db/schema";
 import type { Competition } from "@/types/competition";
+
+type DbCompetition = typeof competitions.$inferSelect;
 
 // Map Indonesian categories to English
 const categoryMapping: Record<string, string> = {
@@ -211,7 +213,7 @@ export function dbToCompetition(dbRecord: DbCompetition): Competition {
 		registrationUrl: dbRecord.urlsource || "",
 		location: dbRecord.location || undefined,
 		socialMedia: {
-			instagram: dbRecord.instagram || undefined,
+			instagram: dbRecord.socialMedia?.instagram || undefined,
 			website: dbRecord.url || undefined,
 		},
 	};
