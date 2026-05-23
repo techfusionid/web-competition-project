@@ -1,7 +1,7 @@
 import { and, desc, eq, ilike, sql } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 import { CACHE_DURATIONS, CACHE_TAGS } from "@/lib/cache";
-import { competitions, db } from "./index";
+import { competitions, getDb } from "./index";
 
 export interface FilterState {
 	category?: string;
@@ -16,7 +16,7 @@ export interface FilterState {
 // getAllCompetitions
 // ========================================
 export async function getAllCompetitions() {
-	const allCompetitions = await db
+	const allCompetitions = await getDb()
 		.select()
 		.from(competitions)
 		.orderBy(desc(competitions.createdAt));
@@ -36,7 +36,7 @@ export const getAllCompetitionsCached = unstable_cache(
 // getCompetitionById
 // ========================================
 export async function getCompetitionById(id: string) {
-	const [competition] = await db
+	const [competition] = await getDb()
 		.select()
 		.from(competitions)
 		.where(eq(competitions.id, id))
@@ -85,7 +85,7 @@ export async function getCompetitionsByFilter(filter: FilterState) {
 
 	const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
-	const results = await db
+	const results = await getDb()
 		.select()
 		.from(competitions)
 		.where(whereClause)
@@ -107,7 +107,7 @@ export const getCompetitionsByFilterCached = unstable_cache(
 // getCompetitionsByOrganizer
 // ========================================
 export async function getCompetitionsByOrganizer(organizerName: string) {
-	const results = await db
+	const results = await getDb()
 		.select()
 		.from(competitions)
 		.where(
@@ -131,7 +131,7 @@ export const getCompetitionsByOrganizerCached = unstable_cache(
 // getCompetitionsByCategory
 // ========================================
 export async function getCompetitionsByCategory(category: string) {
-	const results = await db
+	const results = await getDb()
 		.select()
 		.from(competitions)
 		.where(ilike(competitions.categories, category))
@@ -157,7 +157,7 @@ export async function getCompetitionsByIds(ids: string[]) {
 		return [];
 	}
 
-	const results = await db
+	const results = await getDb()
 		.select()
 		.from(competitions)
 		.where(sql`${competitions.id} = ANY(${ids})`);
@@ -175,7 +175,7 @@ interface Organizer {
 }
 
 export async function getAllOrganizers(): Promise<Organizer[]> {
-	const allCompetitions = await db
+	const allCompetitions = await getDb()
 		.select({
 			organizer: competitions.organizer,
 			category: competitions.categories,
@@ -236,7 +236,7 @@ export const getAllOrganizersCached = unstable_cache(
 // getAllCategories
 // ========================================
 export async function getAllCategories(): Promise<string[]> {
-	const allCompetitions = await db
+	const allCompetitions = await getDb()
 		.select({
 			category: competitions.categories,
 		})
