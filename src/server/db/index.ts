@@ -1,16 +1,12 @@
-import "dotenv/config";
-import { drizzle } from "drizzle-orm/node-postgres";
+import postgres from "postgres";
+import { drizzle } from "drizzle-orm/postgres-js";
 import * as schema from "./schema";
 
-// You can specify any property from the node-postgres connection options
-export const db = drizzle({
-	connection: {
-		connectionString: process.env.DATABASE_URL!,
-		ssl: {
-			rejectUnauthorized: false,
-		},
-	},
-	schema,
+const sql = postgres(process.env.DATABASE_URL!, {
+	ssl: "require",
+	max: 1,
 });
+
+export const db = drizzle(sql, { schema });
 
 export * from "./schema";
