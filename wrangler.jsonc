@@ -3,68 +3,70 @@
  * https://developers.cloudflare.com/workers/wrangler/configuration/
  */
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "web-competition-project",
-  "main": ".open-next/worker.js",
-  "compatibility_date": "2026-02-05",
-  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
-  "keep_vars": true,
-  "assets": {
-    "binding": "ASSETS",
-    "directory": ".open-next/assets",
-  },
-  "images": {
-    // Enable image optimization
-    // see https://opennext.js.org/cloudflare/howtos/image
-    "binding": "IMAGES",
-  },
-  "services": [
-    {
-      // Self-reference service binding, the service name must match the worker name
-      // see https://opennext.js.org/cloudflare/caching
-      "binding": "WORKER_SELF_REFERENCE",
-      "service": "web-competition-project",
-    },
-  ],
-  "observability": {
-    "enabled": true,
-  },
-  "routes": [
-    {
-      "pattern": "competition.techfusion.id",
-      "zone_name": "techfusion.id",
-      "custom_domain": true,
-    },
-    {
-      "pattern": "www.competition.techfusion.id",
-      "zone_name": "techfusion.id",
-    },
-  ],
-  /**
-   * Smart Placement
-   * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
-   */
-  // "placement": {  "mode": "smart" }
-  /**
-   * Bindings
-   * Bindings allow your Worker to interact with resources on the Cloudflare Developer Platform, including
-   * databases, object storage, AI inference, real-time communication and more.
-   * https://developers.cloudflare.com/workers/runtime-apis/bindings/
-   */
-  /**
-   * Environment Variables
-   * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
-   *
-   * To set secrets (sensitive data), use:
-   *   wrangler secret put <SECRET_NAME> --env production
-   *
-   * Required secrets for production:
-   *   - DATABASE_URL (Neon database connection string)
-   *   - NEXT_PUBLIC_POSTHOG_KEY (PostHog API key)
-   *
-   * Regular environment variables (non-sensitive):
-   */
-  "vars": {
-    "NEXT_PUBLIC_POSTHOG_HOST": "https://us.i.posthog.com",
-  },
+   "$schema": "node_modules/wrangler/config-schema.json",
+   "name": "web-competition-project",
+   "main": ".open-next/worker.js",
+   "compatibility_date": "2026-02-05",
+   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+   "keep_vars": true,
+   "assets": {
+      "binding": "ASSETS",
+      "directory": ".open-next/assets",
+   },
+   "images": {
+      // Enable image optimization
+      // see https://opennext.js.org/cloudflare/howtos/image
+      "binding": "IMAGES",
+   },
+   "services": [
+      {
+         // Self-reference service binding, the service name must match the worker name
+         // see https://opennext.js.org/cloudflare/caching
+         "binding": "WORKER_SELF_REFERENCE",
+         "service": "web-competition-project",
+      },
+   ],
+   "observability": {
+      "enabled": true,
+   },
+   "routes": [
+      {
+         "pattern": "competition.techfusion.id",
+         "zone_name": "techfusion.id",
+         "custom_domain": true,
+      },
+      {
+         "pattern": "www.competition.techfusion.id",
+         "zone_name": "techfusion.id",
+      },
+   ],
+   /**
+    * Smart Placement
+    * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
+    */
+   // "placement": {  "mode": "smart" }
+   /**
+    * Bindings
+    * Bindings allow your Worker to interact with resources on the Cloudflare Developer Platform, including
+    * databases, object storage, AI inference, real-time communication and more.
+    * https://developers.cloudflare.com/workers/runtime-apis/bindings/
+    */
+   /**
+    * Environment Variables
+    * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
+    *
+    * To set secrets (sensitive data), use:
+    *   wrangler secret put <SECRET_NAME> --env production
+    *
+    * Required secrets for production:
+    *   - DATABASE_URL (Neon database connection string)
+    *   - NEXT_PUBLIC_POSTHOG_KEY (PostHog API key)
+    *
+    * Regular environment variables (non-sensitive):
+    */
+   // "vars": {
+   //   "DATABASE_URL": "postgresql://postgres.zwncybxdydkcercrtotx:**M@j4U_T@kMundur123!**@aws-1-ap-southeast-1.compute-1.supabase.com:5432/postgres",
+   //   "NEXT_PUBLIC_POSTHOG_HOST": "https://us.i.posthog.com",
+   //   "NEXT_PUBLIC_POSTHOG_KEY": "phc_ivp2ivcQ11M8MZl3ry1cptFjmTGxBwnSUkR2Ry9ELsJ"
+   // },
 }
