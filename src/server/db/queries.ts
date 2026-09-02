@@ -1,7 +1,7 @@
 import { and, desc, eq, ilike, inArray, isNotNull, or, sql } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 import { CACHE_DURATIONS, CACHE_TAGS } from "@/lib/cache";
-import { db } from "./index";
+import { getDb } from "./index";
 import { competitions } from "./schema";
 import type { CompetitionRecord } from "./types";
 
@@ -18,7 +18,7 @@ export interface FilterState {
 // getAllCompetitions
 // ========================================
 export async function getAllCompetitions(): Promise<CompetitionRecord[]> {
-	const rows = await db
+	const rows = await getDb()
 		.select()
 		.from(competitions)
 		.orderBy(desc(competitions.createdAt));
@@ -41,7 +41,7 @@ export const getAllCompetitionsCached = unstable_cache(
 export async function getCompetitionById(
 	id: string
 ): Promise<CompetitionRecord | null> {
-	const rows = await db
+	const rows = await getDb()
 		.select()
 		.from(competitions)
 		.where(eq(competitions.id, id))
@@ -104,7 +104,7 @@ export async function getCompetitionsByFilter(
 		);
 	}
 
-	const rows = await db
+	const rows = await getDb()
 		.select()
 		.from(competitions)
 		.where(conditions.length > 0 ? and(...conditions) : undefined)
@@ -128,7 +128,7 @@ export const getCompetitionsByFilterCached = unstable_cache(
 export async function getCompetitionsByOrganizer(
 	organizerName: string
 ): Promise<CompetitionRecord[]> {
-	const rows = await db
+	const rows = await getDb()
 		.select()
 		.from(competitions)
 		.where(
@@ -154,7 +154,7 @@ export const getCompetitionsByOrganizerCached = unstable_cache(
 export async function getCompetitionsByCategory(
 	category: string
 ): Promise<CompetitionRecord[]> {
-	const rows = await db
+	const rows = await getDb()
 		.select()
 		.from(competitions)
 		.where(ilike(competitions.categories, category))
@@ -182,7 +182,7 @@ export async function getCompetitionsByIds(
 		return [];
 	}
 
-	const rows = await db
+	const rows = await getDb()
 		.select()
 		.from(competitions)
 		.where(inArray(competitions.id, ids));
@@ -200,7 +200,7 @@ interface Organizer {
 }
 
 export async function getAllOrganizers(): Promise<Organizer[]> {
-	const rows = await db
+	const rows = await getDb()
 		.select({
 			organizer: competitions.organizer,
 			categories: competitions.categories,
@@ -263,7 +263,7 @@ export const getAllOrganizersCached = unstable_cache(
 // getAllCategories
 // ========================================
 export async function getAllCategories(): Promise<string[]> {
-	const rows = await db
+	const rows = await getDb()
 		.select({ categories: competitions.categories })
 		.from(competitions)
 		.where(isNotNull(competitions.categories));
