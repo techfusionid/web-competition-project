@@ -1,0 +1,115 @@
+{
+  "model": "mistral-ocr-latest",
+  "document": {
+    "type": "image_url",
+    "image_url": "{{ $json.poster }}"
+  },
+  "document_annotation_format": {
+    "type": "json_schema",
+    "json_schema": {
+      "name": "competition_annotation",
+      "strict": false,
+      "schema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Competition title. Return null if not found."
+          },
+          "organizer": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Competition organizer, single or multiple. Return null if not found."
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "Akademik & Sains",
+                "Teknologi & IT",
+                "Seni & Kreatif",
+                "Bisnis & Startup",
+                "Olahraga & E-sports",
+                "Sastra & Bahasa",
+                "Sosial & Lingkungan",
+                "Keagamaan",
+                "Gaya Hidup & Hobi",
+                "Lainnya"
+              ]
+            },
+            "description": "Competition category. Return null if not found."
+          },
+          "level": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "SD",
+                "SMP",
+                "SMA",
+                "Mahasiswa",
+                "Umum"
+              ]
+            },
+            "description": "Participant level. Return null if not found."
+          },
+          "startDate": {
+            "type": "string",
+            "description": "Registration start date, format YYYY-MM-DD. Return null if not found."
+          },
+          "endDate": {
+            "type": "string",
+            "description": "Registration end date, format YYYY-MM-DD. Return null if not found."
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "Online",
+              "Offline",
+              "Hybrid"
+            ],
+            "description": "Competition format. Return null if not found."
+          },
+          "participationType": {
+            "type": "string",
+            "enum": [
+              "Individual",
+              "Team"
+            ],
+            "description": "Participation type. Return null if not found."
+          },
+          "pricing": {
+            "type": "string",
+            "description": "Registration fee in rupiah. Can be a single number, multiple numbers, or a range. e.g. '50000', '50000, 100000', or 'Gratis'. Return null if not found."
+          },
+          "url": {
+            "type": "string",
+            "description": "Registration URL. Return null if not found."
+          },
+          "location": {
+            "type": "string",
+            "description": "Country of the competition. Return null if not found."
+          }
+        },
+        "required": [
+          "title",
+          "organizer",
+          "categories",
+          "level",
+          "startDate",
+          "endDate",
+          "format",
+          "participationType",
+          "pricing",
+          "url",
+          "location"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "include_image_base64": true
+}
