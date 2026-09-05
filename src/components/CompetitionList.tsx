@@ -7,8 +7,8 @@ import {
 } from "@/components/ui/carousel";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { Competition } from "@/types/competition";
-import { CompetitionCard } from "./CompetitionCardGrid";
-import { CompetitionCardPoster } from "./CompetitionCardPoster";
+import { CompetitionCard, CompetitionCardSkeleton } from "./CompetitionCardGrid";
+import { CompetitionCardPoster, CompetitionCardPosterSkeleton } from "./CompetitionCardPoster";
 import { CompetitionDialog } from "./CompetitionCenterDialog";
 import { CompetitionDrawer } from "./CompetitionDrawer";
 import { CompetitionSheet } from "./CompetitionSideSheet";
@@ -26,6 +26,7 @@ interface CompetitionListProps {
 	onToggleBookmark: (id: string) => void;
 	onOrganizerClick: (organizer: string) => void;
 	resetTrigger?: number;
+	isLoading?: boolean;
 }
 
 const defaultFilters: FilterState = {
@@ -52,6 +53,10 @@ function getInitialViewMode(isMobile: boolean): ViewMode {
 	return isMobile ? "poster" : "card";
 }
 
+const SKELETON_COUNT_CARD = 6;
+const SKELETON_COUNT_POSTER = 8;
+const SKELETON_COUNT_MOBILE = 3;
+
 export function CompetitionList({
 	competitions,
 	searchQuery,
@@ -60,6 +65,7 @@ export function CompetitionList({
 	onToggleBookmark,
 	onOrganizerClick,
 	resetTrigger,
+	isLoading = false,
 }: CompetitionListProps) {
 	const isMobile = useIsMobile();
 	const [filters, setFilters] = useState<FilterState>(defaultFilters);
@@ -268,8 +274,14 @@ export function CompetitionList({
 						</div>
 						<div className="flex items-center justify-between">
 							<p className="text-muted-foreground text-xs">
-								{filteredCompetitions.length} competition
-								{filteredCompetitions.length !== 1 ? "s" : ""}
+								{isLoading ? (
+									<span className="inline-block h-3.5 w-20 animate-pulse rounded bg-muted" />
+								) : (
+									<>
+										{filteredCompetitions.length} competition
+										{filteredCompetitions.length !== 1 ? "s" : ""}
+									</>
+								)}
 							</p>
 							<ViewToggle
 								onViewModeChange={handleViewModeChange}
@@ -278,7 +290,28 @@ export function CompetitionList({
 						</div>
 					</div>
 
-					{filteredCompetitions.length === 0 ? (
+					{isLoading ? (
+						/* Mobile Skeleton Carousel */
+						<Carousel
+							className="w-full"
+							opts={{ align: "center", loop: false, dragFree: false }}
+						>
+							<CarouselContent className="-ml-3">
+								{Array.from({ length: SKELETON_COUNT_MOBILE }).map((_, i) => (
+									<CarouselItem
+										className="basis-[80%] pl-3 sm:basis-[65%]"
+										key={i}
+									>
+										{viewMode === "poster" ? (
+											<CompetitionCardPosterSkeleton />
+										) : (
+											<CompetitionCardSkeleton />
+										)}
+									</CarouselItem>
+								))}
+							</CarouselContent>
+						</Carousel>
+					) : filteredCompetitions.length === 0 ? (
 						<div className="flex flex-col items-center justify-center rounded-lg border border-border border-dashed py-16">
 							<p className="font-medium text-muted-foreground text-sm">
 								No competitions match
@@ -395,7 +428,22 @@ export function CompetitionList({
 					</div>
 				</div>
 
-				{filteredCompetitions.length === 0 ? (
+				{isLoading ? (
+					/* Desktop Skeleton Grid */
+					viewMode === "poster" ? (
+						<div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+							{Array.from({ length: SKELETON_COUNT_POSTER }).map((_, i) => (
+								<CompetitionCardPosterSkeleton key={i} />
+							))}
+						</div>
+					) : (
+						<div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+							{Array.from({ length: SKELETON_COUNT_CARD }).map((_, i) => (
+								<CompetitionCardSkeleton key={i} />
+							))}
+						</div>
+					)
+				) : filteredCompetitions.length === 0 ? (
 					<div className="flex flex-col items-center justify-center rounded-lg border border-border border-dashed py-16">
 						<p className="font-medium text-muted-foreground text-sm">
 							No competitions match

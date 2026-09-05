@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import { Calendar, Share2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { Competition } from "@/types/competition";
 import { SharePopup } from "./SharePopup";
 
@@ -15,6 +16,23 @@ interface CompetitionCardProps {
 	competition: Competition;
 	onClick?: () => void;
 	onOrganizerClick?: (organizer: string) => void;
+}
+
+export function CompetitionCardSkeleton() {
+	return (
+		<div className="relative flex flex-col rounded-lg border border-border bg-secondary/15 ring-6 ring-background ring-inset md:p-4">
+			<div className="flex items-start justify-between gap-2">
+				<div className="min-w-0 flex-1 space-y-2">
+					<Skeleton className="h-5 w-3/4" />
+					<Skeleton className="h-3.5 w-1/2" />
+				</div>
+			</div>
+			<div className="mt-2 space-y-2 md:mt-3">
+				<Skeleton className="h-3.5 w-full" />
+				<Skeleton className="h-3.5 w-4/5" />
+			</div>
+		</div>
+	);
 }
 
 export function CompetitionCard({

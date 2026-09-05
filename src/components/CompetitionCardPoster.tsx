@@ -3,6 +3,7 @@ import { BadgeCheck, Calendar, ChevronDown, Flag } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useMemo, useRef } from "react";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -19,6 +20,19 @@ interface CompetitionCardPosterProps {
 	onClaim?: (competition: Competition) => void;
 	/** Dipanggil ketika user memilih "Laporkan" dari kartu */
 	onReport?: (competition: Competition) => void;
+}
+
+export function CompetitionCardPosterSkeleton() {
+	return (
+		<div className="relative overflow-hidden rounded-xl border border-border bg-card">
+			<Skeleton className="aspect-[3/4] w-full rounded-none" />
+			<div className="space-y-2 p-3">
+				<Skeleton className="h-5 w-3/4" />
+				<Skeleton className="h-3.5 w-1/2" />
+				<Skeleton className="h-3.5 w-2/3" />
+			</div>
+		</div>
+	);
 }
 
 const LONG_PRESS_DURATION = 500;

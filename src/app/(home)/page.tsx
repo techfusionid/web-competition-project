@@ -14,7 +14,7 @@ function HomeContent() {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [resetTrigger, setResetTrigger] = useState(0);
 	const [competitions, setCompetitions] = useState<Competition[]>([]);
-	const [_isLoading, setIsLoading] = useState(true);
+	const [isLoading, setIsLoading] = useState(true);
 	const { bookmarks, toggleBookmark } = useBookmarks();
 
 	// Fetch competitions from database on mount
@@ -127,6 +127,7 @@ function HomeContent() {
 				<CompetitionList
 					bookmarks={bookmarks}
 					competitions={competitions}
+					isLoading={isLoading}
 					onOrganizerClick={handleOrganizerClick}
 					onSearchChange={handleSearchChange}
 					onToggleBookmark={toggleBookmark}
