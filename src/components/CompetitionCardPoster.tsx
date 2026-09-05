@@ -93,7 +93,7 @@ export function CompetitionCardPoster({
 				{competition.imageUrl ? (
 					<Image
 						alt={competition.title}
-						className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
+						className="object-cover transition-transform duration-500 group-hover:scale-105"
 						fill
 						loading="lazy"
 						sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"

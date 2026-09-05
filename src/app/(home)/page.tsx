@@ -2,37 +2,18 @@
 
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { fetchCompetitions } from "@/app/actions/competitions";
 import { CompetitionList } from "@/components/CompetitionList";
 import { Hero } from "@/components/Hero";
 import { SponsorSection } from "@/components/SponsorSection";
 import { useBookmarks } from "@/hooks/useBookmarks";
-import type { Competition } from "@/types/competition";
+import { useCompetitions } from "@/hooks/useCompetitions";
 
 function HomeContent() {
 	const searchParams = useSearchParams();
 	const [searchQuery, setSearchQuery] = useState("");
 	const [resetTrigger, setResetTrigger] = useState(0);
-	const [competitions, setCompetitions] = useState<Competition[]>([]);
-	const [isLoading, setIsLoading] = useState(true);
+	const { competitions, isLoading } = useCompetitions();
 	const { bookmarks, toggleBookmark } = useBookmarks();
-
-	// Fetch competitions from database on mount
-	useEffect(() => {
-		async function loadData() {
-			setIsLoading(true);
-			try {
-				const data = await fetchCompetitions();
-				setCompetitions(data);
-			} catch (error) {
-				console.error("Failed to fetch competitions:", error);
-				setCompetitions([]);
-			} finally {
-				setIsLoading(false);
-			}
-		}
-		loadData();
-	}, []);
 
 	// Sync search query with URL
 	useEffect(() => {

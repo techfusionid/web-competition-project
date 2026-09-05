@@ -53,8 +53,8 @@ function getInitialViewMode(isMobile: boolean): ViewMode {
 	return isMobile ? "poster" : "card";
 }
 
-const SKELETON_COUNT_CARD = 6;
-const SKELETON_COUNT_POSTER = 8;
+const SKELETON_COUNT_CARD = 12;
+const SKELETON_COUNT_POSTER = 16;
 const SKELETON_COUNT_MOBILE = 3;
 
 export function CompetitionList({

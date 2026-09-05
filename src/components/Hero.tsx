@@ -14,7 +14,7 @@ export function Hero() {
 						Built by{" "}
 						<span className="font-bold tracking-wide">#Techfusion</span>
 					</a>
-					<h1 className="text-balance pb-6 font-bold text-4xl text-foreground sm:text-4xl md:text-5xl lg:text-7xl">
+					<h1 className="text-balance pb-4 font-bold text-foreground sm:text-4xl md:text-5xl lg:text-7xl">
 						One-stop platform to find best <AuroraText>competition</AuroraText>{" "}
 						and team for you!
 					</h1>
