@@ -1,0 +1,87 @@
+{
+  "pasal_list": [],
+  "check_siujk_skb_skd": [
+    {
+      "content": "PT Ericsson Indonesia\n\nData SIUJK/SBU vendor konstruksi.\nVendor ID: 200407\nNama Vendor: PT Ericsson Indonesia\nJumlah catatan kualifikasi: 1\n\nCatatan kualifikasi 1\nNomor sumber: 2\nKualifikasi: Pekerjaan Konstruksi Besar - Konstruksi Sentral Telekomunikasi\nTanggal kedaluwarsa: 2025-11-17\nKeterangan: Kemen PUPR (Fisik Ada)\nFormat SIUJK: Baru\nTanggal terima SIUJK: Tidak tersedia\nStatus pada sumber: Expired\nJenis PPh: Tidak tersedia",
+      "files": null,
+      "metadata": {
+        "child_chunks": [],
+        "data_source_type": "upload_file",
+        "dataset_id": "09c2175e-470d-4b59-bf59-8534e005609e",
+        "dataset_name": "siujk-knowledge",
+        "doc_metadata": {
+          "construction_type": "construction_work",
+          "dependency_topic": "construction",
+          "pph_category": "UNKNOWN",
+          "record_status": "ACTIVE",
+          "requires_service_type": "TRUE",
+          "requires_transaction_date": "TRUE",
+          "requires_vendor_identity": "TRUE",
+          "routing_strategy": "FAQ_THEN_SIUJK_THEN_TAX_LIST_THEN_MANUAL",
+          "siujk_requirement": "NEEDED",
+          "siujk_source_status": "EXPIRED",
+          "snapshot_id": "SIUJK-2026-V1-VENDOR-LOOKUP",
+          "source_role": "VENDOR_CERTIFICATE_LOOKUP",
+          "source_type": "SIUJK",
+          "time_scope": "CURRENT",
+          "vendor_id": "200407",
+          "vendor_name_normalized": "PT ERICSSON INDONESIA"
+        },
+        "document_id": "6f9053f0-b490-4b7f-9f30-61bbc8e0a37c",
+        "document_name": "SIUJK-200407-pt-ericsson-indonesia-cbab3516",
+        "position": 1,
+        "retriever_from": "workflow",
+        "score": 0.7634314,
+        "segment_hit_count": 6,
+        "segment_id": "1cfb4efe-9251-447e-adda-7c35fa26e1ab",
+        "segment_index_node_hash": "4b0495ffdb89e88c76ae61d93124ebdd214e8ccbe9aa231c9666c7c9ab129b3e",
+        "segment_position": 1,
+        "segment_word_count": 431,
+        "source": "knowledge"
+      },
+      "summary": null,
+      "title": "SIUJK-200407-pt-ericsson-indonesia-cbab3516"
+    }
+  ],
+  "code_list": [
+    {
+      "content": "Jenis dan kode pajak yang tercatat:\n1. WHT Tax Type: I1\n   Tax Type Description: PPh Article 4(2)\n   WHT Tax Code: AK\n   Tax Code Description Final: Pekerjaan konstruksi SIUJK M/B/Spe 2,65%\n   Jumlah transaksi historis: 672\n   Rentang Invoice Payment Date: 2025-01-03 sampai 2025-12-22\n   Contoh Description: 0101475085-4200036148-00001-Veloce SBU-Mob/Demob 0\n   Contoh Description: 0101475086-4400011678-00005-Biaya Maintenance\n2. WHT Tax Type: I1\n   Tax Type Description: PPh Article 4(2)\n   WHT Tax Code: AN\n   Tax Code Description Final: Pek. konstruksi integrasi NonSIUJK 4,00%\n   Jumlah transaksi historis: 104\n   Rentang Invoice Payment Date: 2025-01-03 sampai 2025-12-24\n   Contoh Description: 0101475084-4200036150-00003-Veloce SBU-Int tstcom&\n   Contoh Description: 0101471754-4200034563-00004-Material Tower SST\n3. WHT Tax Type: I4\n   Tax Type Description: PPh Article 22\n   WHT Tax Code: GA\n   Tax Code Description Final: Pemb Barang Oleh Bendaharawan/Badan 1.5%\n   Jumlah transaksi historis: 5\n   Rentang Invoice Payment Date: 2025-12-12 sampai 2025-12-17\n   Contoh Description: 0101757451-4200050644-00010-Arrester OBO\n   Contoh Description: 0101758654-4200050644-00085-Arrester OBO\n4. WHT Tax Type: I5\n   Tax Type Description: PPh Article 23\n   WHT Tax Code: IK\n   Tax Code Description Final: Js Perantara dan/atau Keagenan 2%\n   Jumlah transaksi historis: 1\n   Rentang Invoice Payment Date: 2025-09-19\n   Contoh Description: Pek support optimaslisasi pilkada instalasi RRU\n5. WHT Tax Type: J1\n   Tax Type Description: PPh Article 4(2)\n   WHT Tax Code: AB\n   Tax Code Description Final: Sewa tanah dan/atau bangunan (Final) 10%\n   Jumlah transaksi historis: 4\n   Rentang Invoice Payment Date: 2025-04-16 sampai 2025-12-29\n   Contoh Description: SEWA LAHAN DAN PENGURUSAN PLN COMBAT RAFI 2025,MANAGEMENT FEE\n   Contoh Description: 202412_KOMPENSASI PENEMPATAN PERANGKAT SIMPANGLIMA\n6. WHT Tax Type: J1\n   Tax Type Description: PPh Article 4(2)\n   WHT Tax Code: AK\n   Tax Code Description Final: Pekerjaan konstruksi SIUJK M/B/Spe 2,65%\n   Jumlah transaksi historis: 8\n   Rentang Invoice Payment Date: 2025-01-15 sampai 2025-12-19\n   Contoh Description: 0101484069-4200045156-00001-Physical Tunning Anten\n   Contoh Description: 0101486125-4400013498-00001-JTG-Peninggian Antena\n7. WHT Tax Type: J1\n   Tax Type Description: PPh Article 4(2)\n   WHT Tax Code: AN\n   Tax Code Description Final: Pek.",
+      "files": null,
+      "metadata": {
+        "child_chunks": [],
+        "data_source_type": "upload_file",
+        "dataset_id": "f1644414-42f4-4bc9-94eb-5dd9a8b79151",
+        "dataset_name": "tax code list",
+        "doc_metadata": {
+          "construction_type": "MULTIPLE",
+          "dependency_topic": "multiple",
+          "record_status": "ACTIVE",
+          "requires_vendor_identity": "TRUE",
+          "routing_strategy": "FAQ_THEN_SIUJK_THEN_TAX_LIST_THEN_MANUAL",
+          "siujk_requirement": "CONDITIONAL",
+          "snapshot_id": "TAXLIST-2025-V3-ALLCODES-7COL",
+          "source_role": "HISTORICAL_VENDOR_SUMMARY",
+          "source_type": "TAX_LIST",
+          "source_year": "2025",
+          "time_scope": "HISTORICAL",
+          "vendor_name_normalized": "PT KINARYA UTAMA TEKNIK",
+          "wht_tax_code": "MULTIPLE",
+          "wht_tax_type": "MULTIPLE"
+        },
+        "document_id": "ad9495f7-c7c6-4058-84e8-e24f6dc1a373",
+        "document_name": "TaxList-pt-kinarya-utama-teknik-7195ddd4-f488cc9185-summary",
+        "position": 1,
+        "retriever_from": "workflow",
+        "score": 0.5422425,
+        "segment_hit_count": 27,
+        "segment_id": "23cd8701-c2ac-4f6b-a6f1-b14757617801",
+        "segment_index_node_hash": "b4bf3f6b34f018b66c58ae22fe022189d0e282087f881c8c6ac4cf4b1b3bd7a8",
+        "segment_position": 2,
+        "segment_word_count": 2408,
+        "source": "knowledge"
+      },
+      "summary": null,
+      "title": "TaxList-pt-kinarya-utama-teknik-7195ddd4-f488cc9185-summary"
+    }
+  ]
+}

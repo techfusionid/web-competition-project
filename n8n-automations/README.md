@@ -17,10 +17,34 @@ database postgres
 
 scrape (6*30) 180 competitions scrapping instagram to postgres and cloudflare R2 in n8n
 
-2. EXTRACT COMPETITION DATA AND ENSURE COMPETITION WORK VERY WELL
+2. EXTRACT COMPETITION DATA AND ENSURE COMPETITION WORKFLOW WORKING PROPERLY
 
-2. execute workflow and human in the loop `comp-extraction` run looping until 180 competition extract dgn baik 
 
-2. run scheduled each 3 days `comp-extraction` and execute workflow 
+## n8n workflow in markdown
 
-2. run scheduled scrape each 3 days with filter deduplication handling
+### dev 
+1. ambil 2 data
+2. text extract dulu
+3. baru extract gambar
+4.
+
+
+## checklist
+- [x] 1. tech stack project fixed: n8n and nextjs
+- [x] 2. skema database website 
+- [ ] 3. n8n: mekanisme get data dan update data ke postgres database
+- [ ] 4. n8n: mekanisme timpa kolom data text extractor
+- [ ] 5. naikin akurasi structured output dgn refine prompt
+- [ ] panduan migrasi database
+- [ ] final testing menuju ke automation
+
+
+logging
+1. scrape konten instagram (berapa yg baru, berapa yg )
+2. data postgres yg diambil 
+3. hasil ekstraksi text
+4. update ke postgres database
+5. hasil ekstraksi gambar
+6. full data yg diekstrak ke 
+
+hasil ekstraksi gambar

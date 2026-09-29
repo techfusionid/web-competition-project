@@ -1,0 +1,269 @@
+input,prompt,output
+"📣 [FK UMS PROUDLY PRESENTS]\n\nBukan sekadar timbangan naik, obesitas itu ternyata berdampak serius sampai ke imun tubuh dan THT! 🩺🧬\n\nHalo, future researchers dan teman-teman mahasiswa Indonesia! 👋\n\nPernah gak sih mikir, kenapa kasus obesitas makin kompleks dan nyerempet ke banyak sistem tubuh sekaligus? Daripada cuma jadi bahan obrolan, yuk bedah tuntas lewat riset dan inovasi terbaikmu di MEDSCO 2026!\nTema MEDSCO 2026:\n\n“Obesity: A Multidisciplinary Perspective on Immunology and ENT Health”\n\nCabang Lomba:\n🔬 Poster Ilmiah\n📣 Poster Publik\n📝 Esai Ilmiah\n🎥 Video Edukasi\n📢 Registrasi Telah Resmi Dibuka!\n\nSaatnya ubah rasa penasaranmu jadi karya nyata yang berdampak buat dunia kesehatan.\n\nYuk, siapkan tim terbaikmu!\n*Info Lengkap & Pendaftaran*\n📝 Guideline: https://linktr.ee/MEDSCOFKUMS\n\n📞 Narahubung:\n👤 Naylla – 0821-4264-6022\n👤 Dhia – 0898‑5937‑442\n\nTunjukkan kalau ide anak muda bisa bawa perubahan nyata. \nSampai ketemu di MEDSCO 2026! 🏆✨\nMEDSCO 2026 – FK UMS\n\nMore information:\n📸 Instagram: @medscofkums\n📧 Email: medsco.ums@gmail.com\n📲 TikTok: @medsco_ums\n\n#MEDSCO2026 #MedicalScientificCompetition \n#FutureResearchers \n#NationalScientificCompetition \n#HealthcareInnovation \nObesityAwareness","{
+  ""model"": ""ministral-8b-latest"",
+  ""messages"": [
+    {
+      ""role"": ""system"",
+      ""content"": ""Extract the competition information from the provided text. Return null for any field that cannot be found.""
+    },
+    {
+      ""role"": ""user"",
+      ""content"": ""{{ $json.text }}""
+    }
+  ],
+  ""response_format"": {
+    ""type"": ""json_schema"",
+    ""json_schema"": {
+      ""schema"": {
+        ""properties"": {
+          ""title"": {
+            ""title"": ""Title"",
+            ""type"": ""string"",
+            ""description"": ""Competition title. Return null if not found.""
+          },
+          ""organizer"": {
+            ""title"": ""Organizer"",
+            ""items"": {
+              ""type"": ""string""
+            },
+            ""type"": ""array"",
+            ""description"": ""Competition organizer, single or multiple. Return null if not found.""
+          },
+          ""categories"": {
+            ""title"": ""Categories"",
+            ""items"": {
+              ""type"": ""string"",
+              ""enum"": [
+                ""Akademik & Sains"",
+                ""Teknologi & IT"",
+                ""Seni & Kreatif"",
+                ""Bisnis & Startup"",
+                ""Olahraga & E-sports"",
+                ""Sastra & Bahasa"",
+                ""Sosial & Lingkungan"",
+                ""Keagamaan"",
+                ""Gaya Hidup & Hobi"",
+                ""Lainnya""
+              ]
+            },
+            ""type"": ""array"",
+            ""description"": ""Competition category. Return null if not found.""
+          },
+          ""level"": {
+            ""title"": ""Level"",
+            ""items"": {
+              ""type"": ""string"",
+              ""enum"": [
+                ""SD"",
+                ""SMP"",
+                ""SMA"",
+                ""Mahasiswa"",
+                ""Umum""
+              ]
+            },
+            ""type"": ""array"",
+            ""description"": ""Participant level. Return null if not found.""
+          },
+          ""startDate"": {
+            ""title"": ""Start Date"",
+            ""type"": ""string"",
+            ""description"": ""Registration start date, format YYYY-MM-DD. Return null if not found.""
+          },
+          ""endDate"": {
+            ""title"": ""End Date"",
+            ""type"": ""string"",
+            ""description"": ""Registration end date, format YYYY-MM-DD. Return null if not found.""
+          },
+          ""format"": {
+            ""title"": ""Format"",
+            ""type"": ""string"",
+            ""enum"": [
+              ""Online"",
+              ""Offline"",
+              ""Hybrid""
+            ],
+            ""description"": ""Competition format. Return null if not found.""
+          },
+          ""participationType"": {
+            ""title"": ""Participation Type"",
+            ""type"": ""string"",
+            ""enum"": [
+              ""Individual"",
+              ""Team""
+            ],
+            ""description"": ""Participation type. Return null if not found.""
+          },
+          ""pricing"": {
+            ""title"": ""Pricing"",
+            ""type"": ""string"",
+            ""description"": ""Registration fee in rupiah. Return null if not found.""
+          },
+          ""url"": {
+            ""title"": ""URL"",
+            ""type"": ""string"",
+            ""description"": ""Registration URL. Return null if not found.""
+          },
+          ""location"": {
+            ""title"": ""Location"",
+            ""type"": ""string"",
+            ""description"": ""Country of the competition. Return null if not found.""
+          }
+        },
+        ""required"": [
+          ""title"",
+          ""organizer"",
+          ""categories"",
+          ""level"",
+          ""startDate"",
+          ""endDate"",
+          ""format"",
+          ""participationType"",
+          ""pricing"",
+          ""url"",
+          ""location""
+        ],
+        ""title"": ""Competition"",
+        ""type"": ""object"",
+        ""additionalProperties"": false
+      },
+      ""name"": ""competition"",
+      ""strict"": true
+    }
+  },
+  ""max_tokens"": 512,
+  ""temperature"": 0
+}","{    ""id"": ""8f9907bb-a0f2-4d8e-86c9-b0dc9f048421"",    ""title"": null,    ""organizer"": {      ""data"": [      ]    },    ""categories"": {      ""data"": [        ""Lainnya""      ]    },    ""level"": {      ""data"": [        ""Umum""      ]    },    ""startDate"": null,    ""endDate"": null,    ""format"": ""Online"",    ""participationType"": ""Team"",    ""pricing"": null,    ""location"": ""Indonesia"",    ""url"": null  },"
+"🏆 NATIONAL BUSINESS PLAN & BUSINESS POSTER COMPETITION 2026\n\nGreetings of Innovation, Hello Future Entrepreneurs! 👋\n\n""Trusted and inclusive businesses are the key to bringing Indonesia's economy to the global stage."" ✨\n\nProgram Studi Ilmu Administrasi Bisnis FISIP Universitas Sumatera Utara (USU) kembali menghadirkan ajang bergengsi National Business Plan & Business Poster Competition 2026! Wadah nasional bagi para mahasiswa berkarya, merancang strategi, serta menyalurkan ide bisnis yang beda dari yang lain.\n\n📌 Tema Utama :\n""Business Innovation for Indonesia's Trusted and Inclusive Economy""\n\nSub-tema :\nCulinary Art\nCircular Food Economy\nLocal Resource Innovation\nDigital Financial Inclusivity\nEco-Conscious Fashion\n\n📅 Timeline NBPC 2026 \n1 Sept - 20 Okt 2026 : Pendaftaran & Pengumpulan Proposal/Poster\n1 Nov - 8 Nov : Penilaian Proposal/Poster\n9 Nov : Pengumuman Top 10 NBPC\n10 Nov - 15 Nov : Pengumpulan Online Video Presenting\n18 Nov : Pengumuman Top 5 NBPC\n24 Nov : Presentasi Top 5 (Peserta Luar Kota Medan - Via Zoom)\n25 Nov : Acara Puncak (Presentasi, Penilaian, Seminar, dan Pengumuman Business Plan & Poster)\n\n🏆 Hadiah Juara\nKategori Business Plan Competition :\nJuara 1 : Rp 3.000.000 + Sertifikat + Plakat\nJuara 2 : Rp 2.500.000 + Sertifikat + Plakat\nJuara 3 : Rp 1.500.000 + Sertifikat + Plakat\nKategori Business Poster Competition :\nJuara 1 : 500.000 + Sertifikat + Medali\nJuara 2 : 300.000 + Sertifikat + Medali\n\n☎️ Contact Person\n+62 812-6263-5108 (Ewita)\n+62 822-6974-1601 (Sulha)\n📩 Email : businessplancompetitionusu2023@gmail.com\n📱 Instagram : @bpcusu26\n🎥 Tiktok : @bpcusu26","{
+  ""model"": ""ministral-8b-latest"",
+  ""messages"": [
+    {
+      ""role"": ""system"",
+      ""content"": ""Extract the competition information from the provided text. Return null for any field that cannot be found.""
+    },
+    {
+      ""role"": ""user"",
+      ""content"": ""{{ $json.text }}""
+    }
+  ],
+  ""response_format"": {
+    ""type"": ""json_schema"",
+    ""json_schema"": {
+      ""schema"": {
+        ""properties"": {
+          ""title"": {
+            ""title"": ""Title"",
+            ""type"": ""string"",
+            ""description"": ""Competition title. Return null if not found.""
+          },
+          ""organizer"": {
+            ""title"": ""Organizer"",
+            ""items"": {
+              ""type"": ""string""
+            },
+            ""type"": ""array"",
+            ""description"": ""Competition organizer, single or multiple. Return null if not found.""
+          },
+          ""categories"": {
+            ""title"": ""Categories"",
+            ""items"": {
+              ""type"": ""string"",
+              ""enum"": [
+                ""Akademik & Sains"",
+                ""Teknologi & IT"",
+                ""Seni & Kreatif"",
+                ""Bisnis & Startup"",
+                ""Olahraga & E-sports"",
+                ""Sastra & Bahasa"",
+                ""Sosial & Lingkungan"",
+                ""Keagamaan"",
+                ""Gaya Hidup & Hobi"",
+                ""Lainnya""
+              ]
+            },
+            ""type"": ""array"",
+            ""description"": ""Competition category. Return null if not found.""
+          },
+          ""level"": {
+            ""title"": ""Level"",
+            ""items"": {
+              ""type"": ""string"",
+              ""enum"": [
+                ""SD"",
+                ""SMP"",
+                ""SMA"",
+                ""Mahasiswa"",
+                ""Umum""
+              ]
+            },
+            ""type"": ""array"",
+            ""description"": ""Participant level. Return null if not found.""
+          },
+          ""startDate"": {
+            ""title"": ""Start Date"",
+            ""type"": ""string"",
+            ""description"": ""Registration start date, format YYYY-MM-DD. Return null if not found.""
+          },
+          ""endDate"": {
+            ""title"": ""End Date"",
+            ""type"": ""string"",
+            ""description"": ""Registration end date, format YYYY-MM-DD. Return null if not found.""
+          },
+          ""format"": {
+            ""title"": ""Format"",
+            ""type"": ""string"",
+            ""enum"": [
+              ""Online"",
+              ""Offline"",
+              ""Hybrid""
+            ],
+            ""description"": ""Competition format. Return null if not found.""
+          },
+          ""participationType"": {
+            ""title"": ""Participation Type"",
+            ""type"": ""string"",
+            ""enum"": [
+              ""Individual"",
+              ""Team""
+            ],
+            ""description"": ""Participation type. Return null if not found.""
+          },
+          ""pricing"": {
+            ""title"": ""Pricing"",
+            ""type"": ""string"",
+            ""description"": ""Registration fee in rupiah. Return null if not found.""
+          },
+          ""url"": {
+            ""title"": ""URL"",
+            ""type"": ""string"",
+            ""description"": ""Registration URL. Return null if not found.""
+          },
+          ""location"": {
+            ""title"": ""Location"",
+            ""type"": ""string"",
+            ""description"": ""Country of the competition. Return null if not found.""
+          }
+        },
+        ""required"": [
+          ""title"",
+          ""organizer"",
+          ""categories"",
+          ""level"",
+          ""startDate"",
+          ""endDate"",
+          ""format"",
+          ""participationType"",
+          ""pricing"",
+          ""url"",
+          ""location""
+        ],
+        ""title"": ""Competition"",
+        ""type"": ""object"",
+        ""additionalProperties"": false
+      },
+      ""name"": ""competition"",
+      ""strict"": true
+    }
+  },
+  ""max_tokens"": 512,
+  ""temperature"": 0
+}","{    ""id"": ""5d9f8c79-1c6e-48b6-bba3-1657f443222e"",    ""title"": null,    ""organizer"": {      ""data"": [      ]    },    ""categories"": {      ""data"": [        ""Lainnya""      ]    },    ""level"": {      ""data"": [        ""Umum""      ]    },    ""startDate"": null,    ""endDate"": null,    ""format"": ""Online"",    ""participationType"": ""Team"",    ""pricing"": null,    ""location"": ""Indonesia"",    ""url"": null  }"
