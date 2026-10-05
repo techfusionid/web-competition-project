@@ -1,0 +1,1289 @@
+{
+  "name": "COMP-EXTRACTION",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        144,
+        -144
+      ],
+      "id": "a5d186e1-076b-4b81-8854-0cf98207212a",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "competitions",
+          "mode": "list",
+          "cachedResultName": "competitions"
+        },
+        "limit": 2,
+        "where": {
+          "values": [
+            {
+              "column": "categories",
+              "condition": "IS NULL"
+            },
+            {
+              "column": "organizer",
+              "condition": "IS NULL"
+            }
+          ]
+        },
+        "combineConditions": "OR",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        416,
+        0
+      ],
+      "id": "a85d9ff0-921e-41f5-92a8-28a1e7609a92",
+      "name": "Select rows from a table",
+      "credentials": {
+        "postgres": {
+          "id": "i0ko9qJYNmkOaq02",
+          "name": "opencomps"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.mistral.ai/v1/ocr",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer tTy1ocKkcZaARSin5iZgIimzvalrVksQ"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "=  {\n    \"model\": \"mistral-ocr-latest\",\n    \"document\": {\n      \"type\": \"image_url\",\n      \"image_url\": \"{{ $('Select rows from a table').item.json.poster }}\"\n    },\n    \"document_annotation_format\": {\n      \"type\": \"json_schema\",\n      \"json_schema\": {\n        \"name\": \"competition_annotation\",\n        \"strict\": true,\n        \"schema\": {\n          \"type\": \"object\",\n          \"properties\": {\n            \"title\": {\n              \"type\": \"string\",\n              \"description\": \"Competition title. Return null if not found.\"\n            },\n            \"organizer\": {\n              \"type\": \"array\",\n              \"items\": {\n                \"type\": \"string\"\n              },\n              \"description\": \"Competition organizer, single or multiple. Return null if not found.\"\n            },\n            \"categories\": {\n              \"type\": \"array\",\n              \"items\": {\n                \"type\": \"string\",\n                \"enum\": [\n                  \"Akademik & Sains\",\n                  \"Teknologi & IT\",\n                  \"Seni & Kreatif\",\n                  \"Bisnis & Startup\",\n                  \"Olahraga & E-sports\",\n                  \"Sastra & Bahasa\",\n                  \"Sosial & Lingkungan\",\n                  \"Keagamaan\",\n                  \"Gaya Hidup & Hobi\",\n                  \"Lainnya\"\n                ]\n              },\n              \"description\": \"Competition category. Return null if not found.\"\n            },\n            \"level\": {\n              \"type\": \"array\",\n              \"items\": {\n                \"type\": \"string\",\n                \"enum\": [\n                  \"SD\",\n                  \"SMP\",\n                  \"SMA\",\n                  \"Mahasiswa\",\n                  \"Umum\"\n                ]\n              },\n              \"description\": \"Participant level. Return null if not found.\"\n            },\n            \"startDate\": {\n              \"type\": \"string\",\n              \"description\": \"Registration start date, format YYYY-MM-DD. Return null if not found.\"\n            },\n            \"endDate\": {\n              \"type\": \"string\",\n              \"description\": \"Registration end date, format YYYY-MM-DD. Return null if not found.\"\n            },\n            \"format\": {\n              \"type\": \"string\",\n              \"enum\": [\n                \"Online\",\n                \"Offline\",\n                \"Hybrid\"\n              ],\n              \"description\": \"Competition format. Return null if not found.\"\n            },\n            \"participationType\": {\n              \"type\": \"string\",\n              \"enum\": [\n                \"Individual\",\n                \"Team\"\n              ],\n              \"description\": \"Participation type. Return null if not found.\"\n            },\n            \"pricing\": {\n              \"type\": \"string\",\n              \"description\": \"Registration fee in rupiah. Can be a single number, or multiple numbers e.g. '50000', '50000, 100000'. Return null if not found.\"\n            },\n            \"url\": {\n              \"type\": \"string\",\n              \"description\": \"Registration URL. Return null if not found.\"\n            },\n            \"location\": {\n              \"type\": \"string\",\n              \"description\": \"Country of the competition. Return null if not found.\"\n            }\n          },\n          \"required\": [\n            \"title\",\n            \"organizer\",\n            \"categories\",\n            \"level\",\n            \"startDate\",\n            \"endDate\",\n            \"format\",\n            \"participationType\",\n            \"pricing\",\n            \"url\",\n            \"location\"\n          ],\n          \"additionalProperties\": false\n        }\n      }\n    },\n    \"include_image_base64\": true\n  }\n",
+        "options": {
+          "redirect": {
+            "redirect": {
+              "maxRedirects": 2
+            }
+          }
+        }
+      },
+      "id": "c5e53f0a-26f9-4662-b24c-6de9ca349803",
+      "name": "Image extractor - Mistral2",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1904,
+        -144
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * n8n Code Node\n * Run Once for All Items\n *\n * - Parse document_annotation\n * - Merge annotation ke record\n * - title selalu diambil dari annotation\n * - Array top-level → object dengan key \"0\", \"1\", ...\n * - Array kosong → {}\n * - pricing → object terstruktur\n * - Field null / \"null\" → null\n */\n\nconst FIELDS_TO_MERGE = [\n  \"organizer\",\n  \"categories\",\n  \"level\",\n  \"startDate\",\n  \"endDate\",\n  \"format\",\n  \"participationType\",\n  \"pricing\",\n  \"location\",\n  \"url\",\n];\n\nconst FIELDS_ALWAYS_OVERWRITE = [\n  \"title\",\n];\n\n/**\n * Membersihkan value.\n */\nfunction cleanValue(value) {\n  if (\n    value === null ||\n    value === undefined ||\n    value === \"null\"\n  ) {\n    return null;\n  }\n\n  return value;\n}\n\n/**\n * Parse pricing string menjadi object.\n */\nfunction parsePricing(raw) {\n  if (raw === null || raw === undefined || raw === \"null\") {\n    return null;\n  }\n\n  if (typeof raw !== \"string\") {\n    return raw;\n  }\n\n  const trimmed = raw.trim();\n\n  if (!trimmed) {\n    return null;\n  }\n\n  if (/^(gratis|free)$/i.test(trimmed)) {\n    return {\n      type: \"free\",\n      raw: trimmed,\n    };\n  }\n\n  try {\n    const tiers = trimmed\n      .split(\";\")\n      .map((s) => s.trim())\n      .filter(Boolean)\n      .map((waveStr) => {\n        // Ambil label gelombang\n        const waveLabelMatch =\n          waveStr.match(/\\(([^)]+)\\)\\s*$/);\n\n        const wave = waveLabelMatch\n          ? waveLabelMatch[1].trim()\n          : null;\n\n        const withoutWaveLabel = waveLabelMatch\n          ? waveStr\n              .slice(0, waveLabelMatch.index)\n              .trim()\n          : waveStr;\n\n        // Ambil unit setelah /\n        const unitMatch =\n          withoutWaveLabel.match(/\\/([^/]+)$/);\n\n        const unit = unitMatch\n          ? unitMatch[1].trim()\n          : null;\n\n        const amountsPart = unitMatch\n          ? withoutWaveLabel\n              .slice(0, unitMatch.index)\n              .trim()\n          : withoutWaveLabel;\n\n        const amounts = amountsPart\n          .split(\",\")\n          .map((s) => {\n            const number = Number(\n              s.replace(/[^\\d]/g, \"\")\n            );\n\n            return number;\n          })\n          .filter((n) => !Number.isNaN(n));\n\n        return {\n          wave,\n          unit,\n          amounts,\n        };\n      });\n\n    const hasAmounts = tiers.some(\n      (tier) => tier.amounts.length > 0\n    );\n\n    if (!hasAmounts) {\n      return {\n        type: \"unparsed\",\n        raw: trimmed,\n      };\n    }\n\n    return {\n      type: \"paid\",\n      raw: trimmed,\n      tiers,\n    };\n  } catch {\n    return {\n      type: \"unparsed\",\n      raw: trimmed,\n    };\n  }\n}\n\n/**\n * Transformer khusus field.\n */\nconst TRANSFORMERS = {\n  pricing: parsePricing,\n};\n\n/**\n * Array → Object\n *\n * [\"A\", \"B\"]\n *\n * menjadi:\n *\n * {\n *   \"0\": \"A\",\n *   \"1\": \"B\"\n * }\n *\n * [] → {}\n */\nfunction arrayToObject(value) {\n  if (!Array.isArray(value)) {\n    return value;\n  }\n\n  return Object.fromEntries(\n    value\n      .filter(\n        (item) =>\n          item !== null &&\n          item !== undefined &&\n          item !== \"null\"\n      )\n      .map((item, index) => [\n        String(index),\n        item,\n      ])\n  );\n}\n\n/**\n * Convert semua array top-level\n * menjadi object untuk kompatibilitas\n * dengan field JSONB di n8n Postgres.\n */\nfunction convertTopLevelArraysToObjects(record) {\n  const result = {\n    ...record,\n  };\n\n  for (const key of Object.keys(result)) {\n    if (Array.isArray(result[key])) {\n      result[key] = arrayToObject(result[key]);\n    }\n  }\n\n  return result;\n}\n\n/**\n * Cek apakah value kosong.\n */\nfunction isEmpty(value) {\n  if (\n    value === null ||\n    value === undefined ||\n    value === \"null\"\n  ) {\n    return true;\n  }\n\n  if (Array.isArray(value)) {\n    return value.length === 0;\n  }\n\n  if (\n    typeof value === \"object\" &&\n    Object.keys(value).length === 0\n  ) {\n    return true;\n  }\n\n  return false;\n}\n\n/**\n * Merge document_annotation ke record.\n */\nfunction mergeAnnotation(record, overwrite = false) {\n  const result = {\n    ...record,\n  };\n\n  let annotation;\n\n  try {\n    annotation =\n      typeof record.document_annotation === \"string\"\n        ? JSON.parse(record.document_annotation)\n        : record.document_annotation;\n  } catch {\n    return result;\n  }\n\n  if (\n    !annotation ||\n    typeof annotation !== \"object\"\n  ) {\n    return result;\n  }\n\n  // title selalu overwrite\n  for (const field of FIELDS_ALWAYS_OVERWRITE) {\n    if (field in annotation) {\n      result[field] =\n        cleanValue(annotation[field]);\n    }\n  }\n\n  // Field lainnya hanya diisi kalau kosong\n  for (const field of FIELDS_TO_MERGE) {\n    if (!(field in annotation)) {\n      continue;\n    }\n\n    const currentValue = result[field];\n\n    if (\n      overwrite ||\n      isEmpty(currentValue)\n    ) {\n      const rawValue =\n        annotation[field];\n\n      const transformer =\n        TRANSFORMERS[field];\n\n      result[field] = transformer\n        ? transformer(rawValue)\n        : cleanValue(rawValue);\n    }\n  }\n\n  return result;\n}\n\n\n// =====================================================\n// MAIN\n// =====================================================\n\nconst OVERWRITE = false;\n\nreturn $input.all().map((item) => {\n  const merged = mergeAnnotation(\n    item.json,\n    OVERWRITE\n  );\n\n  const converted =\n    convertTopLevelArraysToObjects(\n      merged\n    );\n\n  // document_annotation tidak perlu\n  // dikirim ke database\n  delete converted.document_annotation;\n\n  return {\n    json: converted,\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2464,
+        -16
+      ],
+      "id": "233690ea-730a-4c77-a24b-2debfa276910",
+      "name": "array to object"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "competitions",
+          "mode": "list",
+          "cachedResultName": "competitions"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {
+            "id": "={{ $json.id }}",
+            "updatedAt": "={{ DateTime.now() }}",
+            "url": "={{ $json.url }}",
+            "location": "={{ $json.location }}",
+            "pricing": "={{ $json.pricing }}",
+            "organizer": "={{ $json.organizer }}",
+            "title": "={{ $json.title }}",
+            "categories": "={{ $json.categories }}",
+            "level": "={{ $json.level }}",
+            "startDate": "={{ $json.startDate }}",
+            "endDate": "={{ $json.endDate }}",
+            "format": "={{ $json.format }}",
+            "participationType": "={{ $json.participationType }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "organizer",
+              "displayName": "organizer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "categories",
+              "displayName": "categories",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "views",
+              "displayName": "views",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "poster",
+              "displayName": "poster",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "urlsource",
+              "displayName": "urlsource",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "level",
+              "displayName": "level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "startDate",
+              "displayName": "startDate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "endDate",
+              "displayName": "endDate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "format",
+              "displayName": "format",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "participationType",
+              "displayName": "participationType",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "pricing",
+              "displayName": "pricing",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "location",
+              "displayName": "location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "whatsappChannel",
+              "displayName": "whatsappChannel",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "socialMedia",
+              "displayName": "socialMedia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "createdAt",
+              "displayName": "createdAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "updatedAt",
+              "displayName": "updatedAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "url",
+              "displayName": "url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        2704,
+        -16
+      ],
+      "id": "6f6024f2-d37c-40d4-b7d9-db33e76a345d",
+      "name": "Update rows in a table",
+      "credentials": {
+        "postgres": {
+          "id": "i0ko9qJYNmkOaq02",
+          "name": "opencomps"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 6
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        144,
+        64
+      ],
+      "id": "842207db-3bf8-4039-a36e-ead72af46eef",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.mistral.ai/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer tTy1ocKkcZaARSin5iZgIimzvalrVksQ"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"ministral-8b-latest\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Extract competition information from the provided text and return the result according to the JSON schema. Every field is optional: extract a value whenever it is explicitly stated or can be reliably inferred from the competition text. Return null for scalar fields or an empty array for array fields only when the information is genuinely unavailable. Do not invent, hallucinate, or use generic default values. Carefully inspect the title, headings, descriptions, themes, eligibility information, timeline, and other competition details before deciding that a field is unavailable. For classification fields such as categories and level, reasonable inference is allowed when strongly supported by the text. For example, a competition explicitly intended for university or college students should be classified as Mahasiswa, and a business plan or entrepreneurship competition should be classified as Bisnis & Startup. The title should be extracted from the main competition name or heading even when there is no explicit 'Title' label. The organizer should be extracted from organizations or institutions explicitly described as presenting, organizing, hosting, or holding the competition. Do not assume Online, Offline, Hybrid, Individual, or Team when the format or participation type is not clearly supported. For dates, extract the registration start and end dates and convert them to YYYY-MM-DD when the year is clearly available from the text. Do not confuse registration dates with judging, presentation, announcement, or event dates. For pricing, extract registration fees only and do not confuse them with prize money. For URL, extract the registration or official competition URL when available. For location, only return a location that is explicitly stated or clearly established as the competition location; do not infer it merely from the organizer's country or institution. Extract the most accurate information available from the text and do not leave a field null when reliable evidence for that field exists.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": {{ JSON.stringify($json.description) }}\n    }\n  ],\n  \"response_format\": {\n    \"type\": \"json_schema\",\n    \"json_schema\": {\n      \"name\": \"competition\",\n      \"strict\": true,\n      \"schema\": {\n        \"type\": \"object\",\n        \"title\": \"Competition\",\n        \"properties\": {\n          \"title\": {\n            \"type\": [\"string\", \"null\"],\n            \"title\": \"Title\",\n            \"description\": \"Main competition title or official competition name. Extract it from the main heading, headline, or opening announcement even if there is no explicit 'Title:' label. Return null only when no competition title can be reliably identified.\"\n          },\n          \"organizer\": {\n            \"type\": \"array\",\n            \"title\": \"Organizer\",\n            \"items\": {\n              \"type\": \"string\"\n            },\n            \"description\": \"Organization, institution, university, company, or group responsible for organizing, hosting, presenting, or holding the competition. Extract one or more organizers when supported by the text. Do not include contact persons. Return an empty array only when the organizer cannot be reliably identified.\"\n          },\n          \"categories\": {\n            \"type\": \"array\",\n            \"title\": \"Categories\",\n            \"items\": {\n              \"type\": \"string\",\n              \"enum\": [\n                \"Akademik & Sains\",\n                \"Teknologi & IT\",\n                \"Seni & Kreatif\",\n                \"Bisnis & Startup\",\n                \"Olahraga & E-sports\",\n                \"Sastra & Bahasa\",\n                \"Sosial & Lingkungan\",\n                \"Keagamaan\",\n                \"Gaya Hidup & Hobi\",\n                \"Lainnya\"\n              ]\n            },\n            \"description\": \"Competition category based on its title, subject, theme, description, and competition type. Use the most specific available category. Reasonable classification is allowed when strongly supported by the text. For example, business plan, entrepreneurship, or business strategy competitions should be categorized as Bisnis & Startup; scientific or research competitions as Akademik & Sains; technology, programming, AI, or software competitions as Teknologi & IT. Use Lainnya only when none of the available categories reasonably applies. Return an empty array only when the competition topic cannot be determined.\"\n          },\n          \"level\": {\n            \"type\": \"array\",\n            \"title\": \"Level\",\n            \"items\": {\n              \"type\": \"string\",\n              \"enum\": [\n                \"SD\",\n                \"SMP\",\n                \"SMA\",\n                \"Mahasiswa\",\n                \"Umum\"\n              ]\n            },\n            \"description\": \"Intended participant level. Extract from explicit eligibility or strongly supported contextual information. University students, college students, or mahasiswa should be classified as Mahasiswa; SMA or SMK students as SMA; SMP students as SMP; SD students as SD; explicitly open or intended for the general public as Umum. Do not use Umum merely because eligibility is not stated. Return an empty array when participant level cannot be determined.\"\n          },\n          \"startDate\": {\n            \"type\": [\"string\", \"null\"],\n            \"title\": \"Start Date\",\n            \"description\": \"Start date of the registration period, formatted as YYYY-MM-DD. Use the year explicitly stated in the competition text when the date itself only contains day and month. Do not confuse registration start with judging, presentation, announcement, or event dates. Return null when the registration start date cannot be reliably determined.\"\n          },\n          \"endDate\": {\n            \"type\": [\"string\", \"null\"],\n            \"title\": \"End Date\",\n            \"description\": \"End date or deadline of the registration period, formatted as YYYY-MM-DD. Use the year explicitly stated in the competition text when the date itself only contains day and month. Do not confuse registration deadline with judging, presentation, announcement, or event dates. Return null when the registration end date cannot be reliably determined.\"\n          },\n          \"format\": {\n            \"type\": [\"string\", \"null\"],\n            \"enum\": [\n              \"Online\",\n              \"Offline\",\n              \"Hybrid\",\n              null\n            ],\n            \"title\": \"Format\",\n            \"description\": \"Overall competition format. Return Online, Offline, or Hybrid only when the overall format is explicitly stated or clearly established. Do not assume Online merely because registration, submission, or one presentation stage is online. Return null when the overall competition format cannot be reliably determined.\"\n          },\n          \"participationType\": {\n            \"type\": [\"string\", \"null\"],\n            \"enum\": [\n              \"Individual\",\n              \"Team\",\n              null\n            ],\n            \"title\": \"Participation Type\",\n            \"description\": \"Competition participation type. Return Individual or Team only when individual or team participation is explicitly stated or clearly required. Do not infer Team merely because the text mentions teams casually or uses the word 'tim' in promotional language. Return null when participation type cannot be reliably determined.\"\n          },\n          \"pricing\": {\n            \"type\": [\"string\", \"null\"],\n            \"title\": \"Pricing\",\n            \"description\": \"Competition registration fee in rupiah. Extract the registration fee when explicitly stated. Do not confuse registration fees with prize money, awards, grants, or other financial information. Return null when no registration fee is provided.\"\n          },\n          \"url\": {\n            \"type\": [\"string\", \"null\"],\n            \"title\": \"URL\",\n            \"description\": \"Registration URL or official competition information URL. Extract the relevant URL when available. Prefer a URL explicitly presented for registration or competition information. Do not invent or construct a URL. Return null when no relevant URL is provided.\"\n          },\n          \"location\": {\n            \"type\": [\"string\", \"null\"],\n            \"title\": \"Location\",\n            \"description\": \"Competition location. Extract the physical or geographical location only when explicitly stated or clearly established as the competition location. Do not infer location merely from the organizer's institution, country, email address, or competition theme. Return null when the competition location cannot be reliably determined.\"\n          }\n        },\n        \"required\": [\n          \"title\",\n          \"organizer\",\n          \"categories\",\n          \"level\",\n          \"startDate\",\n          \"endDate\",\n          \"format\",\n          \"participationType\",\n          \"pricing\",\n          \"url\",\n          \"location\"\n        ],\n        \"additionalProperties\": false\n      }\n    }\n  },\n  \"max_tokens\": 1024,\n  \"temperature\": 0\n}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        688,
+        -336
+      ],
+      "id": "7c9cf118-760d-44ef-a204-e4a60836d9f5",
+      "name": "Text extractor"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d43a1229-e0ba-437c-a379-7f5e73dec30a",
+              "leftValue": "={{ $json.title }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "b121414e-4afa-4515-af19-03a645128781",
+              "leftValue": "={{ $json.startDate }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "37c0a919-f98b-4064-9b29-29175d757af9",
+              "leftValue": "={{ $json.endDate }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "e0d71153-c3f6-4889-99dc-ae36b1b51c0f",
+              "leftValue": "={{ $json.location }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1648,
+        -144
+      ],
+      "id": "63e0f049-0c1e-4dc7-aee5-e1202980f003",
+      "name": "null checking"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c3f96980-04ac-4962-93b6-020faf21c307",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "42a777da-ba34-47b2-b496-19d12df0aa0f",
+              "name": "title",
+              "value": "={{ JSON.parse($json.choices[0].message.content).title }}",
+              "type": "string"
+            },
+            {
+              "id": "c8ce22fc-9f39-48bc-8987-c45c39c2a8c4",
+              "name": "organizer",
+              "value": "={{ JSON.parse($json.choices[0].message.content).organizer }}",
+              "type": "string"
+            },
+            {
+              "id": "3f6eff15-edc4-41c0-9288-41baa7bc8588",
+              "name": "categories",
+              "value": "={{ JSON.parse($json.choices[0].message.content).categories }}",
+              "type": "string"
+            },
+            {
+              "id": "6ff7fea8-21a9-4b32-a7ff-e7f9842e9dbb",
+              "name": "level",
+              "value": "={{ JSON.parse($json.choices[0].message.content).level }}",
+              "type": "array"
+            },
+            {
+              "id": "6e691362-2aef-4f7f-82b1-eabc6a5c771d",
+              "name": "startDate",
+              "value": "={{ JSON.parse($json.choices[0].message.content).startDate }}",
+              "type": "string"
+            },
+            {
+              "id": "0106a943-0a19-470e-8fa5-c18a1d69bc3c",
+              "name": "endDate",
+              "value": "={{ JSON.parse($json.choices[0].message.content).endDate }}",
+              "type": "string"
+            },
+            {
+              "id": "5e767b13-87c3-42ea-9a87-ccdb8839c6b5",
+              "name": "format",
+              "value": "={{ JSON.parse($json.choices[0].message.content).format }}",
+              "type": "string"
+            },
+            {
+              "id": "92c7074a-1014-4ee3-b073-1cf4dd48ebe4",
+              "name": "participationType",
+              "value": "={{ JSON.parse($json.choices[0].message.content).participationType }}",
+              "type": "string"
+            },
+            {
+              "id": "7d67a653-f4eb-4c5f-b22b-598f8d5988d7",
+              "name": "pricing",
+              "value": "={{ JSON.parse($json.choices[0].message.content).pricing }}",
+              "type": "object"
+            },
+            {
+              "id": "15aaed44-7834-45ba-a93b-0ca6339476b3",
+              "name": "location",
+              "value": "={{ JSON.parse($json.choices[0].message.content).location }}",
+              "type": "string"
+            },
+            {
+              "id": "04c44f32-56fa-4f33-9930-b6c77961c2ce",
+              "name": "url",
+              "value": "={{ JSON.parse($json.choices[0].message.content).url }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1184,
+        -320
+      ],
+      "id": "52057ac8-ef1b-4e70-bff3-bff9d40fbf52",
+      "name": "processing"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(({ json: data }) => {\n  const clean = (value) =>\n    value === null || value === undefined || value === 'null'\n      ? null\n      : value;\n\n  const toArray = (value) => {\n    if (Array.isArray(value)) {\n      return value.filter(\n        (item) => item !== null && item !== 'null'\n      );\n    }\n\n    if (typeof value === 'string') {\n      try {\n        const parsed = JSON.parse(value);\n\n        if (Array.isArray(parsed)) {\n          return parsed.filter(\n            (item) => item !== null && item !== 'null'\n          );\n        }\n      } catch {}\n    }\n\n    return [];\n  };\n\n  return {\n    json: {\n      id: data.id,\n      title: clean(data.title),\n\n      organizer: {\n        data: toArray(data.organizer)\n      },\n\n      categories: {\n        data: toArray(data.categories)\n      },\n\n      level: {\n        data: toArray(data.level)\n      },\n\n      startDate: clean(data.startDate),\n      endDate: clean(data.endDate),\n      format: clean(data.format),\n      participationType: clean(data.participationType),\n      pricing: clean(data.pricing),\n      location: clean(data.location),\n      url: clean(data.url)\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1408,
+        -320
+      ],
+      "id": "787b2a6a-80c7-4303-a5cd-7bbcfeba0340",
+      "name": "cleaning"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        992,
+        -320
+      ],
+      "id": "7300ca79-ce15-46ea-bdc1-38afd21272ab",
+      "name": "add id"
+    },
+    {
+      "parameters": {
+        "content": "## note\nimprove this prompt\n",
+        "height": 80,
+        "width": 176
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        688,
+        -432
+      ],
+      "typeVersion": 1,
+      "id": "e6632250-c062-43fa-9df2-40328a5b2b7d",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "10089ab6-47c8-4252-aa5f-261d9fe88f1b",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "80437206-b327-4253-a6b4-9dbb34611358",
+              "name": "document_annotation",
+              "value": "={{ $json.document_annotation }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2304,
+        -16
+      ],
+      "id": "3fdb2167-c5b0-45ce-8b52-05eec862019e",
+      "name": "processing1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2144,
+        -16
+      ],
+      "id": "3f754845-2569-470e-9d9c-bf8c90757e13",
+      "name": "add id1"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "competitions",
+          "mode": "list",
+          "cachedResultName": "competitions"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.id }}",
+            "updatedAt": "={{ DateTime.now() }}",
+            "url": "={{ $json.url }}",
+            "location": "={{ $json.location }}",
+            "pricing": "={{ $json.pricing }}",
+            "organizer": "={{ JSON.stringify($json.organizer) }}",
+            "title": "={{ $json.title }}",
+            "categories": "={{ $json.categories }}",
+            "level": "={{ $json.level }}",
+            "startDate": "={{ $json.startDate }}",
+            "endDate": "={{ $json.endDate }}",
+            "format": "={{ $json.format }}",
+            "participationType": "={{ $json.participationType }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "organizer",
+              "displayName": "organizer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "categories",
+              "displayName": "categories",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "views",
+              "displayName": "views",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "poster",
+              "displayName": "poster",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "urlsource",
+              "displayName": "urlsource",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "level",
+              "displayName": "level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "startDate",
+              "displayName": "startDate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "endDate",
+              "displayName": "endDate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "format",
+              "displayName": "format",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "participationType",
+              "displayName": "participationType",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "pricing",
+              "displayName": "pricing",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "location",
+              "displayName": "location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "whatsappChannel",
+              "displayName": "whatsappChannel",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "socialMedia",
+              "displayName": "socialMedia",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "createdAt",
+              "displayName": "createdAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "updatedAt",
+              "displayName": "updatedAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "url",
+              "displayName": "url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1680,
+        -608
+      ],
+      "id": "9e2c47d3-3080-456b-b2c7-65c59f950e59",
+      "name": "Update rows in a table2",
+      "credentials": {
+        "postgres": {
+          "id": "i0ko9qJYNmkOaq02",
+          "name": "opencomps"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0b713840-efdf-4831-a89b-745ce04d8189",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1312,
+        0
+      ],
+      "id": "280719e3-7863-49ad-a0ed-87839b5431fc",
+      "name": "get id"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE competitions\nSET\n    \"title\" = COALESCE(NULLIF(\"title\", ''), NULLIF('{{$json.title}}', '')),\n\n    \"organizer\" = COALESCE(\n        \"organizer\",\n        NULLIF('{{ JSON.stringify($json.organizer || null) }}', 'null')::jsonb\n    ),\n\n    \"categories\" = COALESCE(\n        NULLIF(\"categories\", ''),\n        NULLIF('{{$json.categories}}', '')\n    ),\n\n    \"views\" = COALESCE(\n        \"views\",\n        {{$json.views || 'NULL'}}\n    ),\n\n    \"level\" = COALESCE(\n        \"level\",\n        NULLIF('{{ JSON.stringify($json.level || null) }}', 'null')::jsonb\n    ),\n\n    \"startDate\" = COALESCE(\n        \"startDate\",\n        NULLIF('{{$json.startDate}}', '')::date\n    ),\n\n    \"endDate\" = COALESCE(\n        \"endDate\",\n        NULLIF('{{$json.endDate}}', '')::date\n    ),\n\n    \"format\" = COALESCE(\n        NULLIF(\"format\", ''),\n        NULLIF('{{$json.format}}', '')\n    ),\n\n    \"participationType\" = COALESCE(\n        NULLIF(\"participationType\", ''),\n        NULLIF('{{$json.participationType}}', '')\n    ),\n\n    \"pricing\" = COALESCE(\n        \"pricing\",\n        NULLIF('{{ JSON.stringify($json.pricing || null) }}', 'null')::jsonb\n    ),\n\n    \"location\" = COALESCE(\n        NULLIF(\"location\", ''),\n        NULLIF('{{$json.location}}', '')\n    ),\n\n    \"whatsappChannel\" = COALESCE(\n        \"whatsappChannel\",\n        {{$json.whatsappChannel ?? 'NULL'}}\n    ),\n\n    \"url\" = COALESCE(\n        NULLIF(\"url\", ''),\n        NULLIF('{{$json.url}}', '')\n    ),\n\n    \"updatedAt\" = NOW()\n\nWHERE \"id\" = '{{$json.id}}'::uuid;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        2912,
+        176
+      ],
+      "id": "ff67c745-1512-48de-b469-d9b1a3d68ab6",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "postgres": {
+          "id": "i0ko9qJYNmkOaq02",
+          "name": "opencomps"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://s2782400.us-west-2a.betterstackdata.com",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer aPCE8bUgsBrjgHiSJ6F33Rta"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "dt",
+              "value": "$(date -u +'%Y-%m-%d %T UTC')"
+            },
+            {
+              "name": "get_data",
+              "value": "={{ $json.data }}"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        672,
+        368
+      ],
+      "id": "d44be071-b140-40c3-822c-9996b82cffa3",
+      "name": "send log"
+    },
+    {
+      "parameters": {
+        "jsCode": "// return items.map(item => ({\n//   json: {\n//     id: item.json.id,\n//     instagram_url: item.json.urlsource\n//   }\n// }));\n\nreturn [\n  {\n    json: {\n      data: items.map(item => ({\n        id: item.json.id,\n        instagram_url: item.json.urlsource\n      }))\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        224
+      ],
+      "id": "4da4d385-fa44-4997-9205-78f5cf207368",
+      "name": "specify code"
+    }
+  ],
+  "pinData": {
+    "array to object": [
+      {
+        "json": {
+          "id": "8f9907bb-a0f2-4d8e-86c9-b0dc9f048421",
+          "title": "MEDSCO - Medical Scientific Competition ULIS",
+          "organizer": {
+            "0": "Universitas Lambung Mangkurat (ULIS)"
+          },
+          "categories": {
+            "0": "Akademik & Sains"
+          },
+          "level": {
+            "0": "Mahasiswa"
+          },
+          "startDate": "2024-06-20",
+          "endDate": "2024-10-05",
+          "format": "Online",
+          "participationType": "Individual",
+          "pricing": {
+            "type": "paid",
+            "raw": "175000, 190000, 205000, 220000",
+            "tiers": [
+              {
+                "wave": null,
+                "unit": null,
+                "amounts": [
+                  175000,
+                  190000,
+                  205000,
+                  220000
+                ]
+              }
+            ]
+          },
+          "location": "Indonesia",
+          "url": "https://linktr.ee/medscoufkums"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "id": "5d9f8c79-1c6e-48b6-bba3-1657f443222e",
+          "title": "National Business Plan & Business Poster Competition 2026",
+          "organizer": {
+            "0": "Program Studi Ilmu Administrasi Bisnis FISIP USU"
+          },
+          "categories": {
+            "0": "Bisnis & Startup",
+            "1": "Teknologi & IT"
+          },
+          "level": {
+            "0": "Mahasiswa"
+          },
+          "startDate": "2026-09-01",
+          "endDate": "2026-10-20",
+          "format": "Hybrid",
+          "participationType": "Team",
+          "pricing": {
+            "type": "paid",
+            "raw": "200000, 250000, 40000",
+            "tiers": [
+              {
+                "wave": null,
+                "unit": null,
+                "amounts": [
+                  200000,
+                  250000,
+                  40000
+                ]
+              }
+            ]
+          },
+          "location": "Indonesia",
+          "url": "https://businessplancompetitionusu2023.mail.com"
+        },
+        "pairedItem": {
+          "item": 1
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Select rows from a table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select rows from a table": {
+      "main": [
+        [
+          {
+            "node": "Text extractor",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "add id",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "get id",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "specify code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image extractor - Mistral2": {
+      "main": [
+        [
+          {
+            "node": "add id1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "array to object": {
+      "main": [
+        [
+          {
+            "node": "Update rows in a table",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Select rows from a table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text extractor": {
+      "main": [
+        [
+          {
+            "node": "add id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "null checking": {
+      "main": [
+        [
+          {
+            "node": "Image extractor - Mistral2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "processing": {
+      "main": [
+        [
+          {
+            "node": "cleaning",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "cleaning": {
+      "main": [
+        [
+          {
+            "node": "null checking",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Update rows in a table2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add id": {
+      "main": [
+        [
+          {
+            "node": "processing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "processing1": {
+      "main": [
+        [
+          {
+            "node": "array to object",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add id1": {
+      "main": [
+        [
+          {
+            "node": "processing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get id": {
+      "main": [
+        [
+          {
+            "node": "add id1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "send log": {
+      "main": [
+        []
+      ]
+    },
+    "specify code": {
+      "main": [
+        [
+          {
+            "node": "send log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "a5c6d35b-f333-43c9-958a-0d2f83a6a1a4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2705c33d1212b14fb211e0176bc2b9a48d97ec7a05e306e33c055dedfa23cf66"
+  },
+  "id": "V6coldbYmK5prt_hXV8kj",
+  "tags": []
+}

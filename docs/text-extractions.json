@@ -1,0 +1,136 @@
+{
+  "model": "ministral-8b-latest",
+  "messages": [
+    {
+      "role": "system",
+      "content": "Extract competition information from the provided text and return the result according to the JSON schema. Every field is optional: extract a value whenever it is explicitly stated or can be reliably inferred from the competition text. Return null for scalar fields or an empty array for array fields only when the information is genuinely unavailable. Do not invent, hallucinate, or use generic default values. Carefully inspect the title, headings, descriptions, themes, eligibility information, timeline, and other competition details before deciding that a field is unavailable. For classification fields such as categories and level, reasonable inference is allowed when strongly supported by the text. For example, a competition explicitly intended for university or college students should be classified as Mahasiswa, and a business plan or entrepreneurship competition should be classified as Bisnis & Startup. The title should be extracted from the main competition name or heading even when there is no explicit 'Title' label. The organizer should be extracted from organizations or institutions explicitly described as presenting, organizing, hosting, or holding the competition. Do not assume Online, Offline, Hybrid, Individual, or Team when the format or participation type is not clearly supported. For dates, extract the registration start and end dates and convert them to YYYY-MM-DD when the year is clearly available from the text. Do not confuse registration dates with judging, presentation, announcement, or event dates. For pricing, extract registration fees only and do not confuse them with prize money. For URL, extract the registration or official competition URL when available. For location, only return a location that is explicitly stated or clearly established as the competition location; do not infer it merely from the organizer's country or institution. Extract the most accurate information available from the text and do not leave a field null when reliable evidence for that field exists."
+    },
+    {
+      "role": "user",
+      "content": {{ JSON.stringify($json.description) }}
+    }
+  ],
+  "response_format": {
+    "type": "json_schema",
+    "json_schema": {
+      "name": "competition",
+      "strict": true,
+      "schema": {
+        "type": "object",
+        "title": "Competition",
+        "properties": {
+          "title": {
+            "type": ["string", "null"],
+            "title": "Title",
+            "description": "Main competition title or official competition name. Extract it from the main heading, headline, or opening announcement even if there is no explicit 'Title:' label. Return null only when no competition title can be reliably identified."
+          },
+          "organizer": {
+            "type": "array",
+            "title": "Organizer",
+            "items": {
+              "type": "string"
+            },
+            "description": "Organization, institution, university, company, or group responsible for organizing, hosting, presenting, or holding the competition. Extract one or more organizers when supported by the text. Do not include contact persons. Return an empty array only when the organizer cannot be reliably identified."
+          },
+          "categories": {
+            "type": "array",
+            "title": "Categories",
+            "items": {
+              "type": "string",
+              "enum": [
+                "Akademik & Sains",
+                "Teknologi & IT",
+                "Seni & Kreatif",
+                "Bisnis & Startup",
+                "Olahraga & E-sports",
+                "Sastra & Bahasa",
+                "Sosial & Lingkungan",
+                "Keagamaan",
+                "Gaya Hidup & Hobi",
+                "Lainnya"
+              ]
+            },
+            "description": "Competition category based on its title, subject, theme, description, and competition type. Use the most specific available category. Reasonable classification is allowed when strongly supported by the text. For example, business plan, entrepreneurship, or business strategy competitions should be categorized as Bisnis & Startup; scientific or research competitions as Akademik & Sains; technology, programming, AI, or software competitions as Teknologi & IT. Use Lainnya only when none of the available categories reasonably applies. Return an empty array only when the competition topic cannot be determined."
+          },
+          "level": {
+            "type": "array",
+            "title": "Level",
+            "items": {
+              "type": "string",
+              "enum": [
+                "SD",
+                "SMP",
+                "SMA",
+                "Mahasiswa",
+                "Umum"
+              ]
+            },
+            "description": "Intended participant level. Extract from explicit eligibility or strongly supported contextual information. University students, college students, or mahasiswa should be classified as Mahasiswa; SMA or SMK students as SMA; SMP students as SMP; SD students as SD; explicitly open or intended for the general public as Umum. Do not use Umum merely because eligibility is not stated. Return an empty array when participant level cannot be determined."
+          },
+          "startDate": {
+            "type": ["string", "null"],
+            "title": "Start Date",
+            "description": "Start date of the registration period, formatted as YYYY-MM-DD. Use the year explicitly stated in the competition text when the date itself only contains day and month. Do not confuse registration start with judging, presentation, announcement, or event dates. Return null when the registration start date cannot be reliably determined."
+          },
+          "endDate": {
+            "type": ["string", "null"],
+            "title": "End Date",
+            "description": "End date or deadline of the registration period, formatted as YYYY-MM-DD. Use the year explicitly stated in the competition text when the date itself only contains day and month. Do not confuse registration deadline with judging, presentation, announcement, or event dates. Return null when the registration end date cannot be reliably determined."
+          },
+          "format": {
+            "type": ["string", "null"],
+            "enum": [
+              "Online",
+              "Offline",
+              "Hybrid",
+              null
+            ],
+            "title": "Format",
+            "description": "Overall competition format. Return Online, Offline, or Hybrid only when the overall format is explicitly stated or clearly established. Do not assume Online merely because registration, submission, or one presentation stage is online. Return null when the overall competition format cannot be reliably determined."
+          },
+          "participationType": {
+            "type": ["string", "null"],
+            "enum": [
+              "Individual",
+              "Team",
+              null
+            ],
+            "title": "Participation Type",
+            "description": "Competition participation type. Return Individual or Team only when individual or team participation is explicitly stated or clearly required. Do not infer Team merely because the text mentions teams casually or uses the word 'tim' in promotional language. Return null when participation type cannot be reliably determined."
+          },
+          "pricing": {
+            "type": ["string", "null"],
+            "title": "Pricing",
+            "description": "Competition registration fee in rupiah. Extract the registration fee when explicitly stated. Do not confuse registration fees with prize money, awards, grants, or other financial information. Return null when no registration fee is provided."
+          },
+          "url": {
+            "type": ["string", "null"],
+            "title": "URL",
+            "description": "Registration URL or official competition information URL. Extract the relevant URL when available. Prefer a URL explicitly presented for registration or competition information. Do not invent or construct a URL. Return null when no relevant URL is provided."
+          },
+          "location": {
+            "type": ["string", "null"],
+            "title": "Location",
+            "description": "Competition location. Extract the physical or geographical location only when explicitly stated or clearly established as the competition location. Do not infer location merely from the organizer's institution, country, email address, or competition theme. Return null when the competition location cannot be reliably determined."
+          }
+        },
+        "required": [
+          "title",
+          "organizer",
+          "categories",
+          "level",
+          "startDate",
+          "endDate",
+          "format",
+          "participationType",
+          "pricing",
+          "url",
+          "location"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "max_tokens": 1024,
+  "temperature": 0
+}
