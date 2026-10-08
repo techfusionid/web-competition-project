@@ -8,6 +8,7 @@
 - **Analytics**: PostHog
 - **Linting/Formatting**: Biome (not ESLint/Prettier)
 
+s
 ## Commands
 ```bash
 pnpm dev              # Start dev server
