@@ -5,10 +5,7 @@
       "parameters": {},
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
-      "position": [
-        144,
-        -144
-      ],
+      "position": [144, -144],
       "id": "a5d186e1-076b-4b81-8854-0cf98207212a",
       "name": "When clicking ‘Execute workflow’"
     },
@@ -44,10 +41,7 @@
       },
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
-      "position": [
-        416,
-        0
-      ],
+      "position": [416, 0],
       "id": "a85d9ff0-921e-41f5-92a8-28a1e7609a92",
       "name": "Select rows from a table",
       "credentials": {
@@ -84,10 +78,7 @@
       "id": "c5e53f0a-26f9-4662-b24c-6de9ca349803",
       "name": "Image extractor - Mistral2",
       "type": "n8n-nodes-base.httpRequest",
-      "position": [
-        1904,
-        -144
-      ],
+      "position": [1904, -144],
       "typeVersion": 4.2
     },
     {
@@ -96,10 +87,7 @@
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        2464,
-        -16
-      ],
+      "position": [2464, -16],
       "id": "233690ea-730a-4c77-a24b-2debfa276910",
       "name": "array to object"
     },
@@ -134,9 +122,7 @@
             "format": "={{ $json.format }}",
             "participationType": "={{ $json.participationType }}"
           },
-          "matchingColumns": [
-            "id"
-          ],
+          "matchingColumns": ["id"],
           "schema": [
             {
               "id": "id",
@@ -344,10 +330,7 @@
       },
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
-      "position": [
-        2704,
-        -16
-      ],
+      "position": [2704, -16],
       "id": "6f6024f2-d37c-40d4-b7d9-db33e76a345d",
       "name": "Update rows in a table",
       "credentials": {
@@ -370,10 +353,7 @@
       },
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.3,
-      "position": [
-        144,
-        64
-      ],
+      "position": [144, 64],
       "id": "842207db-3bf8-4039-a36e-ead72af46eef",
       "name": "Schedule Trigger"
     },
@@ -405,10 +385,7 @@
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
-      "position": [
-        688,
-        -336
-      ],
+      "position": [688, -336],
       "id": "7c9cf118-760d-44ef-a204-e4a60836d9f5",
       "name": "Text extractor"
     },
@@ -469,10 +446,7 @@
       },
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
-      "position": [
-        1648,
-        -144
-      ],
+      "position": [1648, -144],
       "id": "63e0f049-0c1e-4dc7-aee5-e1202980f003",
       "name": "null checking"
     },
@@ -558,10 +532,7 @@
       },
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [
-        1184,
-        -320
-      ],
+      "position": [1184, -320],
       "id": "52057ac8-ef1b-4e70-bff3-bff9d40fbf52",
       "name": "processing"
     },
@@ -571,10 +542,7 @@
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        1408,
-        -320
-      ],
+      "position": [1408, -320],
       "id": "787b2a6a-80c7-4303-a5cd-7bbcfeba0340",
       "name": "cleaning"
     },
@@ -586,10 +554,7 @@
       },
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
-      "position": [
-        992,
-        -320
-      ],
+      "position": [992, -320],
       "id": "7300ca79-ce15-46ea-bdc1-38afd21272ab",
       "name": "add id"
     },
@@ -600,10 +565,7 @@
         "width": 176
       },
       "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        688,
-        -432
-      ],
+      "position": [688, -432],
       "typeVersion": 1,
       "id": "e6632250-c062-43fa-9df2-40328a5b2b7d",
       "name": "Sticky Note"
@@ -630,10 +592,7 @@
       },
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [
-        2304,
-        -16
-      ],
+      "position": [2304, -16],
       "id": "3fdb2167-c5b0-45ce-8b52-05eec862019e",
       "name": "processing1"
     },
@@ -645,10 +604,7 @@
       },
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
-      "position": [
-        2144,
-        -16
-      ],
+      "position": [2144, -16],
       "id": "3f754845-2569-470e-9d9c-bf8c90757e13",
       "name": "add id1"
     },
@@ -683,9 +639,7 @@
             "format": "={{ $json.format }}",
             "participationType": "={{ $json.participationType }}"
           },
-          "matchingColumns": [
-            "id"
-          ],
+          "matchingColumns": ["id"],
           "schema": [
             {
               "id": "id",
@@ -893,10 +847,7 @@
       },
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
-      "position": [
-        1680,
-        -608
-      ],
+      "position": [1680, -608],
       "id": "9e2c47d3-3080-456b-b2c7-65c59f950e59",
       "name": "Update rows in a table2",
       "credentials": {
@@ -922,10 +873,7 @@
       },
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [
-        1312,
-        0
-      ],
+      "position": [1312, 0],
       "id": "280719e3-7863-49ad-a0ed-87839b5431fc",
       "name": "get id"
     },
@@ -937,10 +885,7 @@
       },
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
-      "position": [
-        2912,
-        176
-      ],
+      "position": [2912, 176],
       "id": "ff67c745-1512-48de-b469-d9b1a3d68ab6",
       "name": "Execute a SQL query",
       "credentials": {
@@ -982,10 +927,7 @@
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
-      "position": [
-        672,
-        368
-      ],
+      "position": [672, 368],
       "id": "d44be071-b140-40c3-822c-9996b82cffa3",
       "name": "send log"
     },
@@ -995,10 +937,7 @@
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [
-        672,
-        224
-      ],
+      "position": [672, 224],
       "id": "4da4d385-fa44-4997-9205-78f5cf207368",
       "name": "specify code"
     }
@@ -1029,12 +968,7 @@
               {
                 "wave": null,
                 "unit": null,
-                "amounts": [
-                  175000,
-                  190000,
-                  205000,
-                  220000
-                ]
+                "amounts": [175000, 190000, 205000, 220000]
               }
             ]
           },
@@ -1070,11 +1004,7 @@
               {
                 "wave": null,
                 "unit": null,
-                "amounts": [
-                  200000,
-                  250000,
-                  40000
-                ]
+                "amounts": [200000, 250000, 40000]
               }
             ]
           },
@@ -1258,9 +1188,7 @@
       ]
     },
     "send log": {
-      "main": [
-        []
-      ]
+      "main": [[]]
     },
     "specify code": {
       "main": [

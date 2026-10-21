@@ -1,7 +1,7 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Loader2 } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchCompetitions } from "@/app/actions/competitions";
 import { CompetitionDialog } from "@/components/CompetitionCenterDialog";
@@ -34,8 +34,9 @@ function getRandomCompetition(
 	competitions: Competition[],
 	exclude?: string[]
 ): Competition {
+	const excludeSet = new Set(exclude);
 	const available = exclude
-		? competitions.filter((c) => !exclude.includes(c.id))
+		? competitions.filter((c) => !excludeSet.has(c.id))
 		: competitions;
 	const pool = available.length > 0 ? available : competitions;
 	return pool[Math.floor(Math.random() * pool.length)];
@@ -63,6 +64,14 @@ function CardContent({
 		<div
 			className="relative flex h-[320px] flex-col overflow-hidden rounded-xl border border-border bg-card shadow-lg"
 			onClick={onViewClick}
+			onKeyDown={(e) => {
+				if (e.key === "Enter" || e.key === " ") {
+					e.preventDefault();
+					onViewClick?.();
+				}
+			}}
+			role="button"
+			tabIndex={0}
 		>
 			<div className="relative h-40 w-full overflow-hidden">
 				{competition.imageUrl ? (
@@ -144,7 +153,6 @@ function AnimatedCard({
 				type: "spring",
 				stiffness: 300,
 				damping: 30,
-				duration: transitionSpeed,
 			}}
 		>
 			<CardContent competition={card.competition} onViewClick={onViewClick} />

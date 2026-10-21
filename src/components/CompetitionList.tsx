@@ -1,14 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-	Carousel,
-	CarouselContent,
-	CarouselItem,
-} from "@/components/ui/carousel";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { Competition } from "@/types/competition";
-import { CompetitionCard, CompetitionCardSkeleton } from "./CompetitionCardGrid";
-import { CompetitionCardPoster, CompetitionCardPosterSkeleton } from "./CompetitionCardPoster";
+import {
+	CompetitionCard,
+	CompetitionCardSkeleton,
+} from "./CompetitionCardGrid";
+import {
+	CompetitionCardPoster,
+	CompetitionCardPosterSkeleton,
+} from "./CompetitionCardPoster";
 import { CompetitionDialog } from "./CompetitionCenterDialog";
 import { CompetitionDrawer } from "./CompetitionDrawer";
 import { CompetitionSheet } from "./CompetitionSideSheet";
@@ -25,7 +26,6 @@ interface CompetitionListProps {
 	bookmarks: string[];
 	onToggleBookmark: (id: string) => void;
 	onOrganizerClick: (organizer: string) => void;
-	resetTrigger?: number;
 	isLoading?: boolean;
 }
 
@@ -57,6 +57,410 @@ const SKELETON_COUNT_CARD = 12;
 const SKELETON_COUNT_POSTER = 16;
 const SKELETON_COUNT_MOBILE = 3;
 
+function matchCompetition(
+	comp: Competition,
+	searchQuery: string,
+	categorySet: ReadonlySet<string>,
+	levelSet: ReadonlySet<string>,
+	filters: FilterState
+): boolean {
+	if (searchQuery) {
+		const query = searchQuery.toLowerCase();
+		const matchesSearch =
+			comp.title.toLowerCase().includes(query) ||
+			comp.description.toLowerCase().includes(query) ||
+			comp.organizer.toLowerCase().includes(query) ||
+			comp.category.toLowerCase().includes(query);
+		if (!matchesSearch) return false;
+	}
+
+	if (filters.categories.length > 0 && !categorySet.has(comp.category)) {
+		return false;
+	}
+
+	if (filters.levels.length > 0 && !comp.level.some((l) => levelSet.has(l))) {
+		return false;
+	}
+
+	if (filters.format !== "all" && comp.format !== filters.format) return false;
+
+	if (
+		filters.participationType !== "all" &&
+		comp.participationType !== filters.participationType
+	)
+		return false;
+
+	return true;
+}
+
+// ── Sub-components ────────────────────────────────────────────────
+
+interface MobileSkeletonListProps {
+	viewMode: ViewMode;
+}
+
+function MobileSkeletonList({ viewMode }: MobileSkeletonListProps) {
+	return (
+		<div
+			className={
+				viewMode === "card"
+					? "grid grid-cols-1 gap-3"
+					: "grid grid-cols-2 gap-2.5 min-[420px]:gap-3"
+			}
+		>
+			{Array.from({ length: SKELETON_COUNT_MOBILE }).map((_, i) => (
+				<div key={i}>
+					{viewMode === "poster" ? (
+						<CompetitionCardPosterSkeleton />
+					) : (
+						<CompetitionCardSkeleton />
+					)}
+				</div>
+			))}
+		</div>
+	);
+}
+
+interface MobileEmptyStateProps {
+	onClearFilters: () => void;
+}
+
+function MobileEmptyState({ onClearFilters }: MobileEmptyStateProps) {
+	return (
+		<div className="flex flex-col items-center justify-center rounded-lg border border-border border-dashed py-16">
+			<p className="font-medium text-muted-foreground text-sm">
+				Tidak ada kompetisi yang cocok
+			</p>
+			<Button
+				className="mt-4 text-xs"
+				onClick={onClearFilters}
+				size="sm"
+				variant="outline"
+			>
+				Reset Filter
+			</Button>
+		</div>
+	);
+}
+
+interface MobileCompetitionListProps {
+	competitions: Competition[];
+	viewMode: ViewMode;
+	onItemClick: (index: number) => void;
+	onLongPress: (index: number) => void;
+	hasMore: boolean;
+	onLoadMore: () => void;
+	remainingCount: number;
+}
+
+function MobileCompetitionList({
+	competitions,
+	viewMode,
+	onItemClick,
+	onLongPress,
+	hasMore,
+	onLoadMore,
+	remainingCount,
+}: MobileCompetitionListProps) {
+	return (
+		<>
+			<div
+				className={
+					viewMode === "card"
+						? "grid grid-cols-1 gap-3"
+						: "grid grid-cols-2 gap-2.5 min-[420px]:gap-3"
+				}
+			>
+				{competitions.map((competition, index) => (
+					<div key={competition.id} className="min-w-0">
+						{viewMode === "card" ? (
+							<CompetitionCard
+								competition={competition}
+								onClick={() => onItemClick(index)}
+							/>
+						) : (
+							<CompetitionCardPoster
+								competition={competition}
+								onClick={() => onItemClick(index)}
+								onLongPress={() => onLongPress(index)}
+							/>
+						)}
+					</div>
+				))}
+			</div>
+			{hasMore && (
+				<div className="mt-6 flex justify-center">
+					<Button onClick={onLoadMore} size="sm" variant="outline">
+						Lihat {remainingCount} lainnya
+					</Button>
+				</div>
+			)}
+		</>
+	);
+}
+
+interface DesktopSkeletonGridProps {
+	viewMode: ViewMode;
+}
+
+function DesktopSkeletonGrid({ viewMode }: DesktopSkeletonGridProps) {
+	return viewMode === "poster" ? (
+		<div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+			{Array.from({ length: SKELETON_COUNT_POSTER }).map((_, i) => (
+				<CompetitionCardPosterSkeleton key={i} />
+			))}
+		</div>
+	) : (
+		<div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+			{Array.from({ length: SKELETON_COUNT_CARD }).map((_, i) => (
+				<CompetitionCardSkeleton key={i} />
+			))}
+		</div>
+	);
+}
+
+interface DesktopEmptyStateProps {
+	onClearFilters: () => void;
+}
+
+function DesktopEmptyState({ onClearFilters }: DesktopEmptyStateProps) {
+	return (
+		<div className="flex flex-col items-center justify-center rounded-lg border border-border border-dashed py-16">
+			<p className="font-medium text-muted-foreground text-sm">
+				Tidak ada kompetisi yang cocok
+			</p>
+			<Button
+				className="mt-4 text-xs"
+				onClick={onClearFilters}
+				size="sm"
+				variant="outline"
+			>
+				Reset Filter
+			</Button>
+		</div>
+	);
+}
+
+interface DesktopCardGridProps {
+	competitions: Competition[];
+	viewMode: ViewMode;
+	onItemClick: (index: number) => void;
+	onOrganizerClick: (organizer: string) => void;
+	onLongPress: (index: number) => void;
+	hasMore: boolean;
+	onLoadMore: () => void;
+	remainingCount: number;
+	setPosterPopupIndex: (index: number | null) => void;
+	posterPopupIndex: number | null;
+	filteredCompetitions: Competition[];
+}
+
+function DesktopCardGrid({
+	competitions,
+	viewMode,
+	onItemClick,
+	onOrganizerClick,
+	onLongPress,
+	hasMore,
+	onLoadMore,
+	remainingCount,
+	setPosterPopupIndex,
+	posterPopupIndex,
+	filteredCompetitions,
+}: DesktopCardGridProps) {
+	if (viewMode === "card") {
+		return (
+			<>
+				<div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+					{competitions.map((competition, index) => (
+						<CompetitionCard
+							competition={competition}
+							key={competition.id}
+							onClick={() => onItemClick(index)}
+							onOrganizerClick={onOrganizerClick}
+						/>
+					))}
+				</div>
+				{hasMore && (
+					<div className="mt-6 flex justify-center">
+						<Button onClick={onLoadMore} variant="outline">
+							Lihat {remainingCount} lainnya
+						</Button>
+					</div>
+				)}
+			</>
+		);
+	}
+
+	return (
+		<>
+			<div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+				{competitions.map((competition, index) => (
+					<CompetitionCardPoster
+						competition={competition}
+						key={competition.id}
+						onClick={() => onItemClick(index)}
+						onLongPress={() => onLongPress(index)}
+					/>
+				))}
+			</div>
+			{hasMore && (
+				<div className="mt-6 flex justify-center">
+					<Button onClick={onLoadMore} variant="outline">
+						Lihat {remainingCount} lainnya
+					</Button>
+				</div>
+			)}
+			<PosterPopup
+				competition={
+					posterPopupIndex !== null
+						? filteredCompetitions[posterPopupIndex]
+						: null
+				}
+				isOpen={posterPopupIndex !== null}
+				onClose={() => setPosterPopupIndex(null)}
+			/>
+		</>
+	);
+}
+
+interface CompetitionFilterBarProps {
+	searchQuery: string;
+	onSearchChange: (query: string) => void;
+	showFilters: boolean;
+	setShowFilters: (show: boolean) => void;
+	filteredCompetitions: Competition[];
+	filters: FilterState;
+	clearFilters: () => void;
+	setFilters: (filters: FilterState) => void;
+	onViewModeChange: (mode: ViewMode) => void;
+	viewMode: ViewMode;
+	isLoading: boolean;
+	isMobile: boolean;
+}
+
+function CompetitionFilterBar({
+	searchQuery,
+	onSearchChange,
+	showFilters,
+	setShowFilters,
+	filteredCompetitions,
+	filters,
+	clearFilters,
+	setFilters,
+	onViewModeChange,
+	viewMode,
+	isLoading,
+	isMobile,
+}: CompetitionFilterBarProps) {
+	return (
+		<div className="mb-4 flex flex-col gap-2 sm:mb-6 sm:gap-3">
+			<SearchBar
+				onChange={onSearchChange}
+				onToggleFilters={() => setShowFilters(!showFilters)}
+				resultCount={filteredCompetitions.length}
+				showFilters={showFilters}
+				value={searchQuery}
+			/>
+			<div
+				className={`overflow-hidden transition-all duration-300 ease-out ${
+					showFilters ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+				}`}
+			>
+				<Filters
+					filters={filters}
+					onClearFilters={clearFilters}
+					onFiltersChange={setFilters}
+				/>
+			</div>
+			{isMobile ? (
+				<div className="flex items-center justify-between">
+					<p className="text-muted-foreground text-xs">
+						{isLoading ? (
+							<span className="inline-block h-3.5 w-20 animate-pulse rounded bg-muted" />
+						) : (
+							<>{filteredCompetitions.length} kompetisi</>
+						)}
+					</p>
+					<ViewToggle onViewModeChange={onViewModeChange} viewMode={viewMode} />
+				</div>
+			) : (
+				<div className="flex flex-wrap items-center justify-end gap-3">
+					<ViewToggle onViewModeChange={onViewModeChange} viewMode={viewMode} />
+				</div>
+			)}
+		</div>
+	);
+}
+
+interface CompetitionDetailViewProps {
+	detailViewMode: DetailViewMode;
+	selectedIndex: number | null;
+	dialogIndex: number | null;
+	filteredCompetitions: Competition[];
+	handleCloseDialog: () => void;
+	handleDetailViewModeChange: (mode: DetailViewMode) => void;
+	handleSheetNext: () => void;
+	handleSheetPrevious: () => void;
+	setDialogIndex: (index: number | null) => void;
+}
+
+function CompetitionDetailView({
+	detailViewMode,
+	selectedIndex,
+	dialogIndex,
+	filteredCompetitions,
+	handleCloseDialog,
+	handleDetailViewModeChange,
+	handleSheetNext,
+	handleSheetPrevious,
+	setDialogIndex,
+}: CompetitionDetailViewProps) {
+	return (
+		<>
+			{detailViewMode === "dialog" && (
+				<CompetitionDialog
+					competition={
+						dialogIndex !== null ? filteredCompetitions[dialogIndex] : null
+					}
+					detailViewMode={detailViewMode}
+					hasNext={
+						dialogIndex !== null &&
+						dialogIndex < filteredCompetitions.length - 1
+					}
+					hasPrevious={dialogIndex !== null && dialogIndex > 0}
+					isOpen={dialogIndex !== null}
+					onClose={() => setDialogIndex(null)}
+					onDetailViewModeChange={handleDetailViewModeChange}
+					onNext={handleSheetNext}
+					onPrevious={handleSheetPrevious}
+				/>
+			)}
+			{detailViewMode === "sheet" && (
+				<CompetitionSheet
+					competition={
+						selectedIndex !== null ? filteredCompetitions[selectedIndex] : null
+					}
+					detailViewMode={detailViewMode}
+					hasNext={
+						selectedIndex !== null &&
+						selectedIndex < filteredCompetitions.length - 1
+					}
+					hasPrevious={selectedIndex !== null && selectedIndex > 0}
+					isOpen={selectedIndex !== null}
+					key={selectedIndex}
+					onClose={handleCloseDialog}
+					onDetailViewModeChange={handleDetailViewModeChange}
+					onNext={handleSheetNext}
+					onPrevious={handleSheetPrevious}
+				/>
+			)}
+		</>
+	);
+}
+
+// ── Main Component ────────────────────────────────────────────────
+
 export function CompetitionList({
 	competitions,
 	searchQuery,
@@ -64,7 +468,6 @@ export function CompetitionList({
 	bookmarks,
 	onToggleBookmark,
 	onOrganizerClick,
-	resetTrigger,
 	isLoading = false,
 }: CompetitionListProps) {
 	const isMobile = useIsMobile();
@@ -133,64 +536,16 @@ export function CompetitionList({
 		setVisibleCount(20);
 	}, []);
 
-	// Reset view when resetTrigger changes (e.g., when clicking home/logo)
-	useEffect(() => {
-		if (resetTrigger !== undefined) {
-			setSelectedIndex(null);
-			setFilters(defaultFilters);
-			setVisibleCount(20);
-			setShowFilters(false);
-			setDialogIndex(null);
-			setPosterPopupIndex(null);
-			// Scroll to top of competitions section
-			const competitionsSection = document.getElementById("competitions");
-			if (competitionsSection) {
-				competitionsSection.scrollIntoView({ behavior: "smooth" });
-			}
-		}
-	}, [resetTrigger]);
+	const categorySet = useMemo(
+		() => new Set(filters.categories),
+		[filters.categories]
+	);
+	const levelSet = useMemo(() => new Set(filters.levels), [filters.levels]);
 
 	const filteredCompetitions = useMemo(() => {
-		const result = competitions.filter((comp) => {
-			if (searchQuery) {
-				const query = searchQuery.toLowerCase();
-				const matchesSearch =
-					comp.title.toLowerCase().includes(query) ||
-					comp.description.toLowerCase().includes(query) ||
-					comp.organizer.toLowerCase().includes(query) ||
-					comp.category.toLowerCase().includes(query);
-				if (!matchesSearch) {
-					return false;
-				}
-			}
-
-			if (
-				filters.categories.length > 0 &&
-				!filters.categories.includes(comp.category)
-			) {
-				return false;
-			}
-
-			if (
-				filters.levels.length > 0 &&
-				!comp.level.some((l) => filters.levels.includes(l))
-			) {
-				return false;
-			}
-
-			if (filters.format !== "all" && comp.format !== filters.format) {
-				return false;
-			}
-
-			if (
-				filters.participationType !== "all" &&
-				comp.participationType !== filters.participationType
-			) {
-				return false;
-			}
-
-			return true;
-		});
+		const result = competitions.filter((comp) =>
+			matchCompetition(comp, searchQuery, categorySet, levelSet, filters)
+		);
 
 		result.sort((a, b) => {
 			switch (sortBy) {
@@ -206,7 +561,7 @@ export function CompetitionList({
 		});
 
 		return result;
-	}, [competitions, searchQuery, filters, sortBy]);
+	}, [competitions, searchQuery, filters, sortBy, categorySet, levelSet]);
 
 	const visibleCompetitions = useMemo(() => {
 		return filteredCompetitions.slice(0, visibleCount);
@@ -245,134 +600,59 @@ export function CompetitionList({
 		);
 	}, [filteredCompetitions.length]);
 
+	const remainingCount = filteredCompetitions.length - visibleCount;
+	const handleLongPress = useCallback(
+		(index: number) => {
+			if (isMobile) {
+				setPosterPopupIndex(index);
+			} else {
+				setDialogIndex(index);
+			}
+		},
+		[isMobile]
+	);
+
 	const selectedCompetition =
 		selectedIndex !== null ? filteredCompetitions[selectedIndex] : null;
+
+	const sharedFilterBar = (
+		<CompetitionFilterBar
+			clearFilters={clearFilters}
+			filteredCompetitions={filteredCompetitions}
+			filters={filters}
+			isLoading={isLoading}
+			isMobile={isMobile}
+			onSearchChange={onSearchChange}
+			onViewModeChange={handleViewModeChange}
+			searchQuery={searchQuery}
+			setFilters={setFilters}
+			setShowFilters={setShowFilters}
+			showFilters={showFilters}
+			viewMode={viewMode}
+		/>
+	);
 
 	// Mobile View - Horizontal carousel with drawer
 	if (isMobile) {
 		return (
 			<section className="py-8">
 				<div className="container">
-					<div className="mb-6 flex flex-col gap-3">
-						<SearchBar
-							onChange={onSearchChange}
-							onToggleFilters={() => setShowFilters(!showFilters)}
-							resultCount={filteredCompetitions.length}
-							showFilters={showFilters}
-							value={searchQuery}
-						/>
-						<div
-							className={`overflow-hidden transition-all duration-300 ease-out ${
-								showFilters ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-							}`}
-						>
-							<Filters
-								filters={filters}
-								onClearFilters={clearFilters}
-								onFiltersChange={setFilters}
-							/>
-						</div>
-						<div className="flex items-center justify-between">
-							<p className="text-muted-foreground text-xs">
-								{isLoading ? (
-									<span className="inline-block h-3.5 w-20 animate-pulse rounded bg-muted" />
-								) : (
-									<>
-										{filteredCompetitions.length} competition
-										{filteredCompetitions.length !== 1 ? "s" : ""}
-									</>
-								)}
-							</p>
-							<ViewToggle
-								onViewModeChange={handleViewModeChange}
-								viewMode={viewMode}
-							/>
-						</div>
-					</div>
+					{sharedFilterBar}
 
 					{isLoading ? (
-						/* Mobile Skeleton Carousel */
-						<Carousel
-							className="w-full"
-							opts={{ align: "center", loop: false, dragFree: false }}
-						>
-							<CarouselContent className="-ml-3">
-								{Array.from({ length: SKELETON_COUNT_MOBILE }).map((_, i) => (
-									<CarouselItem
-										className="basis-[80%] pl-3 sm:basis-[65%]"
-										key={i}
-									>
-										{viewMode === "poster" ? (
-											<CompetitionCardPosterSkeleton />
-										) : (
-											<CompetitionCardSkeleton />
-										)}
-									</CarouselItem>
-								))}
-							</CarouselContent>
-						</Carousel>
+						<MobileSkeletonList viewMode={viewMode} />
 					) : filteredCompetitions.length === 0 ? (
-						<div className="flex flex-col items-center justify-center rounded-lg border border-border border-dashed py-16">
-							<p className="font-medium text-muted-foreground text-sm">
-								No competitions match
-							</p>
-							<Button
-								className="mt-4 text-xs"
-								onClick={clearFilters}
-								size="sm"
-								variant="outline"
-							>
-								Reset Filters
-							</Button>
-						</div>
+						<MobileEmptyState onClearFilters={clearFilters} />
 					) : (
-						<>
-							{/* Horizontal Carousel */}
-							<Carousel
-								className="w-full"
-								opts={{
-									align: "center",
-									loop: false,
-									dragFree: false,
-								}}
-							>
-								<CarouselContent className="-ml-3">
-									{visibleCompetitions.map((competition, index) => (
-										<CarouselItem
-											className="basis-[80%] pl-3 sm:basis-[65%]"
-											key={competition.id}
-										>
-											{viewMode === "card" ? (
-												<CompetitionCard
-													competition={competition}
-													onClick={() => handleItemClick(index)}
-													onOrganizerClick={onOrganizerClick}
-												/>
-											) : (
-												<CompetitionCardPoster
-													competition={competition}
-													onClick={() => handleItemClick(index)}
-													onLongPress={() => setPosterPopupIndex(index)}
-												/>
-											)}
-										</CarouselItem>
-									))}
-									{hasMore && (
-										<CarouselItem className="basis-[80%] pl-3 sm:basis-[65%]">
-											<div className="flex h-full min-h-[200px] items-center justify-center rounded-lg border border-border border-dashed bg-muted/30">
-												<Button
-													onClick={handleLoadMore}
-													size="sm"
-													variant="outline"
-												>
-													Load {filteredCompetitions.length - visibleCount} more
-												</Button>
-											</div>
-										</CarouselItem>
-									)}
-								</CarouselContent>
-							</Carousel>
-						</>
+						<MobileCompetitionList
+							competitions={visibleCompetitions}
+							hasMore={hasMore}
+							onItemClick={handleItemClick}
+							onLoadMore={handleLoadMore}
+							onLongPress={setPosterPopupIndex}
+							remainingCount={remainingCount}
+							viewMode={viewMode}
+						/>
 					)}
 
 					{/* Mobile Drawer */}
@@ -401,170 +681,40 @@ export function CompetitionList({
 	return (
 		<section className="py-8 md:py-12">
 			<div className="container">
-				<div className="mb-6 flex flex-col gap-3">
-					<SearchBar
-						onChange={onSearchChange}
-						onToggleFilters={() => setShowFilters(!showFilters)}
-						resultCount={filteredCompetitions.length}
-						showFilters={showFilters}
-						value={searchQuery}
-					/>
-					<div
-						className={`overflow-hidden transition-all duration-300 ease-out ${
-							showFilters ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-						}`}
-					>
-						<Filters
-							filters={filters}
-							onClearFilters={clearFilters}
-							onFiltersChange={setFilters}
-						/>
-					</div>
-					<div className="flex flex-wrap items-center justify-end gap-3">
-						<ViewToggle
-							onViewModeChange={handleViewModeChange}
-							viewMode={viewMode}
-						/>
-					</div>
-				</div>
+				{sharedFilterBar}
 
 				{isLoading ? (
-					/* Desktop Skeleton Grid */
-					viewMode === "poster" ? (
-						<div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-							{Array.from({ length: SKELETON_COUNT_POSTER }).map((_, i) => (
-								<CompetitionCardPosterSkeleton key={i} />
-							))}
-						</div>
-					) : (
-						<div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-							{Array.from({ length: SKELETON_COUNT_CARD }).map((_, i) => (
-								<CompetitionCardSkeleton key={i} />
-							))}
-						</div>
-					)
+					<DesktopSkeletonGrid viewMode={viewMode} />
 				) : filteredCompetitions.length === 0 ? (
-					<div className="flex flex-col items-center justify-center rounded-lg border border-border border-dashed py-16">
-						<p className="font-medium text-muted-foreground text-sm">
-							No competitions match
-						</p>
-						<Button
-							className="mt-4 text-xs"
-							onClick={clearFilters}
-							size="sm"
-							variant="outline"
-						>
-							Reset Filters
-						</Button>
-					</div>
-				) : viewMode === "card" ? (
-					/* Normal Card Grid View */
-					<>
-						<div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-							{visibleCompetitions.map((competition, index) => (
-								<CompetitionCard
-									competition={competition}
-									key={competition.id}
-									onClick={() => handleItemClick(index)}
-									onOrganizerClick={onOrganizerClick}
-								/>
-							))}
-						</div>
-						{hasMore && (
-							<div className="mt-6 flex justify-center">
-								<Button onClick={handleLoadMore} variant="outline">
-									Load more ({filteredCompetitions.length - visibleCount} more)
-								</Button>
-							</div>
-						)}
-					</>
+					<DesktopEmptyState onClearFilters={clearFilters} />
 				) : (
-					/* Normal Poster Grid View - Landing page keeps poster format */
-					<>
-						<div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-							{visibleCompetitions.map((competition, index) => (
-								<CompetitionCardPoster
-									competition={competition}
-									key={competition.id}
-									onClick={() => handleItemClick(index)}
-									onLongPress={() => {
-										// On mobile, show poster popup; on desktop, show full dialog
-										if (isMobile) {
-											setPosterPopupIndex(index);
-										} else {
-											setDialogIndex(index);
-										}
-									}}
-								/>
-							))}
-						</div>
-						{hasMore && (
-							<div className="mt-6 flex justify-center">
-								<Button onClick={handleLoadMore} variant="outline">
-									Load more ({filteredCompetitions.length - visibleCount} more)
-								</Button>
-							</div>
-						)}
-						{/* Mobile Poster Popup - Shows clear poster on long press */}
-						<PosterPopup
-							competition={
-								posterPopupIndex !== null
-									? filteredCompetitions[posterPopupIndex]
-									: null
-							}
-							isOpen={posterPopupIndex !== null}
-							onClose={() => setPosterPopupIndex(null)}
-						/>
-					</>
-				)}
-
-				{/* Desktop detail dialog - used for dialog mode */}
-				{detailViewMode === "dialog" && (
-					<CompetitionDialog
-						competition={
-							dialogIndex !== null ? filteredCompetitions[dialogIndex] : null
-						}
-						detailViewMode={detailViewMode}
-						hasNext={
-							dialogIndex !== null &&
-							dialogIndex < filteredCompetitions.length - 1
-						}
-						hasPrevious={dialogIndex !== null && dialogIndex > 0}
-						isOpen={dialogIndex !== null}
-						onClose={() => setDialogIndex(null)}
-						onDetailViewModeChange={handleDetailViewModeChange}
-						onNext={() =>
-							setDialogIndex((prev) =>
-								prev !== null && prev < filteredCompetitions.length - 1
-									? prev + 1
-									: prev
-							)
-						}
-						onPrevious={() =>
-							setDialogIndex((prev) =>
-								prev !== null && prev > 0 ? prev - 1 : prev
-							)
-						}
+					<DesktopCardGrid
+						competitions={visibleCompetitions}
+						filteredCompetitions={filteredCompetitions}
+						hasMore={hasMore}
+						onItemClick={handleItemClick}
+						onLoadMore={handleLoadMore}
+						onLongPress={handleLongPress}
+						onOrganizerClick={onOrganizerClick}
+						posterPopupIndex={posterPopupIndex}
+						remainingCount={remainingCount}
+						setPosterPopupIndex={setPosterPopupIndex}
+						viewMode={viewMode}
 					/>
 				)}
 
-				{/* Desktop sheet - used for sheet mode */}
-				{detailViewMode === "sheet" && (
-					<CompetitionSheet
-						competition={selectedCompetition}
-						detailViewMode={detailViewMode}
-						hasNext={
-							selectedIndex !== null &&
-							selectedIndex < filteredCompetitions.length - 1
-						}
-						hasPrevious={selectedIndex !== null && selectedIndex > 0}
-						isOpen={selectedIndex !== null}
-						onClose={() => setSelectedIndex(null)}
-						onDetailViewModeChange={handleDetailViewModeChange}
-						onNext={handleSheetNext}
-						onPrevious={handleSheetPrevious}
-					/>
-				)}
+				{/* Desktop detail dialog/sheet */}
+				<CompetitionDetailView
+					detailViewMode={detailViewMode}
+					dialogIndex={dialogIndex}
+					filteredCompetitions={filteredCompetitions}
+					handleCloseDialog={handleCloseDialog}
+					handleDetailViewModeChange={handleDetailViewModeChange}
+					handleSheetNext={handleSheetNext}
+					handleSheetPrevious={handleSheetPrevious}
+					selectedIndex={selectedIndex}
+					setDialogIndex={setDialogIndex}
+				/>
 			</div>
 		</section>
 	);

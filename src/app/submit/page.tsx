@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { type Control, type FieldPath, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -62,6 +62,183 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
+// ─── Reusable form field components ───────────────────────────────────────
+
+interface TextFieldProps {
+	control: Control<FormData>;
+	name: FieldPath<FormData>;
+	label: string;
+	placeholder: string;
+}
+
+function TextField({ control, name, label, placeholder }: TextFieldProps) {
+	return (
+		<FormField
+			control={control}
+			name={name}
+			render={({ field }) => (
+				<FormItem>
+					<FormLabel>{label}</FormLabel>
+					<FormControl>
+						<Input
+							onBlur={field.onBlur}
+							onChange={field.onChange}
+							placeholder={placeholder}
+							ref={field.ref}
+							value={field.value as string}
+						/>
+					</FormControl>
+					<FormMessage />
+				</FormItem>
+			)}
+		/>
+	);
+}
+
+interface TextareaFieldProps {
+	control: Control<FormData>;
+	name: FieldPath<FormData>;
+	label: string;
+	placeholder: string;
+}
+
+function TextareaField({
+	control,
+	name,
+	label,
+	placeholder,
+}: TextareaFieldProps) {
+	return (
+		<FormField
+			control={control}
+			name={name}
+			render={({ field }) => (
+				<FormItem>
+					<FormLabel>{label}</FormLabel>
+					<FormControl>
+						<Textarea
+							className="min-h-[100px] resize-none"
+							onBlur={field.onBlur}
+							onChange={field.onChange}
+							placeholder={placeholder}
+							ref={field.ref}
+							value={field.value as string}
+						/>
+					</FormControl>
+					<FormMessage />
+				</FormItem>
+			)}
+		/>
+	);
+}
+
+interface SelectOption {
+	value: string;
+	label: string;
+}
+
+interface SelectFieldProps {
+	control: Control<FormData>;
+	name: FieldPath<FormData>;
+	label: string;
+	placeholder: string;
+	options: SelectOption[];
+}
+
+function SelectField({
+	control,
+	name,
+	label,
+	placeholder,
+	options,
+}: SelectFieldProps) {
+	return (
+		<FormField
+			control={control}
+			name={name}
+			render={({ field }) => (
+				<FormItem>
+					<FormLabel>{label}</FormLabel>
+					<Select onValueChange={field.onChange} value={field.value as string}>
+						<FormControl>
+							<SelectTrigger>
+								<SelectValue placeholder={placeholder} />
+							</SelectTrigger>
+						</FormControl>
+						<SelectContent>
+							{options.map((opt) => (
+								<SelectItem key={opt.value} value={opt.value}>
+									{opt.label}
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
+					<FormMessage />
+				</FormItem>
+			)}
+		/>
+	);
+}
+
+interface DatePickerFieldProps {
+	control: Control<FormData>;
+	name: FieldPath<FormData>;
+	label: string;
+	minDate?: Date;
+}
+
+function DatePickerField({
+	control,
+	name,
+	label,
+	minDate,
+}: DatePickerFieldProps) {
+	return (
+		<FormField
+			control={control}
+			name={name}
+			render={({ field }) => (
+				<FormItem className="flex flex-col">
+					<FormLabel>{label}</FormLabel>
+					<Popover>
+						<PopoverTrigger asChild>
+							<FormControl>
+								<Button
+									className={cn(
+										"w-full justify-start text-left font-normal",
+										!field.value && "text-muted-foreground"
+									)}
+									variant="outline"
+								>
+									<CalendarIcon className="mr-2 h-4 w-4" />
+									{field.value ? (
+										format(field.value, "d MMM yyyy")
+									) : (
+										<span>Pick a date</span>
+									)}
+								</Button>
+							</FormControl>
+						</PopoverTrigger>
+						<PopoverContent align="start" className="w-auto p-0">
+							<Calendar
+								className={cn("pointer-events-auto p-3")}
+								disabled={minDate ? (date) => date < minDate : undefined}
+								initialFocus
+								mode="single"
+								onSelect={field.onChange}
+								selected={field.value as Date}
+							/>
+						</PopoverContent>
+					</Popover>
+					<FormMessage />
+				</FormItem>
+			)}
+		/>
+	);
+}
+
+// ─── Page component ───────────────────────────────────────────────────────
+
 export default function SubmitPage() {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -109,282 +286,100 @@ export default function SubmitPage() {
 
 					<Form {...form}>
 						<form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-							<FormField
+							<TextField
 								control={form.control}
+								label="Competition Name"
 								name="title"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Competition Name</FormLabel>
-										<FormControl>
-											<Input placeholder="e.g., Gemastik XVII" {...field} />
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
+								placeholder="e.g., Gemastik XVII"
 							/>
 
-							<FormField
+							<TextField
 								control={form.control}
+								label="Organizer"
 								name="organizer"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Organizer</FormLabel>
-										<FormControl>
-											<Input
-												placeholder="e.g., Ministry of Education"
-												{...field}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
+								placeholder="e.g., Ministry of Education"
 							/>
 
-							<FormField
+							<TextareaField
 								control={form.control}
+								label="Description"
 								name="description"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Description</FormLabel>
-										<FormControl>
-											<Textarea
-												className="min-h-[100px] resize-none"
-												placeholder="Describe this competition..."
-												{...field}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
+								placeholder="Describe this competition..."
 							/>
 
 							<div className="grid gap-4 sm:grid-cols-2">
-								<FormField
+								<SelectField
 									control={form.control}
+									label="Category"
 									name="category"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Category</FormLabel>
-											<Select
-												onValueChange={field.onChange}
-												value={field.value}
-											>
-												<FormControl>
-													<SelectTrigger>
-														<SelectValue placeholder="Select category" />
-													</SelectTrigger>
-												</FormControl>
-												<SelectContent>
-													{CATEGORIES.map((cat) => (
-														<SelectItem key={cat} value={cat}>
-															{cat}
-														</SelectItem>
-													))}
-												</SelectContent>
-											</Select>
-											<FormMessage />
-										</FormItem>
-									)}
+									options={CATEGORIES.map((c) => ({ value: c, label: c }))}
+									placeholder="Select category"
 								/>
 
-								<FormField
+								<SelectField
 									control={form.control}
+									label="Level"
 									name="level"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Level</FormLabel>
-											<Select
-												onValueChange={field.onChange}
-												value={field.value}
-											>
-												<FormControl>
-													<SelectTrigger>
-														<SelectValue placeholder="Select level" />
-													</SelectTrigger>
-												</FormControl>
-												<SelectContent>
-													{LEVELS.map((lvl) => (
-														<SelectItem key={lvl.value} value={lvl.value}>
-															{lvl.label}
-														</SelectItem>
-													))}
-												</SelectContent>
-											</Select>
-											<FormMessage />
-										</FormItem>
-									)}
+									options={LEVELS.map((l) => ({
+										value: l.value,
+										label: l.label,
+									}))}
+									placeholder="Select level"
 								/>
 							</div>
 
 							<div className="grid gap-4 sm:grid-cols-2">
-								<FormField
+								<SelectField
 									control={form.control}
+									label="Format"
 									name="format"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Format</FormLabel>
-											<Select
-												onValueChange={field.onChange}
-												value={field.value}
-											>
-												<FormControl>
-													<SelectTrigger>
-														<SelectValue placeholder="Select format" />
-													</SelectTrigger>
-												</FormControl>
-												<SelectContent>
-													<SelectItem value="online">Online</SelectItem>
-													<SelectItem value="offline">Offline</SelectItem>
-													<SelectItem value="hybrid">Hybrid</SelectItem>
-												</SelectContent>
-											</Select>
-											<FormMessage />
-										</FormItem>
-									)}
+									options={[
+										{ value: "online", label: "Online" },
+										{ value: "offline", label: "Offline" },
+										{ value: "hybrid", label: "Hybrid" },
+									]}
+									placeholder="Select format"
 								/>
 
-								<FormField
+								<SelectField
 									control={form.control}
+									label="Participation Type"
 									name="participationType"
-									render={({ field }) => (
-										<FormItem>
-											<FormLabel>Participation Type</FormLabel>
-											<Select
-												onValueChange={field.onChange}
-												value={field.value}
-											>
-												<FormControl>
-													<SelectTrigger>
-														<SelectValue placeholder="Select type" />
-													</SelectTrigger>
-												</FormControl>
-												<SelectContent>
-													<SelectItem value="individual">Individual</SelectItem>
-													<SelectItem value="team">Team</SelectItem>
-												</SelectContent>
-											</Select>
-											<FormMessage />
-										</FormItem>
-									)}
+									options={[
+										{ value: "individual", label: "Individual" },
+										{ value: "team", label: "Team" },
+									]}
+									placeholder="Select type"
 								/>
 							</div>
 
 							<div className="grid gap-4 sm:grid-cols-2">
-								<FormField
+								<DatePickerField
 									control={form.control}
+									label="Registration Start"
 									name="registrationStart"
-									render={({ field }) => (
-										<FormItem className="flex flex-col">
-											<FormLabel>Registration Start</FormLabel>
-											<Popover>
-												<PopoverTrigger asChild>
-													<FormControl>
-														<Button
-															className={cn(
-																"w-full justify-start text-left font-normal",
-																!field.value && "text-muted-foreground"
-															)}
-															variant="outline"
-														>
-															<CalendarIcon className="mr-2 h-4 w-4" />
-															{field.value ? (
-																format(field.value, "d MMM yyyy")
-															) : (
-																<span>Pick a date</span>
-															)}
-														</Button>
-													</FormControl>
-												</PopoverTrigger>
-												<PopoverContent align="start" className="w-auto p-0">
-													<Calendar
-														className={cn("pointer-events-auto p-3")}
-														initialFocus
-														mode="single"
-														onSelect={field.onChange}
-														selected={field.value}
-													/>
-												</PopoverContent>
-											</Popover>
-											<FormMessage />
-										</FormItem>
-									)}
 								/>
 
-								<FormField
+								<DatePickerField
 									control={form.control}
+									label="Registration End"
+									minDate={form.watch("registrationStart")}
 									name="registrationEnd"
-									render={({ field }) => (
-										<FormItem className="flex flex-col">
-											<FormLabel>Registration End</FormLabel>
-											<Popover>
-												<PopoverTrigger asChild>
-													<FormControl>
-														<Button
-															className={cn(
-																"w-full justify-start text-left font-normal",
-																!field.value && "text-muted-foreground"
-															)}
-															variant="outline"
-														>
-															<CalendarIcon className="mr-2 h-4 w-4" />
-															{field.value ? (
-																format(field.value, "d MMM yyyy")
-															) : (
-																<span>Pick a date</span>
-															)}
-														</Button>
-													</FormControl>
-												</PopoverTrigger>
-												<PopoverContent align="start" className="w-auto p-0">
-													<Calendar
-														className={cn("pointer-events-auto p-3")}
-														disabled={(date) => {
-															const startDate =
-																form.getValues("registrationStart");
-															return startDate ? date < startDate : false;
-														}}
-														initialFocus
-														mode="single"
-														onSelect={field.onChange}
-														selected={field.value}
-													/>
-												</PopoverContent>
-											</Popover>
-											<FormMessage />
-										</FormItem>
-									)}
 								/>
 							</div>
 
-							<FormField
+							<TextField
 								control={form.control}
+								label="Registration Link"
 								name="registrationUrl"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Registration Link</FormLabel>
-										<FormControl>
-											<Input placeholder="https://..." {...field} />
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
+								placeholder="https://..."
 							/>
 
-							<FormField
+							<TextField
 								control={form.control}
+								label="Prize"
 								name="prize"
-								render={({ field }) => (
-									<FormItem>
-										<FormLabel>Prize</FormLabel>
-										<FormControl>
-											<Input
-												placeholder="e.g., Total Rp 50 Million"
-												{...field}
-											/>
-										</FormControl>
-										<FormMessage />
-									</FormItem>
-								)}
+								placeholder="e.g., Total Rp 50 Million"
 							/>
 
 							<Button className="w-full" disabled={isSubmitting} type="submit">

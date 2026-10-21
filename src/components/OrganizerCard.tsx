@@ -16,7 +16,7 @@ export function OrganizerCard({
 }: OrganizerCardProps) {
 	return (
 		<Link href={href}>
-			<Card className="group cursor-pointer overflow-hidden border-border/50 bg-card/50 shadow-none backdrop-blur-sm transition-all hover:border-primary/50 hover:shadow-md">
+			<Card className="group cursor-pointer overflow-hidden border-border/50 bg-card/50 shadow-none backdrop-blur-sm transition-colors transition-shadow hover:border-primary/50 hover:shadow-md">
 				<CardContent>
 					{/* Image at top */}
 					<div className="mb-4 h-12 w-12 overflow-hidden rounded-lg">

@@ -17,23 +17,27 @@ export default function BookmarksPage() {
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
+		let ignore = false;
+
 		async function loadBookmarkedCompetitions() {
 			setIsLoading(true);
 			try {
 				if (bookmarks.length > 0) {
 					const data = await fetchCompetitionsByIds(bookmarks);
-					setBookmarkedCompetitions(data);
-				} else {
-					setBookmarkedCompetitions([]);
-				}
+					if (!ignore) setBookmarkedCompetitions(data);
+				} else if (!ignore) setBookmarkedCompetitions([]);
 			} catch (error) {
 				console.error("Failed to fetch bookmarked competitions:", error);
-				setBookmarkedCompetitions([]);
+				if (!ignore) setBookmarkedCompetitions([]);
 			} finally {
-				setIsLoading(false);
+				if (!ignore) setIsLoading(false);
 			}
 		}
 		loadBookmarkedCompetitions();
+
+		return () => {
+			ignore = true;
+		};
 	}, [bookmarks]);
 
 	return (
@@ -71,7 +75,7 @@ export default function BookmarksPage() {
 					</Link>
 				</div>
 			) : (
-				<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+				<div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
 					{bookmarkedCompetitions.map((competition) => (
 						<CompetitionCard competition={competition} key={competition.id} />
 					))}

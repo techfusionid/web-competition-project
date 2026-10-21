@@ -70,6 +70,355 @@ interface SponsorSectionProps {
 
 const STORAGE_KEY_PREFIX = "sponsor-section-visible";
 
+// ──────── Sub-components ────────
+
+interface SponsorLogoCellProps {
+	sponsor: Sponsor;
+	showName?: boolean;
+	showExternalIcon?: boolean;
+	logoContainerClass?: string;
+	logoClass?: string;
+	nameClass?: string;
+	externalIconClass?: string;
+}
+
+/** Repeated logo cell with image/emoji rendering, name, external link icon. */
+function SponsorLogoCell({
+	sponsor,
+	showName = false,
+	showExternalIcon = false,
+	logoContainerClass = "",
+	logoClass = "",
+	nameClass = "",
+	externalIconClass = "",
+}: SponsorLogoCellProps) {
+	return (
+		<>
+			{/* Logo */}
+			<div
+				className={cn(
+					"flex w-full items-center justify-center",
+					logoContainerClass
+				)}
+			>
+				{sponsor.logo.startsWith("http") ||
+				sponsor.logo.startsWith("data:") ||
+				sponsor.logo.startsWith("/") ? (
+					<img
+						alt={sponsor.name}
+						className={cn(
+							"cursor-pointer object-contain grayscale transition-transform duration-200 group-hover:scale-105",
+							logoClass
+						)}
+						src={sponsor.logo}
+					/>
+				) : (
+					<span className="text-2xl">{sponsor.logo}</span>
+				)}
+			</div>
+
+			{/* Sponsor Name */}
+			{showName && (
+				<p
+					className={cn(
+						"text-center font-medium text-foreground transition-colors group-hover:text-primary",
+						nameClass
+					)}
+				>
+					{sponsor.name}
+				</p>
+			)}
+
+			{/* External link indicator */}
+			{showExternalIcon && sponsor.website && (
+				<ExternalLink
+					className={cn(
+						"text-muted-foreground opacity-0 transition-opacity duration-200 group-hover:opacity-100",
+						externalIconClass
+					)}
+				/>
+			)}
+		</>
+	);
+}
+
+interface VariantContentProps {
+	sponsors: Sponsor[];
+	title: string;
+	description: string;
+	sponsorCtaLink?: string;
+	sponsorCtaText: string;
+	toggleVisibility: () => void;
+	dismissible: boolean;
+	maxLogosPerRow: number;
+}
+
+/** Minimal variant – 4×2 grid, 8 slots, no names/external icons/dismiss. */
+function MinimalSponsorContent({
+	sponsors,
+	title,
+	description,
+	sponsorCtaLink,
+	sponsorCtaText,
+}: Pick<
+	VariantContentProps,
+	"sponsors" | "title" | "description" | "sponsorCtaLink" | "sponsorCtaText"
+>) {
+	return (
+		<section className="border-border border-t py-8">
+			<div className="container">
+				<div className="mx-auto mb-6 max-w-3xl text-center">
+					<h2 className="mb-3 font-semibold text-foreground text-xl md:text-2xl">
+						{title}
+					</h2>
+					{description && (
+						<p className="mb-5 text-muted-foreground text-sm">{description}</p>
+					)}
+					{sponsorCtaLink && (
+						<Button asChild variant="outline">
+							<Link href={sponsorCtaLink}>
+								{sponsorCtaText}
+								<ArrowRight className="ml-2 h-4 w-4" />
+							</Link>
+						</Button>
+					)}
+				</div>
+
+				{/* Table-like grid layout - 4 columns x 2 rows */}
+				<div className="mx-auto max-w-4xl overflow-visible rounded-lg border border-border bg-card">
+					<div className="grid grid-cols-4 grid-rows-2 divide-x divide-y divide-border">
+						{/* Render sponsors */}
+						{sponsors.slice(0, 8).map((sponsor) => (
+							<Tooltip key={sponsor.id}>
+								<TooltipTrigger asChild>
+									<a
+										className="group flex cursor-pointer flex-col items-center justify-center p-4 transition-colors duration-200 hover:bg-muted/50"
+										href={sponsor.website || "#"}
+										rel={sponsor.website ? "noopener noreferrer" : undefined}
+										target={sponsor.website ? "_blank" : undefined}
+									>
+										<SponsorLogoCell
+											logoClass="h-8 w-auto max-w-[60px]"
+											logoContainerClass="h-10"
+											sponsor={sponsor}
+										/>
+									</a>
+								</TooltipTrigger>
+								<SponsorTooltip sponsor={sponsor} />
+							</Tooltip>
+						))}
+						{/* Empty slots to fill 8 total */}
+						{Array.from({ length: Math.max(0, 8 - sponsors.length) }).map(
+							(_, i) => (
+								<div
+									className="flex items-center justify-center p-4"
+									key={`empty-${i}`}
+								/>
+							)
+						)}
+					</div>
+				</div>
+			</div>
+		</section>
+	);
+}
+
+/** Compact variant – responsive grid with names always visible. */
+function CompactSponsorContent({
+	sponsors,
+	title,
+	description,
+	sponsorCtaLink,
+	sponsorCtaText,
+	dismissible,
+	toggleVisibility,
+}: VariantContentProps) {
+	return (
+		<section className="border-border border-t py-8">
+			<div className="container">
+				<div className="mb-6 flex items-center justify-between">
+					<div className="flex-1">
+						<h2 className="font-semibold text-foreground text-lg">{title}</h2>
+						{description && (
+							<p className="text-muted-foreground text-sm">{description}</p>
+						)}
+					</div>
+					<div className="flex items-center gap-2">
+						{sponsorCtaLink && (
+							<Button asChild variant="outline">
+								<Link href={sponsorCtaLink}>
+									{sponsorCtaText}
+									<ArrowRight className="ml-2 h-4 w-4" />
+								</Link>
+							</Button>
+						)}
+						{dismissible && (
+							<Button
+								aria-label="Dismiss sponsor"
+								className="h-8 w-8 text-muted-foreground hover:text-destructive"
+								onClick={toggleVisibility}
+								size="icon"
+								variant="ghost"
+							>
+								<X className="h-4 w-4" />
+							</Button>
+						)}
+					</div>
+				</div>
+
+				{/* Table-like grid layout */}
+				<div className="rounded-lg border border-border bg-card">
+					<div className="grid grid-cols-3 divide-x divide-y divide-border sm:grid-cols-4 md:grid-cols-6">
+						{sponsors.map((sponsor) => (
+							<Tooltip key={sponsor.id}>
+								<TooltipTrigger asChild>
+									<a
+										className="group flex cursor-pointer flex-col items-center justify-center p-4 transition-colors duration-200 hover:bg-muted/50"
+										href={sponsor.website || "#"}
+										rel={sponsor.website ? "noopener noreferrer" : undefined}
+										target={sponsor.website ? "_blank" : undefined}
+									>
+										<SponsorLogoCell
+											logoClass="h-8 w-auto max-w-[80px]"
+											logoContainerClass="mb-2 h-10"
+											nameClass="line-clamp-1 text-xs"
+											showName
+											sponsor={sponsor}
+										/>
+									</a>
+								</TooltipTrigger>
+								{sponsor.description && <SponsorTooltip sponsor={sponsor} />}
+							</Tooltip>
+						))}
+					</div>
+				</div>
+			</div>
+		</section>
+	);
+}
+
+/** Default variant – tier-grouped with badges, names, external link indicators. */
+function DefaultSponsorContent({
+	sponsors,
+	title,
+	description,
+	sponsorCtaLink,
+	sponsorCtaText,
+	dismissible,
+	toggleVisibility,
+	maxLogosPerRow,
+}: VariantContentProps) {
+	return (
+		<section className="border-border border-t py-16">
+			<div className="container">
+				<div className="mb-10 flex flex-col items-center">
+					<div className="text-center">
+						<h2 className="font-bold text-2xl text-foreground">{title}</h2>
+						{description && (
+							<p className="mt-2 text-muted-foreground">{description}</p>
+						)}
+					</div>
+					<div className="mt-4 flex items-center gap-3">
+						{sponsorCtaLink && (
+							<Button asChild variant="outline">
+								<Link href={sponsorCtaLink}>
+									{sponsorCtaText}
+									<ArrowRight className="ml-2 h-4 w-4" />
+								</Link>
+							</Button>
+						)}
+						{dismissible && (
+							<Button
+								aria-label="Dismiss sponsor"
+								className="h-8 w-8 text-muted-foreground hover:text-destructive"
+								onClick={toggleVisibility}
+								size="icon"
+								variant="ghost"
+							>
+								<X className="h-4 w-4" />
+							</Button>
+						)}
+					</div>
+				</div>
+
+				{/* Group sponsors by tier */}
+				{(
+					["platinum", "gold", "silver", "bronze", "partner"] as Array<
+						"platinum" | "gold" | "silver" | "bronze" | "partner"
+					>
+				)
+					.filter((tier) => sponsors.some((s) => s.tier === tier))
+					.map((tier) => {
+						const tierSponsors = sponsors.filter((s) => s.tier === tier);
+						const config = tierConfig[tier];
+
+						return (
+							<div className="mb-10 last:mb-0" key={tier}>
+								<div className="mb-6 flex items-center justify-center gap-3">
+									<div
+										className={cn(
+											"h-px w-16 bg-gradient-to-r",
+											config.gradient
+										)}
+									/>
+									<span className="font-bold text-foreground text-sm uppercase tracking-wider">
+										{config.badge}
+									</span>
+									<div
+										className={cn(
+											"h-px w-16 bg-gradient-to-l",
+											config.gradient
+										)}
+									/>
+								</div>
+
+								{/* Table-like grid layout */}
+								<div className="rounded-lg border border-border bg-card">
+									<div
+										className="grid divide-x divide-y divide-border bg-card"
+										style={{
+											gridTemplateColumns: `repeat(${Math.min(tierSponsors.length, maxLogosPerRow)}, minmax(0, 1fr))`,
+										}}
+									>
+										{tierSponsors.map((sponsor) => (
+											<Tooltip key={sponsor.id}>
+												<TooltipTrigger asChild>
+													<a
+														className="group flex cursor-pointer flex-col items-center justify-center p-6 transition-colors duration-200 hover:bg-muted/50 md:p-8"
+														href={sponsor.website || "#"}
+														rel={
+															sponsor.website
+																? "noopener noreferrer"
+																: undefined
+														}
+														target={sponsor.website ? "_blank" : undefined}
+													>
+														<SponsorLogoCell
+															externalIconClass="mt-1 h-3.5 w-3.5"
+															logoClass="h-14 w-auto max-w-[120px] rounded-xl md:h-18"
+															logoContainerClass="mb-3 h-20 md:h-24"
+															nameClass="text-sm md:text-base"
+															showExternalIcon
+															showName
+															sponsor={sponsor}
+														/>
+													</a>
+												</TooltipTrigger>
+												{sponsor.description && (
+													<SponsorTooltip sponsor={sponsor} />
+												)}
+											</Tooltip>
+										))}
+									</div>
+								</div>
+							</div>
+						);
+					})}
+			</div>
+		</section>
+	);
+}
+
 // Hoisted outside component to avoid recreation on each render
 function SponsorTooltip({ sponsor }: { sponsor: Sponsor }) {
 	return (
@@ -143,289 +492,45 @@ export function SponsorSection({
 		);
 	}
 
-	const content = (() => {
-		if (variant === "minimal") {
-			return (
-				<section className="border-border border-t py-8">
-					<div className="container">
-						<div className="mx-auto mb-6 max-w-3xl text-center">
-							<h2 className="mb-3 font-semibold text-foreground text-xl md:text-2xl">
-								{title}
-							</h2>
-							{description && (
-								<p className="mb-5 text-muted-foreground text-sm">
-									{description}
-								</p>
-							)}
-							{sponsorCtaLink && (
-								<Button asChild variant="outline">
-									<Link href={sponsorCtaLink}>
-										{sponsorCtaText}
-										<ArrowRight className="ml-2 h-4 w-4" />
-									</Link>
-								</Button>
-							)}
-						</div>
+	let content;
 
-						{/* Table-like grid layout - 4 columns x 2 rows */}
-						<div className="mx-auto max-w-4xl overflow-visible rounded-lg border border-border bg-card">
-							<div className="grid grid-cols-4 grid-rows-2 divide-x divide-y divide-border">
-								{/* Render sponsors */}
-								{sponsors.slice(0, 8).map((sponsor) => (
-									<Tooltip key={sponsor.id}>
-										<TooltipTrigger asChild>
-											<a
-												className="group flex cursor-pointer flex-col items-center justify-center p-4 transition-colors duration-200 hover:bg-muted/50"
-												href={sponsor.website || "#"}
-												rel={
-													sponsor.website ? "noopener noreferrer" : undefined
-												}
-												target={sponsor.website ? "_blank" : undefined}
-											>
-												{/* Logo */}
-												<div className="flex h-10 w-full items-center justify-center">
-													{sponsor.logo.startsWith("http") ||
-													sponsor.logo.startsWith("data:") ||
-													sponsor.logo.startsWith("/") ? (
-														<img
-															alt={sponsor.name}
-															className="h-8 w-auto max-w-[60px] cursor-pointer object-contain grayscale transition-transform duration-200 group-hover:scale-105"
-															src={sponsor.logo}
-														/>
-													) : (
-														<span className="text-2xl">{sponsor.logo}</span>
-													)}
-												</div>
-											</a>
-										</TooltipTrigger>
-										<SponsorTooltip sponsor={sponsor} />
-									</Tooltip>
-								))}
-								{/* Empty slots to fill 8 total */}
-								{Array.from({ length: Math.max(0, 8 - sponsors.length) }).map(
-									(_, i) => (
-										<div
-											className="flex items-center justify-center p-4"
-											key={`empty-${i}`}
-										/>
-									)
-								)}
-							</div>
-						</div>
-					</div>
-				</section>
-			);
-		}
-
-		if (variant === "compact") {
-			return (
-				<section className="border-border border-t py-8">
-					<div className="container">
-						<div className="mb-6 flex items-center justify-between">
-							<div className="flex-1">
-								<h2 className="font-semibold text-foreground text-lg">
-									{title}
-								</h2>
-								{description && (
-									<p className="text-muted-foreground text-sm">{description}</p>
-								)}
-							</div>
-							<div className="flex items-center gap-2">
-								{sponsorCtaLink && (
-									<Button asChild variant="outline">
-										<Link href={sponsorCtaLink}>
-											{sponsorCtaText}
-											<ArrowRight className="ml-2 h-4 w-4" />
-										</Link>
-									</Button>
-								)}
-								{dismissible && (
-									<Button
-										className="h-8 w-8 text-muted-foreground hover:text-destructive"
-										onClick={toggleVisibility}
-										size="icon"
-										variant="ghost"
-									>
-										<X className="h-4 w-4" />
-									</Button>
-								)}
-							</div>
-						</div>
-
-						{/* Table-like grid layout */}
-						<div className="rounded-lg border border-border bg-card">
-							<div className="grid grid-cols-3 divide-x divide-y divide-border sm:grid-cols-4 md:grid-cols-6">
-								{sponsors.map((sponsor) => (
-									<Tooltip key={sponsor.id}>
-										<TooltipTrigger asChild>
-											<a
-												className="group flex cursor-pointer flex-col items-center justify-center p-4 transition-colors duration-200 hover:bg-muted/50"
-												href={sponsor.website || "#"}
-												rel={
-													sponsor.website ? "noopener noreferrer" : undefined
-												}
-												target={sponsor.website ? "_blank" : undefined}
-											>
-												{/* Logo */}
-												<div className="mb-2 flex h-10 w-full items-center justify-center">
-													{sponsor.logo.startsWith("http") ||
-													sponsor.logo.startsWith("data:") ||
-													sponsor.logo.startsWith("/") ? (
-														<img
-															alt={sponsor.name}
-															className="h-8 w-auto max-w-[80px] cursor-pointer object-contain grayscale transition-transform duration-200 group-hover:scale-105"
-															src={sponsor.logo}
-														/>
-													) : (
-														<span className="text-2xl">{sponsor.logo}</span>
-													)}
-												</div>
-
-												{/* Sponsor Name - always visible */}
-												<p className="line-clamp-1 text-center font-medium text-foreground text-xs transition-colors group-hover:text-primary">
-													{sponsor.name}
-												</p>
-											</a>
-										</TooltipTrigger>
-										{sponsor.description && (
-											<SponsorTooltip sponsor={sponsor} />
-										)}
-									</Tooltip>
-								))}
-							</div>
-						</div>
-					</div>
-				</section>
-			);
-		}
-
-		// Default variant - detailed with tier badges
-		return (
-			<section className="border-border border-t py-16">
-				<div className="container">
-					<div className="mb-10 flex flex-col items-center">
-						<div className="text-center">
-							<h2 className="font-bold text-2xl text-foreground">{title}</h2>
-							{description && (
-								<p className="mt-2 text-muted-foreground">{description}</p>
-							)}
-						</div>
-						<div className="mt-4 flex items-center gap-3">
-							{sponsorCtaLink && (
-								<Button asChild variant="outline">
-									<Link href={sponsorCtaLink}>
-										{sponsorCtaText}
-										<ArrowRight className="ml-2 h-4 w-4" />
-									</Link>
-								</Button>
-							)}
-							{dismissible && (
-								<Button
-									className="h-8 w-8 text-muted-foreground hover:text-destructive"
-									onClick={toggleVisibility}
-									size="icon"
-									variant="ghost"
-								>
-									<X className="h-4 w-4" />
-								</Button>
-							)}
-						</div>
-					</div>
-
-					{/* Group sponsors by tier */}
-					{(
-						["platinum", "gold", "silver", "bronze", "partner"] as Array<
-							"platinum" | "gold" | "silver" | "bronze" | "partner"
-						>
-					)
-						.filter((tier) => sponsors.some((s) => s.tier === tier))
-						.map((tier) => {
-							const tierSponsors = sponsors.filter((s) => s.tier === tier);
-							const config = tierConfig[tier];
-
-							return (
-								<div className="mb-10 last:mb-0" key={tier}>
-									<div className="mb-6 flex items-center justify-center gap-3">
-										<div
-											className={cn(
-												"h-px w-16 bg-gradient-to-r",
-												config.gradient
-											)}
-										/>
-										<span className="font-bold text-foreground text-sm uppercase tracking-wider">
-											{config.badge}
-										</span>
-										<div
-											className={cn(
-												"h-px w-16 bg-gradient-to-l",
-												config.gradient
-											)}
-										/>
-									</div>
-
-									{/* Table-like grid layout */}
-									<div className="rounded-lg border border-border bg-card">
-										<div
-											className="grid divide-x divide-y divide-border bg-card"
-											style={{
-												gridTemplateColumns: `repeat(${Math.min(tierSponsors.length, maxLogosPerRow)}, minmax(0, 1fr))`,
-											}}
-										>
-											{tierSponsors.map((sponsor) => (
-												<Tooltip key={sponsor.id}>
-													<TooltipTrigger asChild>
-														<a
-															className="group flex cursor-pointer flex-col items-center justify-center p-6 transition-colors duration-200 hover:bg-muted/50 md:p-8"
-															href={sponsor.website || "#"}
-															rel={
-																sponsor.website
-																	? "noopener noreferrer"
-																	: undefined
-															}
-															target={sponsor.website ? "_blank" : undefined}
-														>
-															{/* Logo */}
-															<div className="mb-3 flex h-20 w-full items-center justify-center md:h-24">
-																{sponsor.logo.startsWith("http") ||
-																sponsor.logo.startsWith("data:") ||
-																sponsor.logo.startsWith("/") ? (
-																	<img
-																		alt={sponsor.name}
-																		className="h-14 w-auto max-w-[120px] cursor-pointer rounded-xl object-contain grayscale transition-transform duration-200 group-hover:scale-105 md:h-18"
-																		src={sponsor.logo}
-																	/>
-																) : (
-																	<span className="text-4xl md:text-5xl">
-																		{sponsor.logo}
-																	</span>
-																)}
-															</div>
-
-															{/* Sponsor Name - always visible */}
-															<p className="text-center font-semibold text-foreground text-sm transition-colors group-hover:text-primary md:text-base">
-																{sponsor.name}
-															</p>
-
-															{/* External link indicator */}
-															{sponsor.website && (
-																<ExternalLink className="mt-1 h-3.5 w-3.5 text-muted-foreground opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
-															)}
-														</a>
-													</TooltipTrigger>
-													{sponsor.description && (
-														<SponsorTooltip sponsor={sponsor} />
-													)}
-												</Tooltip>
-											))}
-										</div>
-									</div>
-								</div>
-							);
-						})}
-				</div>
-			</section>
+	if (variant === "minimal") {
+		content = (
+			<MinimalSponsorContent
+				description={description}
+				sponsorCtaLink={sponsorCtaLink}
+				sponsorCtaText={sponsorCtaText}
+				sponsors={sponsors}
+				title={title}
+			/>
 		);
-	})();
+	} else if (variant === "compact") {
+		content = (
+			<CompactSponsorContent
+				description={description}
+				dismissible={dismissible}
+				maxLogosPerRow={maxLogosPerRow}
+				sponsorCtaLink={sponsorCtaLink}
+				sponsorCtaText={sponsorCtaText}
+				sponsors={sponsors}
+				title={title}
+				toggleVisibility={toggleVisibility}
+			/>
+		);
+	} else {
+		content = (
+			<DefaultSponsorContent
+				description={description}
+				dismissible={dismissible}
+				maxLogosPerRow={maxLogosPerRow}
+				sponsorCtaLink={sponsorCtaLink}
+				sponsorCtaText={sponsorCtaText}
+				sponsors={sponsors}
+				title={title}
+				toggleVisibility={toggleVisibility}
+			/>
+		);
+	}
 
 	return <TooltipProvider delayDuration={200}>{content}</TooltipProvider>;
 }

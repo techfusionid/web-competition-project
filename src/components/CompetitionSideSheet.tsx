@@ -23,6 +23,40 @@ interface CompetitionSheetProps {
 	onNext?: () => void;
 }
 
+function useSheetKeyboard(
+	isOpen: boolean,
+	hasPrevious: boolean,
+	hasNext: boolean,
+	onPrevious: (() => void) | undefined,
+	onNext: (() => void) | undefined,
+	handleClose: () => void
+) {
+	useEffect(() => {
+		if (!isOpen) return;
+
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === "Escape") {
+				handleClose();
+			} else if (e.key === "ArrowUp" && hasPrevious && onPrevious) {
+				onPrevious();
+			} else if (e.key === "ArrowDown" && hasNext && onNext) {
+				onNext();
+			}
+		};
+
+		window.addEventListener("keydown", handleKeyDown);
+		return () => window.removeEventListener("keydown", handleKeyDown);
+	}, [isOpen, hasPrevious, hasNext, onPrevious, onNext, handleClose]);
+
+	useEffect(() => {
+		if (!isOpen) return;
+		document.body.style.overflow = "hidden";
+		return () => {
+			document.body.style.overflow = "";
+		};
+	}, [isOpen]);
+}
+
 export function CompetitionSheet({
 	competition,
 	isOpen,
@@ -43,61 +77,36 @@ export function CompetitionSheet({
 		}, 300);
 	}, [onClose]);
 
-	useEffect(() => {
-		if (!isOpen) {
-			return;
-		}
+	useSheetKeyboard(
+		isOpen,
+		hasPrevious,
+		hasNext,
+		onPrevious,
+		onNext,
+		handleClose
+	);
 
-		const handleKeyDown = (e: KeyboardEvent) => {
-			if (e.key === "Escape") {
-				handleClose();
-			} else if (e.key === "ArrowUp" && hasPrevious && onPrevious) {
-				onPrevious();
-			} else if (e.key === "ArrowDown" && hasNext && onNext) {
-				onNext();
-			}
-		};
-
-		window.addEventListener("keydown", handleKeyDown);
-		return () => window.removeEventListener("keydown", handleKeyDown);
-	}, [isOpen, hasPrevious, hasNext, onPrevious, onNext, handleClose]);
-
-	useEffect(() => {
-		if (!isOpen) {
-			return;
-		}
-		document.body.style.overflow = "hidden";
-		return () => {
-			document.body.style.overflow = "";
-		};
-	}, [isOpen]);
-
-	useEffect(() => {
-		if (isOpen) {
-			setIsClosing(false);
-		}
-	}, [isOpen]);
-
-	const handleBackdropClick = () => {
-		handleClose();
-	};
-
-	if (!(isOpen || isClosing)) {
-		return null;
-	}
-	if (!(competition || isClosing)) {
+	const showSheet = isOpen || (isClosing && competition);
+	if (!showSheet) {
 		return null;
 	}
 
 	return (
 		<>
 			{/* Backdrop */}
-			<div
+			<button
+				aria-label="Close details"
 				className={cn(
 					"fixed inset-0 z-40 bg-black/50 transition-opacity duration-300",
 					isClosing ? "opacity-0" : "opacity-100"
 				)}
-				onClick={handleBackdropClick}
+				onClick={handleClose}
+				onKeyDown={(e) => {
+					if (e.key === "Enter" || e.key === " ") {
+						e.preventDefault();
+						handleClose();
+					}
+				}}
 			/>
 
 			{/* Sheet */}

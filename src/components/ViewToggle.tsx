@@ -1,5 +1,10 @@
 import { Image, LayoutGrid } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 export type ViewMode = "card" | "poster";
@@ -12,28 +17,40 @@ interface ViewToggleProps {
 export function ViewToggle({ viewMode, onViewModeChange }: ViewToggleProps) {
 	return (
 		<div className="flex items-center rounded-md border border-border bg-background">
-			<Button
-				className={cn(
-					"h-8 rounded-r-none px-3",
-					viewMode === "card" && "bg-secondary"
-				)}
-				onClick={() => onViewModeChange("card")}
-				size="sm"
-				variant="ghost"
-			>
-				<LayoutGrid className="h-4 w-4" />
-			</Button>
-			<Button
-				className={cn(
-					"h-8 rounded-l-none px-3",
-					viewMode === "poster" && "bg-secondary"
-				)}
-				onClick={() => onViewModeChange("poster")}
-				size="sm"
-				variant="ghost"
-			>
-				<Image className="h-4 w-4" />
-			</Button>
+			<Tooltip>
+				<TooltipTrigger asChild>
+					<Button
+						aria-label="Card view"
+						className={cn(
+							"h-8 rounded-r-none px-3",
+							viewMode === "card" && "bg-secondary"
+						)}
+						onClick={() => onViewModeChange("card")}
+						size="sm"
+						variant="ghost"
+					>
+						<LayoutGrid className="h-4 w-4" />
+					</Button>
+				</TooltipTrigger>
+				<TooltipContent side="bottom">Card view</TooltipContent>
+			</Tooltip>
+			<Tooltip>
+				<TooltipTrigger asChild>
+					<Button
+						aria-label="Poster view"
+						className={cn(
+							"h-8 rounded-l-none px-3",
+							viewMode === "poster" && "bg-secondary"
+						)}
+						onClick={() => onViewModeChange("poster")}
+						size="sm"
+						variant="ghost"
+					>
+						<Image className="h-4 w-4" />
+					</Button>
+				</TooltipTrigger>
+				<TooltipContent side="bottom">Poster view</TooltipContent>
+			</Tooltip>
 		</div>
 	);
 }

@@ -249,7 +249,10 @@ export default function ResourcesPage() {
 									</div>
 									<div className="min-w-0 flex-1">
 										<div className="flex items-center gap-2">
-											<h3 className="truncate font-medium text-foreground">
+											<h3
+												className="truncate font-medium text-foreground"
+												title={tool.name}
+											>
 												{tool.name}
 											</h3>
 										</div>
@@ -287,7 +290,7 @@ export default function ResourcesPage() {
                               src={account.imageUrl}
                            />
                            <div className="min-w-0 flex-1">
-                              <h3 className="truncate font-medium text-foreground">
+                              <h3 className="truncate font-medium text-foreground" title={account.name}>
                                  {account.name}
                               </h3>
                               <p className="text-muted-foreground text-sm">
@@ -342,7 +345,10 @@ export default function ResourcesPage() {
 							key={channel.id}
 						>
 							<CardContent className="px-4">
-								<h3 className="truncate font-medium text-foreground">
+								<h3
+									className="truncate font-medium text-foreground"
+									title={channel.name}
+								>
 									{channel.name}
 								</h3>
 								<p className="mt-2 line-clamp-2 text-muted-foreground text-sm">

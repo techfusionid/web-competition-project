@@ -9,13 +9,13 @@ import { Button } from "@/components/ui/button";
 import type { CopyState } from "@/hooks/use-copy-to-clipboard";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 
-export const motionIconVariants: Variants = {
+const motionIconVariants: Variants = {
 	initial: { opacity: 0, scale: 0.8, filter: "blur(2px)" },
 	animate: { opacity: 1, scale: 1, filter: "blur(0px)" },
 	exit: { opacity: 0, scale: 0.8 },
 };
 
-export const motionIconProps: HTMLMotionProps<"span"> = {
+const motionIconProps: HTMLMotionProps<"span"> = {
 	variants: motionIconVariants,
 	initial: "initial",
 	animate: "animate",

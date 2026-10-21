@@ -46,13 +46,7 @@
             "type": "array",
             "items": {
               "type": "string",
-              "enum": [
-                "SD",
-                "SMP",
-                "SMA",
-                "Mahasiswa",
-                "Umum"
-              ]
+              "enum": ["SD", "SMP", "SMA", "Mahasiswa", "Umum"]
             },
             "description": "Participant level. Return null if not found."
           },
@@ -66,19 +60,12 @@
           },
           "format": {
             "type": "string",
-            "enum": [
-              "Online",
-              "Offline",
-              "Hybrid"
-            ],
+            "enum": ["Online", "Offline", "Hybrid"],
             "description": "Competition format. Return null if not found."
           },
           "participationType": {
             "type": "string",
-            "enum": [
-              "Individual",
-              "Team"
-            ],
+            "enum": ["Individual", "Team"],
             "description": "Participation type. Return null if not found."
           },
           "pricing": {

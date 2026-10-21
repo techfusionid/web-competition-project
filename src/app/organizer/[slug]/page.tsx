@@ -13,7 +13,12 @@ import type { Competition } from "@/types/competition";
 export default function InstitutionDetailPage() {
 	const params = useParams();
 	const slug = params.slug as string;
-	const decodedName = slug ? decodeURIComponent(slug) : "";
+	let decodedName = "";
+	try {
+		decodedName = slug ? decodeURIComponent(slug) : "";
+	} catch {
+		decodedName = slug ?? "";
+	}
 	const { isBookmarked, toggleBookmark } = useBookmarks();
 	const [institutionCompetitions, setInstitutionCompetitions] = useState<
 		Competition[]
@@ -21,19 +26,29 @@ export default function InstitutionDetailPage() {
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
+		let ignore = false;
+
 		async function loadOrganizerCompetitions() {
 			setIsLoading(true);
 			try {
 				const data = await fetchCompetitionsByOrganizer(decodedName);
-				setInstitutionCompetitions(data);
+				if (!ignore) {
+					setInstitutionCompetitions(data);
+				}
 			} catch (error) {
 				console.error("Failed to fetch organizer competitions:", error);
-				setInstitutionCompetitions([]);
+				if (!ignore) {
+					setInstitutionCompetitions([]);
+				}
 			} finally {
-				setIsLoading(false);
+				if (!ignore) setIsLoading(false);
 			}
 		}
 		loadOrganizerCompetitions();
+
+		return () => {
+			ignore = true;
+		};
 	}, [decodedName]);
 
 	return (
@@ -67,7 +82,7 @@ export default function InstitutionDetailPage() {
 					<p className="text-muted-foreground">Memuat kompetisi...</p>
 				</div>
 			) : institutionCompetitions.length > 0 ? (
-				<div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+				<div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
 					{institutionCompetitions.map((competition) => (
 						<CompetitionCard competition={competition} key={competition.id} />
 					))}

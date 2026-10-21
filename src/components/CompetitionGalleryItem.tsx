@@ -20,6 +20,14 @@ export function CompetitionGalleryItem({
 				isSelected ? "border-primary ring-2 ring-primary/20" : "border-border"
 			)}
 			onClick={onClick}
+			onKeyDown={(e) => {
+				if (e.key === "Enter" || e.key === " ") {
+					e.preventDefault();
+					onClick?.();
+				}
+			}}
+			role="button"
+			tabIndex={0}
 		>
 			{/* Image */}
 			<div className="relative aspect-[3/4] w-full overflow-hidden bg-secondary">
@@ -40,7 +48,7 @@ export function CompetitionGalleryItem({
 			<div className="p-1.5">
 				<h3
 					className={cn(
-						"line-clamp-2 font-medium text-[10px] leading-tight transition-colors",
+						"line-clamp-2 font-medium text-[10px] leading-relaxed transition-colors",
 						isSelected
 							? "text-primary"
 							: "text-foreground group-hover:text-primary"

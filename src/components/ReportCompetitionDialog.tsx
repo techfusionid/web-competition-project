@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import type { Competition } from "@/types/competition";
 
@@ -44,7 +44,7 @@ export function ReportCompetitionDialog({
 		<Dialog onOpenChange={(open) => !open && handleClose()} open={isOpen}>
 			<DialogContent className="w-full max-w-[320px] rounded-2xl p-6">
 				<div className="space-y-4">
-					<div className="flex items-center gap-2">
+					<DialogTitle className="flex items-center gap-2">
 						<svg
 							className="h-5 w-5 text-muted-foreground"
 							fill="none"
@@ -58,8 +58,8 @@ export function ReportCompetitionDialog({
 								fillRule="evenodd"
 							/>
 						</svg>
-						<h2 className="font-semibold text-xl">Report Event</h2>
-					</div>
+						Report Event
+					</DialogTitle>
 
 					<p className="text-md text-muted-foreground">
 						Please share more information about why you are reporting this

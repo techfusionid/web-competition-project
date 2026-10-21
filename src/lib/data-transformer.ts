@@ -142,13 +142,15 @@ function normalizeLevels(levels: unknown): Competition["level"] {
 
 	const levelArray = Array.isArray(levels) ? levels : [levels];
 	const normalized: Competition["level"] = [];
+	const seen = new Set<string>();
 
 	for (const level of levelArray) {
 		if (typeof level === "string") {
 			// Try direct mapping first
 			if (level in levelMapping) {
 				const mapped = levelMapping[level];
-				if (mapped && !normalized.includes(mapped)) {
+				if (mapped && !seen.has(mapped)) {
+					seen.add(mapped);
 					normalized.push(mapped);
 				}
 			} else {
@@ -156,7 +158,8 @@ function normalizeLevels(levels: unknown): Competition["level"] {
 				const lowerLevel = level.toLowerCase();
 				for (const [key, value] of Object.entries(levelMapping)) {
 					if (key.toLowerCase() === lowerLevel || value === lowerLevel) {
-						if (!normalized.includes(value)) {
+						if (!seen.has(value)) {
+							seen.add(value);
 							normalized.push(value);
 						}
 						break;
@@ -217,6 +220,8 @@ export function dbToCompetition(dbRecord: CompetitionRecord): Competition {
 	};
 }
 
-export function dbToCompetitions(dbRecords: CompetitionRecord[]): Competition[] {
+export function dbToCompetitions(
+	dbRecords: CompetitionRecord[]
+): Competition[] {
 	return dbRecords.map(dbToCompetition);
 }

@@ -113,7 +113,7 @@ export function SharePopup({ isOpen, onClose, title, url }: SharePopupProps) {
 					</div>
 
 					{/* Link Preview Section */}
-					<div className="mx-auto mb-6 max-w-[240px] rounded-2xl border border-gray-200 bg-gray-50 p-4 transition-all duration-300 hover:border-gray-300 hover:bg-white hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600 dark:hover:bg-gray-800">
+					<div className="mx-auto mb-6 max-w-[240px] rounded-2xl border border-gray-200 bg-gray-50 p-4 transition-colors transition-shadow duration-300 hover:border-gray-300 hover:bg-white hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600 dark:hover:bg-gray-800">
 						<h3 className="mb-1 truncate font-semibold text-gray-900 text-sm dark:text-gray-100">
 							{title}
 						</h3>
@@ -143,7 +143,7 @@ export function SharePopup({ isOpen, onClose, title, url }: SharePopupProps) {
 												window.open(
 													option.url,
 													"_blank",
-													"width=600,height=400"
+													"noopener,noreferrer,width=600,height=400"
 												);
 												onClose();
 											}

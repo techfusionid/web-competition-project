@@ -44,6 +44,7 @@ export default function ProfilePage() {
 					<div className="mt-2 flex items-center gap-2">
 						{/* Mock Links - only render if exists. For now hardcoding "hasLink" logic */}
 						<Button
+							aria-label="Instagram profile"
 							className="h-8 w-8 text-muted-foreground hover:text-foreground"
 							size="icon"
 							variant="ghost"
@@ -51,6 +52,7 @@ export default function ProfilePage() {
 							<Instagram className="h-5 w-5" />
 						</Button>
 						<Button
+							aria-label="LinkedIn profile"
 							className="h-8 w-8 text-muted-foreground hover:text-foreground"
 							size="icon"
 							variant="ghost"

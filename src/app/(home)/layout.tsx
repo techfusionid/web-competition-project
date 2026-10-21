@@ -1,4 +1,4 @@
-import { Suspense, type ReactNode } from "react";
+import { type ReactNode, Suspense } from "react";
 
 export const metadata = {
 	title: "Competition.TechFusion.id - Discover & Join Exciting Competitions",

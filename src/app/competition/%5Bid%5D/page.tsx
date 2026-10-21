@@ -31,19 +31,29 @@ export default function CompetitionDetailPage() {
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
+		let ignore = false;
+
 		async function loadCompetition() {
 			setIsLoading(true);
 			try {
 				const data = await fetchCompetitionById(competitionId);
-				setCompetition(data);
+				if (!ignore) {
+					setCompetition(data);
+				}
 			} catch (error) {
 				console.error("Failed to fetch competition:", error);
-				setCompetition(null);
+				if (!ignore) {
+					setCompetition(null);
+				}
 			} finally {
-				setIsLoading(false);
+				if (!ignore) setIsLoading(false);
 			}
 		}
 		loadCompetition();
+
+		return () => {
+			ignore = true;
+		};
 	}, [competitionId]);
 
 	if (isLoading) {

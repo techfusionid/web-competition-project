@@ -19,11 +19,14 @@ export function CategoryCard({
 }: CategoryCardProps) {
 	return (
 		<Link className="group" href={href}>
-			<Card className="h-full border-border/50 bg-card/50 shadow-none backdrop-blur-sm transition-all hover:border-neutral-500">
+			<Card className="h-full border-border/50 bg-card/50 shadow-none backdrop-blur-sm transition-colors hover:border-neutral-500">
 				<CardContent className="flex items-center gap-3">
 					<Icon className={`h-6 w-6 ${color} shrink-0`} />
 					<div className="flex min-w-0 flex-col">
-						<h3 className="truncate font-semibold text-base text-foreground">
+						<h3
+							className="truncate font-semibold text-base text-foreground"
+							title={title}
+						>
 							{title}
 						</h3>
 						<p className="text-muted-foreground/70 text-xs">{count}</p>

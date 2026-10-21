@@ -18,7 +18,9 @@ interface CacheEntry {
 	timestamp: number;
 }
 
-function serializeCompetitions(competitions: Competition[]): SerializedCompetition[] {
+function serializeCompetitions(
+	competitions: Competition[]
+): SerializedCompetition[] {
 	return competitions.map((c) => ({
 		...c,
 		deadline: c.deadline.toISOString(),
@@ -26,7 +28,9 @@ function serializeCompetitions(competitions: Competition[]): SerializedCompetiti
 	}));
 }
 
-function deserializeCompetitions(competitions: SerializedCompetition[]): Competition[] {
+function deserializeCompetitions(
+	competitions: SerializedCompetition[]
+): Competition[] {
 	return competitions.map((c) => ({
 		...c,
 		deadline: new Date(c.deadline),

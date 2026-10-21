@@ -36,6 +36,26 @@ export function PosterPopup({
 					<DialogTitle className="sr-only">
 						{competition.title} - Poster
 					</DialogTitle>
+					{/* Close button — always visible for easy tap on mobile */}
+					<button
+						aria-label="Close"
+						className="absolute top-4 right-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-colors hover:bg-black/70"
+						onClick={(e) => {
+							e.stopPropagation();
+							onClose();
+						}}
+						type="button"
+					>
+						<svg
+							className="h-4 w-4"
+							fill="none"
+							stroke="currentColor"
+							strokeWidth={2}
+							viewBox="0 0 24 24"
+						>
+							<path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
+						</svg>
+					</button>
 					{/* Poster Image - Full size, clear display, optimized for mobile */}
 					<div className="relative flex h-full w-full items-center justify-center overflow-hidden bg-secondary">
 						{competition.imageUrl ? (

@@ -116,6 +116,7 @@ export function CompetitionDetailContent({
 						{/* Share Button */}
 						{showShareButton && (
 							<Button
+								aria-label="Share competition"
 								className="absolute top-3 right-3 h-9 w-9 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
 								onClick={() => setShowShare(true)}
 								size="icon"
@@ -131,7 +132,7 @@ export function CompetitionDetailContent({
 						{/* Header */}
 						<div className="space-y-2">
 							<div className="flex items-start justify-between gap-3">
-								<h2 className="font-bold text-2xl text-foreground leading-tight">
+								<h2 className="font-bold text-2xl text-foreground leading-snug">
 									{competition.title}
 								</h2>
 							</div>
@@ -274,6 +275,7 @@ export function CompetitionDetailContent({
 					<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
 						<div className="relative max-h-[90vh] max-w-4xl">
 							<Button
+								aria-label="Close lightbox"
 								className="absolute top-0 right-0 z-10 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
 								onClick={() => setShowPosterLightbox(false)}
 								size="icon"
@@ -334,6 +336,7 @@ function SharePopup({
 								Share Competition
 							</h3>
 							<Button
+								aria-label="Close share dialog"
 								className="h-8 w-8 rounded-full p-0"
 								onClick={onClose}
 								size="icon"

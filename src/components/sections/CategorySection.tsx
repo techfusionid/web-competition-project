@@ -113,217 +113,215 @@ interface CategorySectionProps {
 	className?: string;
 }
 
-export function CategorySection({
-	title = "Categories",
-	description = "Explore competitions by categories you're interested in",
-	variant = "default",
-	showCount = true,
-	limit,
-	className,
-}: CategorySectionProps) {
-	const [allCompetitions, setAllCompetitions] = useState<Competition[]>([]);
-	const [isLoading, setIsLoading] = useState(true);
-
-	useEffect(() => {
-		async function loadCompetitions() {
-			setIsLoading(true);
-			try {
-				const data = await fetchCompetitions();
-				setAllCompetitions(data);
-			} catch (error) {
-				console.error("Failed to fetch competitions:", error);
-				setAllCompetitions([]);
-			} finally {
-				setIsLoading(false);
-			}
-		}
-		loadCompetitions();
-	}, []);
-
-	const categoryMap = useMemo(() => {
-		const map = new Map<string, number>();
-		CATEGORIES.forEach((cat) => {
-			map.set(cat, 0);
-		});
-
-		allCompetitions.forEach((competition) => {
-			const count = map.get(competition.category) || 0;
-			map.set(competition.category, count + 1);
-		});
-		return map;
-	}, [allCompetitions]);
-
-	const categories = useMemo(() => {
-		return CATEGORIES.map((cat) => ({
-			name: cat,
-			count: categoryMap.get(cat) || 0,
-			config: categoryConfig[cat] || {
-				icon: Monitor,
-				color: "text-primary",
-				gradient: "from-primary/20 via-primary/10 to-transparent",
-				image: "",
-			},
-		}))
-			.filter((cat) => limit === undefined || cat.count > 0)
-			.slice(0, limit)
-			.sort((a, b) => b.count - a.count);
-	}, [categoryMap, limit]);
-
-	const CategoryIcon = (name: string) => {
-		const config = categoryConfig[name];
-		return config?.icon || Monitor;
+interface CategoryWithConfig {
+	name: string;
+	count: number;
+	config: {
+		icon: LucideIcon;
+		color: string;
+		gradient: string;
+		image: string;
 	};
+}
 
-	if (variant === "compact") {
-		return (
-			<section className={cn("space-y-4", className)}>
-				{(title || description) && (
-					<div className="flex items-center justify-between">
-						<div>
-							{title && <h2 className="font-semibold text-lg">{title}</h2>}
-							{description && (
-								<p className="text-muted-foreground text-sm">{description}</p>
-							)}
-						</div>
-						<Link
-							className="text-primary text-sm hover:underline"
-							href="/category"
-						>
-							View all
-						</Link>
-					</div>
-				)}
-				{isLoading ? (
-					<div className="py-8 text-center">
-						<p className="text-muted-foreground text-sm">
-							Loading categories...
-						</p>
-					</div>
-				) : (
-					<div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-						{categories.map((category) => {
-							const Icon = CategoryIcon(category.name);
-							return (
-								<Link
-									className="group"
-									href={`/category/${encodeURIComponent(category.name)}`}
-									key={category.name}
-								>
-									<div className="flex flex-col items-center gap-2 rounded-lg border border-border bg-card/50 p-4 transition-all hover:border-primary/50 hover:bg-card">
-										<div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-											<Icon
-												className={cn(
-													"h-5 w-5",
-													categoryConfig[category.name]?.color || "text-primary"
-												)}
-											/>
-										</div>
-										<div className="text-center">
-											<h3 className="font-medium text-sm transition-colors group-hover:text-primary">
-												{category.name}
-											</h3>
-											{showCount && (
-												<p className="text-muted-foreground text-xs">
-													{category.count}
-												</p>
-											)}
-										</div>
-									</div>
-								</Link>
-							);
-						})}
-					</div>
-				)}
-			</section>
-		);
-	}
+function buildCategories(
+	allCompetitions: Competition[],
+	limit: number | undefined
+): CategoryWithConfig[] {
+	const categoryMap = new Map<string, number>();
+	CATEGORIES.forEach((cat) => categoryMap.set(cat, 0));
+	allCompetitions.forEach((competition) => {
+		const count = categoryMap.get(competition.category) || 0;
+		categoryMap.set(competition.category, count + 1);
+	});
+	return CATEGORIES.map((cat) => ({
+		name: cat,
+		count: categoryMap.get(cat) || 0,
+		config: categoryConfig[cat] || {
+			icon: Monitor,
+			color: "text-primary",
+			gradient: "from-primary/20 via-primary/10 to-transparent",
+			image: "",
+		},
+	}))
+		.filter((cat) => limit === undefined || cat.count > 0)
+		.slice(0, limit)
+		.sort((a, b) => b.count - a.count);
+}
 
-	if (variant === "grid") {
-		return (
-			<section className={cn("space-y-4", className)}>
-				{(title || description) && (
-					<div className="flex items-center justify-between">
-						<div>
-							{title && <h2 className="font-semibold text-lg">{title}</h2>}
-							{description && (
-								<p className="text-muted-foreground text-sm">{description}</p>
-							)}
-						</div>
-						<Link
-							className="text-primary text-sm hover:underline"
-							href="/category"
-						>
-							View all
-						</Link>
-					</div>
-				)}
-				{isLoading ? (
-					<div className="py-8 text-center">
-						<p className="text-muted-foreground text-sm">
-							Loading categories...
-						</p>
-					</div>
-				) : (
-					<div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-						{categories.map((category) => {
-							const Icon = CategoryIcon(category.name);
-							return (
-								<Link
-									className="group"
-									href={`/category/${encodeURIComponent(category.name)}`}
-									key={category.name}
-								>
-									<div className="relative overflow-hidden rounded-xl border border-border bg-card transition-all hover:border-primary/50 hover:shadow-lg">
-										<div
-											className={cn(
-												"absolute inset-0 bg-gradient-to-br",
-												category.config.gradient
-											)}
-										/>
-										<div className="relative p-6">
-											<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-background/80 backdrop-blur">
-												<Icon
-													className={cn("h-6 w-6", category.config.color)}
-												/>
-											</div>
-											<h3 className="mb-1 font-semibold text-foreground transition-colors group-hover:text-primary">
-												{category.name}
-											</h3>
-											{showCount && (
-												<p className="text-muted-foreground text-sm">
-													{category.count} competition
-													{category.count !== 1 ? "s" : ""}
-												</p>
-											)}
-										</div>
-									</div>
-								</Link>
-							);
-						})}
-					</div>
-				)}
-			</section>
-		);
-	}
+function getCategoryIcon(name: string) {
+	return categoryConfig[name]?.icon || Monitor;
+}
 
-	// Default variant (list)
+function CategorySectionHeader({
+	title,
+	description,
+}: {
+	title?: string;
+	description?: string;
+}) {
+	return (
+		<div className="flex items-center justify-between">
+			<div>
+				{title && <h2 className="font-semibold text-lg">{title}</h2>}
+				{description && (
+					<p className="text-muted-foreground text-sm">{description}</p>
+				)}
+			</div>
+			<Link className="text-primary text-sm hover:underline" href="/category">
+				View all
+			</Link>
+		</div>
+	);
+}
+
+function CategorySectionCompact({
+	title,
+	description,
+	categories,
+	showCount,
+	isLoading,
+	className,
+}: {
+	title?: string;
+	description?: string;
+	categories: CategoryWithConfig[];
+	showCount: boolean;
+	isLoading: boolean;
+	className?: string;
+}) {
 	return (
 		<section className={cn("space-y-4", className)}>
 			{(title || description) && (
-				<div className="flex items-center justify-between">
-					<div>
-						{title && <h2 className="font-semibold text-lg">{title}</h2>}
-						{description && (
-							<p className="text-muted-foreground text-sm">{description}</p>
-						)}
-					</div>
-					<Link
-						className="text-primary text-sm hover:underline"
-						href="/category"
-					>
-						View all
-					</Link>
+				<CategorySectionHeader description={description} title={title} />
+			)}
+			{isLoading ? (
+				<div className="py-8 text-center">
+					<p className="text-muted-foreground text-sm">Loading categories...</p>
 				</div>
+			) : (
+				<div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+					{categories.map((category) => {
+						const Icon = getCategoryIcon(category.name);
+						return (
+							<Link
+								className="group"
+								href={`/category/${encodeURIComponent(category.name)}`}
+								key={category.name}
+							>
+								<div className="flex flex-col items-center gap-2 rounded-lg border border-border bg-card/50 p-4 transition-colors hover:border-primary/50 hover:bg-card">
+									<div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+										<Icon
+											className={cn(
+												"h-5 w-5",
+												categoryConfig[category.name]?.color || "text-primary"
+											)}
+										/>
+									</div>
+									<div className="text-center">
+										<h3 className="font-medium text-sm transition-colors group-hover:text-primary">
+											{category.name}
+										</h3>
+										{showCount && (
+											<p className="text-muted-foreground text-xs">
+												{category.count}
+											</p>
+										)}
+									</div>
+								</div>
+							</Link>
+						);
+					})}
+				</div>
+			)}
+		</section>
+	);
+}
+
+function CategorySectionGrid({
+	title,
+	description,
+	categories,
+	showCount,
+	isLoading,
+	className,
+}: {
+	title?: string;
+	description?: string;
+	categories: CategoryWithConfig[];
+	showCount: boolean;
+	isLoading: boolean;
+	className?: string;
+}) {
+	return (
+		<section className={cn("space-y-4", className)}>
+			{(title || description) && (
+				<CategorySectionHeader description={description} title={title} />
+			)}
+			{isLoading ? (
+				<div className="py-8 text-center">
+					<p className="text-muted-foreground text-sm">Loading categories...</p>
+				</div>
+			) : (
+				<div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+					{categories.map((category) => {
+						const Icon = getCategoryIcon(category.name);
+						return (
+							<Link
+								className="group"
+								href={`/category/${encodeURIComponent(category.name)}`}
+								key={category.name}
+							>
+								<div className="relative overflow-hidden rounded-xl border border-border bg-card transition-colors transition-shadow hover:border-primary/50 hover:shadow-lg">
+									<div
+										className={cn(
+											"absolute inset-0 bg-gradient-to-br",
+											category.config.gradient
+										)}
+									/>
+									<div className="relative p-6">
+										<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-background/80 backdrop-blur">
+											<Icon className={cn("h-6 w-6", category.config.color)} />
+										</div>
+										<h3 className="mb-1 font-semibold text-foreground transition-colors group-hover:text-primary">
+											{category.name}
+										</h3>
+										{showCount && (
+											<p className="text-muted-foreground text-sm">
+												{category.count} competition
+												{category.count !== 1 ? "s" : ""}
+											</p>
+										)}
+									</div>
+								</div>
+							</Link>
+						);
+					})}
+				</div>
+			)}
+		</section>
+	);
+}
+
+function CategorySectionList({
+	title,
+	description,
+	categories,
+	showCount,
+	isLoading,
+	className,
+}: {
+	title?: string;
+	description?: string;
+	categories: CategoryWithConfig[];
+	showCount: boolean;
+	isLoading: boolean;
+	className?: string;
+}) {
+	return (
+		<section className={cn("space-y-4", className)}>
+			{(title || description) && (
+				<CategorySectionHeader description={description} title={title} />
 			)}
 			{isLoading ? (
 				<div className="py-12 text-center">
@@ -332,13 +330,13 @@ export function CategorySection({
 			) : (
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
 					{categories.map((category) => {
-						const Icon = CategoryIcon(category.name);
+						const Icon = getCategoryIcon(category.name);
 						return (
 							<Link
 								href={`/category/${encodeURIComponent(category.name)}`}
 								key={category.name}
 							>
-								<Card className="h-full transition-all hover:border-primary/50 hover:shadow-md">
+								<Card className="h-full transition-colors transition-shadow hover:border-primary/50 hover:shadow-md">
 									<CardContent className="p-5">
 										<div className="flex items-center gap-4">
 											<div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-secondary">
@@ -370,5 +368,75 @@ export function CategorySection({
 				</div>
 			)}
 		</section>
+	);
+}
+
+export function CategorySection({
+	title = "Categories",
+	description = "Explore competitions by categories you're interested in",
+	variant = "default",
+	showCount = true,
+	limit,
+	className,
+}: CategorySectionProps) {
+	const [allCompetitions, setAllCompetitions] = useState<Competition[]>([]);
+	const [isLoading, setIsLoading] = useState(true);
+
+	useEffect(() => {
+		async function loadCompetitions() {
+			setIsLoading(true);
+			try {
+				const data = await fetchCompetitions();
+				setAllCompetitions(data);
+			} catch (error) {
+				console.error("Failed to fetch competitions:", error);
+				setAllCompetitions([]);
+			} finally {
+				setIsLoading(false);
+			}
+		}
+		loadCompetitions();
+	}, []);
+
+	const categories = useMemo(
+		() => buildCategories(allCompetitions, limit),
+		[allCompetitions, limit]
+	);
+
+	if (variant === "compact") {
+		return (
+			<CategorySectionCompact
+				categories={categories}
+				className={className}
+				description={description}
+				isLoading={isLoading}
+				showCount={showCount}
+				title={title}
+			/>
+		);
+	}
+
+	if (variant === "grid") {
+		return (
+			<CategorySectionGrid
+				categories={categories}
+				className={className}
+				description={description}
+				isLoading={isLoading}
+				showCount={showCount}
+				title={title}
+			/>
+		);
+	}
+
+	return (
+		<CategorySectionList
+			categories={categories}
+			className={className}
+			description={description}
+			isLoading={isLoading}
+			showCount={showCount}
+			title={title}
+		/>
 	);
 }

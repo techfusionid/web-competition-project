@@ -17,7 +17,6 @@ interface CarouselProps {
 	opts?: CarouselOptions;
 	plugins?: CarouselPlugin;
 	orientation?: "horizontal" | "vertical";
-	setApi?: (api: CarouselApi) => void;
 }
 
 type CarouselContextProps = {
@@ -44,7 +43,6 @@ function useCarousel() {
 function Carousel({
 	orientation = "horizontal",
 	opts,
-	setApi,
 	plugins,
 	className,
 	children,
@@ -90,13 +88,6 @@ function Carousel({
 	);
 
 	React.useEffect(() => {
-		if (!(api && setApi)) {
-			return;
-		}
-		setApi(api);
-	}, [api, setApi]);
-
-	React.useEffect(() => {
 		if (!api) {
 			return;
 		}
@@ -106,23 +97,36 @@ function Carousel({
 
 		return () => {
 			api?.off("select", onSelect);
+			api?.off("reInit", onSelect);
 		};
 	}, [api, onSelect]);
 
+	const contextValue = React.useMemo(
+		() => ({
+			carouselRef,
+			api,
+			opts,
+			orientation:
+				orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
+			scrollPrev,
+			scrollNext,
+			canScrollPrev,
+			canScrollNext,
+		}),
+		[
+			carouselRef,
+			api,
+			opts,
+			orientation,
+			scrollPrev,
+			scrollNext,
+			canScrollPrev,
+			canScrollNext,
+		]
+	);
+
 	return (
-		<CarouselContext.Provider
-			value={{
-				carouselRef,
-				api,
-				opts,
-				orientation:
-					orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
-				scrollPrev,
-				scrollNext,
-				canScrollPrev,
-				canScrollNext,
-			}}
-		>
+		<CarouselContext.Provider value={contextValue}>
 			<div
 				aria-roledescription="carousel"
 				className={cn("relative", className)}

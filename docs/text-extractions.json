@@ -57,13 +57,7 @@
             "title": "Level",
             "items": {
               "type": "string",
-              "enum": [
-                "SD",
-                "SMP",
-                "SMA",
-                "Mahasiswa",
-                "Umum"
-              ]
+              "enum": ["SD", "SMP", "SMA", "Mahasiswa", "Umum"]
             },
             "description": "Intended participant level. Extract from explicit eligibility or strongly supported contextual information. University students, college students, or mahasiswa should be classified as Mahasiswa; SMA or SMK students as SMA; SMP students as SMP; SD students as SD; explicitly open or intended for the general public as Umum. Do not use Umum merely because eligibility is not stated. Return an empty array when participant level cannot be determined."
           },
@@ -79,22 +73,13 @@
           },
           "format": {
             "type": ["string", "null"],
-            "enum": [
-              "Online",
-              "Offline",
-              "Hybrid",
-              null
-            ],
+            "enum": ["Online", "Offline", "Hybrid", null],
             "title": "Format",
             "description": "Overall competition format. Return Online, Offline, or Hybrid only when the overall format is explicitly stated or clearly established. Do not assume Online merely because registration, submission, or one presentation stage is online. Return null when the overall competition format cannot be reliably determined."
           },
           "participationType": {
             "type": ["string", "null"],
-            "enum": [
-              "Individual",
-              "Team",
-              null
-            ],
+            "enum": ["Individual", "Team", null],
             "title": "Participation Type",
             "description": "Competition participation type. Return Individual or Team only when individual or team participation is explicitly stated or clearly required. Do not infer Team merely because the text mentions teams casually or uses the word 'tim' in promotional language. Return null when participation type cannot be reliably determined."
           },

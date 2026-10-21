@@ -11,8 +11,9 @@ import {
 	DayPicker,
 	getDefaultClassNames,
 } from "react-day-picker";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/lib/variants";
 
 function Calendar({
 	className,
@@ -186,6 +187,11 @@ function CalendarDayButton({
 }: React.ComponentProps<typeof DayButton>) {
 	const defaultClassNames = getDefaultClassNames();
 
+	const dayLabel = React.useMemo(
+		() => day.date.toLocaleDateString(),
+		[day.date]
+	);
+
 	const ref = React.useRef<HTMLButtonElement>(null);
 	React.useEffect(() => {
 		if (modifiers.focused) {
@@ -196,11 +202,11 @@ function CalendarDayButton({
 	return (
 		<Button
 			className={cn(
-				"flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 font-normal leading-none data-[range-end=true]:rounded-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-start=true]:rounded-l-md data-[range-end=true]:bg-primary data-[range-middle=true]:bg-accent data-[range-start=true]:bg-primary data-[selected-single=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:text-accent-foreground data-[range-start=true]:text-primary-foreground data-[selected-single=true]:text-primary-foreground group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground [&>span]:text-xs [&>span]:opacity-70",
+				"flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 font-normal leading-none data-[range-end=true]:rounded-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-start=true]:rounded-l-md data-[range-end=true]:bg-primary data-[range-middle=true]:bg-accent data-[range-start=true]:bg-primary data-[selected-single=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:text-accent-foreground data-[range-start=true]:text-primary-foreground data-[selected-single=true]:text-primary-foreground group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/30",
 				defaultClassNames.day,
 				className
 			)}
-			data-day={day.date.toLocaleDateString()}
+			data-day={dayLabel}
 			data-range-end={modifiers.range_end}
 			data-range-middle={modifiers.range_middle}
 			data-range-start={modifiers.range_start}

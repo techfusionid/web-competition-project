@@ -1,7 +1,7 @@
 "use client";
 
-import { Suspense, useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { CompetitionList } from "@/components/CompetitionList";
 import { Hero } from "@/components/Hero";
 import { SponsorSection } from "@/components/SponsorSection";
@@ -50,9 +50,9 @@ function HomeContent() {
 		window.history.replaceState({}, "", url.toString());
 	}, []);
 
-	// Klik organizer tidak lagi memasukkan keyword ke search bar
-	const handleOrganizerClick = useCallback((_organizer: string) => {
-		// No-op: mekanisme isi search bar dihilangkan
+	// Navigate to organizer page on click
+	const handleOrganizerClick = useCallback((organizer: string) => {
+		window.location.href = `/organizer/${encodeURIComponent(organizer)}`;
 	}, []);
 
 	// Sponsor data
@@ -109,10 +109,10 @@ function HomeContent() {
 					bookmarks={bookmarks}
 					competitions={competitions}
 					isLoading={isLoading}
+					key={resetTrigger}
 					onOrganizerClick={handleOrganizerClick}
 					onSearchChange={handleSearchChange}
 					onToggleBookmark={toggleBookmark}
-					resetTrigger={resetTrigger}
 					searchQuery={searchQuery}
 				/>
 			</div>

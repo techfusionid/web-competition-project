@@ -60,10 +60,6 @@ export function CompetitionDrawer({
 		}
 	};
 
-	if (!competition) {
-		return null;
-	}
-
 	const levelLabels = useMemo(
 		() =>
 			LEVELS.reduce(
@@ -75,6 +71,10 @@ export function CompetitionDrawer({
 			),
 		[]
 	);
+
+	if (!competition) {
+		return null;
+	}
 
 	return (
 		<Drawer
@@ -112,6 +112,7 @@ export function CompetitionDrawer({
 
 						{/* Share button - overlay right */}
 						<Button
+							aria-label="Share competition"
 							className="absolute top-3 right-3 z-10 h-9 w-9 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
 							onClick={handleShare}
 							size="icon"
@@ -126,7 +127,7 @@ export function CompetitionDrawer({
 						{/* Title + organizer (caption header) */}
 						<div className="space-y-1">
 							<div className="flex items-start justify-between gap-2">
-								<h2 className="pr-2 font-semibold text-base text-foreground leading-tight">
+								<h2 className="pr-2 font-semibold text-base text-foreground leading-relaxed">
 									{competition.title}
 								</h2>
 							</div>

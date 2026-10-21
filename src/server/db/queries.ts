@@ -1,4 +1,14 @@
-import { and, desc, eq, ilike, inArray, isNotNull, or, sql } from "drizzle-orm";
+import {
+	and,
+	desc,
+	eq,
+	ilike,
+	inArray,
+	isNotNull,
+	ne,
+	or,
+	sql,
+} from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 import { CACHE_DURATIONS, CACHE_TAGS } from "@/lib/cache";
 import { getDb } from "./index";
@@ -21,6 +31,7 @@ export async function getAllCompetitions(): Promise<CompetitionRecord[]> {
 	const rows = await getDb()
 		.select()
 		.from(competitions)
+		.where(and(isNotNull(competitions.title), ne(competitions.title, "")))
 		.orderBy(desc(competitions.createdAt));
 
 	return rows as unknown as CompetitionRecord[];
@@ -104,6 +115,9 @@ export async function getCompetitionsByFilter(
 		);
 	}
 
+	// Always exclude entries without a title (no poster display)
+	conditions.push(isNotNull(competitions.title), ne(competitions.title, ""));
+
 	const rows = await getDb()
 		.select()
 		.from(competitions)
@@ -128,11 +142,24 @@ export const getCompetitionsByFilterCached = unstable_cache(
 export async function getCompetitionsByOrganizer(
 	organizerName: string
 ): Promise<CompetitionRecord[]> {
+	const searchPattern = `%${organizerName}%`;
 	const rows = await getDb()
 		.select()
 		.from(competitions)
 		.where(
-			sql`${competitions.organizer}->>'name' ILIKE ${`%${organizerName}%`}`
+			and(
+				// Match both object format {name: "..."} and array format ["Name1", "Name2"]
+				or(
+					sql`${competitions.organizer}->>'name' ILIKE ${searchPattern}`,
+					sql`EXISTS (
+						SELECT 1 FROM jsonb_array_elements_text(${competitions.organizer}) AS elem
+						WHERE elem ILIKE ${searchPattern}
+					)`,
+					sql`${competitions.organizer}::text ILIKE ${searchPattern}`
+				),
+				isNotNull(competitions.title),
+				ne(competitions.title, "")
+			)
 		)
 		.orderBy(desc(competitions.createdAt));
 
@@ -157,7 +184,13 @@ export async function getCompetitionsByCategory(
 	const rows = await getDb()
 		.select()
 		.from(competitions)
-		.where(ilike(competitions.categories, category))
+		.where(
+			and(
+				ilike(competitions.categories, category),
+				isNotNull(competitions.title),
+				ne(competitions.title, "")
+			)
+		)
 		.orderBy(desc(competitions.createdAt));
 
 	return rows as unknown as CompetitionRecord[];

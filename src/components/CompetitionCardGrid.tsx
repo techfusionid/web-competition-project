@@ -50,17 +50,17 @@ export function CompetitionCard({
 	return (
 		<>
 			<div
-				className="group relative flex cursor-pointer flex-col rounded-lg border border-border bg-secondary/15 ring-6 ring-background ring-inset transition-all hover:border-primary/50 md:p-4"
+				className="group relative flex cursor-pointer flex-col rounded-lg border border-border bg-secondary/15 ring-6 ring-background ring-inset transition-all hover:border-primary/50 p-3 md:p-4"
 				onClick={onClick}
 			>
 				{/* Header - Title, Organizer, Status (default), Share */}
 				<div className="flex items-start justify-between">
 					<div className="min-w-0 flex-1">
-						<h3 className="truncate font-semibold text-base text-foreground tracking-wide transition-colors group-hover:text-primary md:text-lg">
+						<h3 className="truncate font-semibold text-foreground text-sm tracking-wide transition-colors group-hover:text-primary md:text-lg">
 							{competition.title}
 						</h3>
 						<button
-							className="w-full truncate text-left text-muted-foreground text-xs hover:text-primary md:text-sm"
+							className="w-full truncate text-left text-[11px] text-muted-foreground hover:text-primary md:text-sm"
 							onClick={(e) => {
 								e.stopPropagation();
 								onOrganizerClick?.(competition.organizer);
@@ -71,7 +71,7 @@ export function CompetitionCard({
 					</div>
 					<div className="flex shrink-0 items-center gap-1">
 						<Button
-							className="h-7 w-7 shrink-0 opacity-0 transition-opacity group-hover:opacity-100 md:h-8 md:w-8"
+							className="h-7 w-7 shrink-0 md:h-8 md:w-8 md:opacity-0 md:transition-opacity md:group-hover:opacity-100"
 							onClick={(e) => {
 								e.stopPropagation();
 								setShowShare(true);
@@ -85,10 +85,10 @@ export function CompetitionCard({
 				</div>
 
 				{/* Content Area */}
-				<div className="relative mt-2 min-h-[64px] md:mt-3 md:min-h-[72px]">
+				<div className="relative mt-2 min-h-[48px] md:mt-3 md:min-h-[72px]">
 					{/* Default: Description. Hidden on hover (desktop); on touch (hover:none) hidden so meta shows below */}
 					<div className="absolute inset-0 opacity-100 transition-opacity duration-200 group-hover:opacity-0 [@media(hover:none)]:opacity-0">
-						<p className="line-clamp-2 text-muted-foreground text-xs leading-relaxed md:text-sm">
+						<p className="line-clamp-2 text-muted-foreground text-[11px] leading-relaxed md:text-sm">
 							{competition.description}
 						</p>
 					</div>
