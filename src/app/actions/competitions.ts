@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { CACHE_TAGS } from "@/lib/cache";
 import { dbToCompetition, dbToCompetitions } from "@/lib/data-transformer";
 import {
@@ -113,9 +113,9 @@ export async function fetchAllCategories(): Promise<string[]> {
  */
 export async function revalidateCompetitionsCache() {
 	"use server";
-	revalidateTag(CACHE_TAGS.ALL_COMPETITIONS);
-	revalidateTag(CACHE_TAGS.ALL_ORGANIZERS);
-	revalidateTag(CACHE_TAGS.ALL_CATEGORIES);
+	updateTag(CACHE_TAGS.ALL_COMPETITIONS);
+	updateTag(CACHE_TAGS.ALL_ORGANIZERS);
+	updateTag(CACHE_TAGS.ALL_CATEGORIES);
 	return { success: true, timestamp: Date.now() };
 }
 
@@ -125,8 +125,8 @@ export async function revalidateCompetitionsCache() {
  */
 export async function revalidateCompetitionCache(id: string) {
 	"use server";
-	revalidateTag(CACHE_TAGS.COMPETITION_BY_ID(id));
-	revalidateTag(CACHE_TAGS.ALL_COMPETITIONS);
+	updateTag(CACHE_TAGS.COMPETITION_BY_ID(id));
+	updateTag(CACHE_TAGS.ALL_COMPETITIONS);
 	return { success: true, id, timestamp: Date.now() };
 }
 
@@ -136,9 +136,9 @@ export async function revalidateCompetitionCache(id: string) {
  */
 export async function revalidateCategoryCache(category: string) {
 	"use server";
-	revalidateTag(CACHE_TAGS.COMPETITIONS_BY_CATEGORY(category));
-	revalidateTag(CACHE_TAGS.ALL_COMPETITIONS);
-	revalidateTag(CACHE_TAGS.ALL_CATEGORIES);
+	updateTag(CACHE_TAGS.COMPETITIONS_BY_CATEGORY(category));
+	updateTag(CACHE_TAGS.ALL_COMPETITIONS);
+	updateTag(CACHE_TAGS.ALL_CATEGORIES);
 	return { success: true, category, timestamp: Date.now() };
 }
 
@@ -148,8 +148,8 @@ export async function revalidateCategoryCache(category: string) {
  */
 export async function revalidateOrganizerCache(organizer: string) {
 	"use server";
-	revalidateTag(CACHE_TAGS.COMPETITIONS_BY_ORGANIZER(organizer));
-	revalidateTag(CACHE_TAGS.ALL_COMPETITIONS);
-	revalidateTag(CACHE_TAGS.ALL_ORGANIZERS);
+	updateTag(CACHE_TAGS.COMPETITIONS_BY_ORGANIZER(organizer));
+	updateTag(CACHE_TAGS.ALL_COMPETITIONS);
+	updateTag(CACHE_TAGS.ALL_ORGANIZERS);
 	return { success: true, organizer, timestamp: Date.now() };
 }
