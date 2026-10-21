@@ -50,7 +50,7 @@ export function CompetitionCard({
 	return (
 		<>
 			<div
-				className="group relative flex cursor-pointer flex-col rounded-lg border border-border bg-secondary/15 ring-6 ring-background ring-inset transition-all hover:border-primary/50 p-3 md:p-4"
+				className="group relative flex cursor-pointer flex-col rounded-lg border border-border bg-secondary/15 p-3 ring-6 ring-background ring-inset transition-all hover:border-primary/50 md:p-4"
 				onClick={onClick}
 			>
 				{/* Header - Title, Organizer, Status (default), Share */}
@@ -88,7 +88,7 @@ export function CompetitionCard({
 				<div className="relative mt-2 min-h-[48px] md:mt-3 md:min-h-[72px]">
 					{/* Default: Description. Hidden on hover (desktop); on touch (hover:none) hidden so meta shows below */}
 					<div className="absolute inset-0 opacity-100 transition-opacity duration-200 group-hover:opacity-0 [@media(hover:none)]:opacity-0">
-						<p className="line-clamp-2 text-muted-foreground text-[11px] leading-relaxed md:text-sm">
+						<p className="line-clamp-2 text-[11px] text-muted-foreground leading-relaxed md:text-sm">
 							{competition.description}
 						</p>
 					</div>

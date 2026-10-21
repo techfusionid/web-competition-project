@@ -172,7 +172,7 @@ function MobileCompetitionList({
 				}
 			>
 				{competitions.map((competition, index) => (
-					<div key={competition.id} className="min-w-0">
+					<div className="min-w-0" key={competition.id}>
 						{viewMode === "card" ? (
 							<CompetitionCard
 								competition={competition}

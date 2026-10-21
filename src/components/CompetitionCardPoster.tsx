@@ -97,7 +97,7 @@ export function CompetitionCardPoster({
 			tabIndex={0}
 		>
 			{/* Poster Image */}
-			<div className="relative w-full overflow-hidden bg-secondary aspect-[3/4] sm:aspect-[3/4]">
+			<div className="relative aspect-[3/4] w-full overflow-hidden bg-secondary sm:aspect-[3/4]">
 				{competition.imageUrl ? (
 					<Image
 						alt={competition.title}
@@ -129,7 +129,7 @@ export function CompetitionCardPoster({
 						</div>
 
 						{/* Deadline + status */}
-						<div className="flex flex-wrap items-center gap-1.5 text-white/90 text-[10px] leading-tight">
+						<div className="flex flex-wrap items-center gap-1.5 text-[10px] text-white/90 leading-tight">
 							<Calendar className="h-3 w-3 shrink-0" />
 							<span className="truncate font-medium">{formatDateRange}</span>
 						</div>
@@ -140,7 +140,7 @@ export function CompetitionCardPoster({
 								<DropdownMenu>
 									<DropdownMenuTrigger asChild>
 										<Button
-											className="gap-1.5 border-0 bg-white/20 text-white text-[10px] hover:bg-white/30 sm:text-xs"
+											className="gap-1.5 border-0 bg-white/20 text-[10px] text-white hover:bg-white/30 sm:text-xs"
 											onClick={(e) => e.stopPropagation()}
 											size="sm"
 										>
