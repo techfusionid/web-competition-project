@@ -110,10 +110,10 @@ export function CompetitionDrawer({
 							<span className="sr-only">Tutup</span>
 						</DrawerClose>
 
-						{/* Share button - overlay right */}
+						{/* Share button - overlay right (desktop only) */}
 						<Button
 							aria-label="Share competition"
-							className="absolute top-3 right-3 z-10 h-9 w-9 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background"
+							className="absolute top-3 right-3 z-10 hidden h-9 w-9 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background md:inline-flex"
 							onClick={handleShare}
 							size="icon"
 							variant="ghost"

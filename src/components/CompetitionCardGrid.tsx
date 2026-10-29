@@ -69,8 +69,9 @@ export function CompetitionCard({
 							{competition.organizer}
 						</button>
 					</div>
-					<div className="flex shrink-0 items-center gap-1">
+					<div className="hidden shrink-0 items-center gap-1 md:flex">
 						<Button
+							aria-label="Bagikan kompetisi"
 							className="h-7 w-7 shrink-0 md:h-8 md:w-8 md:opacity-0 md:transition-opacity md:group-hover:opacity-100"
 							onClick={(e) => {
 								e.stopPropagation();

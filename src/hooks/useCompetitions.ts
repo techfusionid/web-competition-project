@@ -6,6 +6,8 @@ import type { Competition } from "@/types/competition";
 
 const CACHE_KEY = "competitions-cache";
 const CACHE_TTL_MS = 30 * 60 * 1000; // 30 minutes
+// Bump when the serialized Competition shape changes; stale entries are dropped.
+const CACHE_VERSION = 2;
 
 // Competition serialized for JSON storage (Date → ISO string)
 type SerializedCompetition = Omit<Competition, "deadline" | "startDate"> & {
@@ -14,6 +16,7 @@ type SerializedCompetition = Omit<Competition, "deadline" | "startDate"> & {
 };
 
 interface CacheEntry {
+	version: number;
 	data: SerializedCompetition[];
 	timestamp: number;
 }
@@ -43,7 +46,12 @@ function readCache(): Competition[] | null {
 		const raw = localStorage.getItem(CACHE_KEY);
 		if (!raw) return null;
 		const entry: CacheEntry = JSON.parse(raw);
-		if (Date.now() - entry.timestamp > CACHE_TTL_MS) {
+		if (
+			entry.version !== CACHE_VERSION ||
+			Date.now() - entry.timestamp > CACHE_TTL_MS ||
+			// Guard against rows whose category leaked raw JSON (pre-normalization).
+			entry.data.some((c) => `${c.category ?? ""}`.trim().startsWith("{"))
+		) {
 			localStorage.removeItem(CACHE_KEY);
 			return null;
 		}
@@ -56,6 +64,7 @@ function readCache(): Competition[] | null {
 function writeCache(competitions: Competition[]): void {
 	try {
 		const entry: CacheEntry = {
+			version: CACHE_VERSION,
 			data: serializeCompetitions(competitions),
 			timestamp: Date.now(),
 		};

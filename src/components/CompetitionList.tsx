@@ -536,6 +536,15 @@ export function CompetitionList({
 		setVisibleCount(20);
 	}, []);
 
+	// A desktop "card" mode persisted in storage would render the grid with the
+	// 1-column mobile layout on later mobile visits; fall back to the device default.
+	useEffect(() => {
+		if (isMobile && localStorage.getItem(VIEW_MODE_KEY) === "card") {
+			localStorage.removeItem(VIEW_MODE_KEY);
+			setViewMode("poster");
+		}
+	}, [isMobile]);
+
 	const categorySet = useMemo(
 		() => new Set(filters.categories),
 		[filters.categories]

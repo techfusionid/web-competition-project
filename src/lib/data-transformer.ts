@@ -174,10 +174,21 @@ function toValues(value: unknown): string[] {
 		return [];
 	}
 	if (typeof value === "string") {
+		// A jsonb column can surface as its raw JSON text, e.g. `{"data":[...]}`.
+		const trimmed = value.trim();
+		if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
+			try {
+				return toValues(JSON.parse(trimmed));
+			} catch {
+				return [value];
+			}
+		}
 		return [value];
 	}
 	if (Array.isArray(value)) {
-		return value.filter((item): item is string => typeof item === "string");
+		return value.flatMap((item) =>
+			typeof item === "string" ? [item] : toValues(item)
+		);
 	}
 	if (typeof value === "object" && "data" in value) {
 		return toValues(value.data);
