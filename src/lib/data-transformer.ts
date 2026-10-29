@@ -136,34 +136,28 @@ function formatPrize(pricing: unknown): string {
 }
 
 function normalizeLevels(levels: unknown): Competition["level"] {
-	if (!levels) {
-		return ["umum"];
-	}
-
-	const levelArray = Array.isArray(levels) ? levels : [levels];
+	const levelArray = toValues(levels);
 	const normalized: Competition["level"] = [];
 	const seen = new Set<string>();
 
 	for (const level of levelArray) {
-		if (typeof level === "string") {
-			// Try direct mapping first
-			if (level in levelMapping) {
-				const mapped = levelMapping[level];
-				if (mapped && !seen.has(mapped)) {
-					seen.add(mapped);
-					normalized.push(mapped);
-				}
-			} else {
-				// Try case-insensitive matching
-				const lowerLevel = level.toLowerCase();
-				for (const [key, value] of Object.entries(levelMapping)) {
-					if (key.toLowerCase() === lowerLevel || value === lowerLevel) {
-						if (!seen.has(value)) {
-							seen.add(value);
-							normalized.push(value);
-						}
-						break;
+		// Try direct mapping first
+		if (level in levelMapping) {
+			const mapped = levelMapping[level];
+			if (mapped && !seen.has(mapped)) {
+				seen.add(mapped);
+				normalized.push(mapped);
+			}
+		} else {
+			// Try case-insensitive matching
+			const lowerLevel = level.toLowerCase();
+			for (const [key, value] of Object.entries(levelMapping)) {
+				if (key.toLowerCase() === lowerLevel || value === lowerLevel) {
+					if (!seen.has(value)) {
+						seen.add(value);
+						normalized.push(value);
 					}
+					break;
 				}
 			}
 		}
@@ -172,22 +166,34 @@ function normalizeLevels(levels: unknown): Competition["level"] {
 	return normalized.length > 0 ? normalized : ["umum"];
 }
 
-export function dbToCompetition(dbRecord: CompetitionRecord): Competition {
-	// Handle organizer - it can be an array like ["Name"] or an object with properties
-	let organizerName = "Unknown Organizer";
-	if (dbRecord.organizer) {
-		if (Array.isArray(dbRecord.organizer)) {
-			organizerName = dbRecord.organizer[0] || "Unknown Organizer";
-		} else if (typeof dbRecord.organizer === "object") {
-			organizerName = (dbRecord.organizer as any).name || "Unknown Organizer";
-		} else if (typeof dbRecord.organizer === "string") {
-			organizerName = dbRecord.organizer;
-		}
+// The legacy `categories`/`organizer`/`level` columns are jsonb (declared as
+// plain strings/types in Drizzle). Rows can arrive as `{"data":[...]}` (object),
+// bare arrays, or strings after JSON parsing.
+function toValues(value: unknown): string[] {
+	if (value === null || value === undefined) {
+		return [];
 	}
+	if (typeof value === "string") {
+		return [value];
+	}
+	if (Array.isArray(value)) {
+		return value.filter((item): item is string => typeof item === "string");
+	}
+	if (typeof value === "object" && "data" in value) {
+		return toValues(value.data);
+	}
+	return [];
+}
 
-	const category = dbRecord.categories
-		? categoryMapping[dbRecord.categories] || dbRecord.categories
-		: "Other";
+export function dbToCompetition(dbRecord: CompetitionRecord): Competition {
+	const organizerName =
+		toValues(dbRecord.organizer).find((name) => name.trim() !== "") ||
+		"Unknown Organizer";
+
+	const categoryValues = toValues(dbRecord.categories)
+		.map((name) => categoryMapping[name] || name)
+		.filter((name) => name.trim() !== "");
+	const category = categoryValues[0] ?? "Other";
 
 	const endDate = dbRecord.endDate || dbRecord.startDate;
 	const deadline = endDate ? new Date(endDate) : new Date();

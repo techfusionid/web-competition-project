@@ -4,6 +4,7 @@ import { ArrowUpRight, BookOpen, Info } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Logo } from "./Logo";
 import { ThemeToggle } from "./ThemeToggle";
 
 interface NavItem {
@@ -52,7 +53,7 @@ export function Header({ onHomeClick, sticky = false }: HeaderProps = {}) {
 					href="/"
 					onClick={handleHomeClick}
 				>
-					<img alt="Competitions" className="h-7 w-auto" src="/logo.svg" />
+					<Logo className="h-7 w-auto" />
 				</Link>
 
 				<nav className="hidden items-center gap-1 md:ml-8 md:flex">

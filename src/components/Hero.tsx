@@ -18,7 +18,7 @@ export function Hero() {
 						One-stop platform to find best <AuroraText>competition</AuroraText>{" "}
 						and team for you!
 					</h1>
-					<p className="text-balance text-base text-muted-foreground sm:text-lg md:text-xl">
+					<p className="text-balance text-base text-muted-foreground sm:text-lg md:text-md">
 						Over 500+ competitions from various categories. Build your
 						portfolio, sharpen your skills, and achieve excellence !
 					</p>
